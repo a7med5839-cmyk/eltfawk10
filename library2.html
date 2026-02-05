@@ -3,225 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة التفوق | نظام درايف</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>مكتبة التفوق - مكتبة الـ PDF</title>
     <style>
         :root {
-            --primary-cyan: #00f2fe;
-            --accent-blue: #4facfe;
-            --bg-deep: #020617;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(34, 211, 238, 0.15);
-            --danger: #ff4b2b;
+            --bg-color: #050a18;
+            --container-bg: #0a1226;
+            --accent-color: #00f2ff;
+            --text-color: #ffffff;
+            --secondary-text: #a0a0a0;
+            --pdf-color: #ff4b4b; /* لون مميز لملفات PDF */
         }
 
         body {
-            background: radial-gradient(circle at top right, #0f172a, var(--bg-deep));
-            color: white; font-family: 'Tajawal', sans-serif; margin: 0; min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        header {
-            padding: 20px 5%; background: rgba(8, 51, 68, 0.2);
-            backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
+        .header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
-        header h1 { margin: 0; font-size: 1.5rem; background: linear-gradient(90deg, var(--primary-cyan), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .container { width: 90%; max-width: 1100px; margin: 30px auto; }
-
-        #admin-section {
-            display: none; background: rgba(0, 242, 254, 0.05); border: 1px dashed var(--primary-cyan);
-            padding: 20px; border-radius: 20px; margin-bottom: 30px;
-        }
-
-        .upload-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: end; }
-        input, select { background: #0f172a; border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; font-family: 'Tajawal'; width: 100%; box-sizing: border-box; }
-        .btn-upload { background: var(--primary-cyan); color: #020617; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-
-        .tabs-nav {
-            display: flex; gap: 10px; margin-bottom: 30px; background: var(--glass);
-            padding: 10px; border-radius: 15px; border: 1px solid var(--border);
+        .tabs-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            padding: 5px;
+            margin-bottom: 30px;
         }
 
         .tab-btn {
-            flex: 1; padding: 15px; border: none; background: transparent; color: #94a3b8;
-            font-family: 'Tajawal'; font-weight: bold; cursor: pointer; border-radius: 10px;
-            transition: 0.3s; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px;
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--secondary-text);
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .tab-btn.active { background: var(--primary-cyan); color: #020617; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
-
-        .tab-content { display: none; animation: fadeIn 0.5s ease; }
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 15px;
-            padding: 20px; transition: 0.3s; position: relative; overflow: hidden;
-        }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary-cyan); }
-        .btn-dl {
-            display: inline-block; width: 100%; text-align: center; background: rgba(0, 242, 254, 0.1);
-            color: var(--primary-cyan); padding: 10px; border-radius: 8px; text-decoration: none;
-            margin-top: 10px; border: 1px solid var(--primary-cyan); font-weight: bold; font-size: 0.9rem;
-        }
-        .btn-delete {
-            position: absolute; top: 10px; left: 10px; background: rgba(255, 75, 43, 0.1);
-            color: var(--danger); border: 1px solid var(--danger); border-radius: 50%;
-            width: 28px; height: 28px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px;
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: #000;
+            font-weight: bold;
         }
 
-        .loader-ring { border: 2px solid #f3f3f3; border-top: 2px solid var(--primary-cyan); border-radius: 50%; width: 15px; height: 15px; animation: spin 1s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .content-section {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .content-section.active { display: grid; }
+
+        .item-link {
+            text-decoration: none;
+            background: var(--container-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            color: var(--text-color);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .item-link::before {
+            content: "📄"; /* أيقونة ملف */
+            font-size: 24px;
+        }
+
+        .item-link:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.2);
+        }
+        
+        /* علامة تمييز لملفات المحاضرات */
+        #lectures .item-link::before {
+            content: "📚"; 
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>🚀 مكتبة التفوق</h1>
-    <div id="admin-badge" style="display:none; font-size: 12px; background: var(--primary-cyan); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold;">المشرف:  Ahmed El_samahy</div>
-</header>
+    <div class="header">مكتبة التفوق 🚀</div>
 
-<div class="container">
-    
-    <div id="admin-section">
-        <h3 style="margin-top:0; color: var(--primary-cyan);">📤 إضافة من Google Drive</h3>
-        <div class="upload-form">
-            <div><input type="text" id="fileName" placeholder="اسم الملف"></div>
-            <div>
-                <select id="fileType">
-                    <option value="lectures">🎥 المحاضرات</option>
-                    <option value="summaries">📄 التلخيصات</option>
-                </select>
-            </div>
-            <div><input type="file" id="filePicker" accept=".pdf"></div>
-            <button class="btn-upload" id="uploadBtn">نشر الآن</button>
-        </div>
-        <div id="status" style="margin-top:10px; font-size:13px;"></div>
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="showSection('summaries', this)">📝 ملفات التلخيص</button>
+        <button class="tab-btn" onclick="showSection('lectures', this)">📂 ملفات المحاضرات</button>
     </div>
 
-    <div class="tabs-nav">
-        <button class="tab-btn active" onclick="openTab(event, 'lectures-slide')">🎬 المحاضرات</button>
-        <button class="tab-btn" onclick="openTab(event, 'summaries-slide')">📝 التلخيصات</button>
-    </div>
+    <div id="summaries" class="content-section active"></div>
+    <div id="lectures" class="content-section"></div>
 
-    <div id="lectures-slide" class="tab-content active">
-        <div class="grid" id="lectures-grid"></div>
-    </div>
+    <script>
+        // --- ضع روابط ملفات الـ PDF هنا ---
+        // ملاحظة: تأكد أن الرابط ينتهي بـ .pdf أو رابط مباشر للملف
+        const summaryPdfLinks = [
+            "path/to/summary1.pdf", "path/to/summary2.pdf", "path/to/summary3.pdf",
+            "path/to/summary4.pdf", "path/to/summary5.pdf", "path/to/summary6.pdf",
+            "path/to/summary7.pdf", "path/to/summary8.pdf", "path/to/summary9.pdf",
+            "path/to/summary10.pdf"
+        ];
 
-    <div id="summaries-slide" class="tab-content">
-        <div class="grid" id="summaries-grid"></div>
-    </div>
+        const lecturePdfLinks = [
+            "path/to/lecture1.pdf", "path/to/lecture2.pdf", "path/to/lecture3.pdf",
+            "path/to/lecture4.pdf", "path/to/lecture5.pdf", "path/to/lecture6.pdf",
+            "path/to/lecture7.pdf", "path/to/lecture8.pdf", "path/to/lecture9.pdf",
+            "path/to/lecture10.pdf"
+        ];
 
-</div>
+        function generateButtons() {
+            const sumContainer = document.getElementById('summaries');
+            const lecContainer = document.getElementById('lectures');
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, query, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+            for (let i = 0; i < 10; i++) {
+                // أزرار التلخيص (PDF)
+                let sumBtn = document.createElement('a');
+                sumBtn.className = 'item-link';
+                sumBtn.href = summaryPdfLinks[i];
+                sumBtn.target = "_blank";
+                sumBtn.innerText = `تحميل تلخيص ${i + 1}`;
+                sumContainer.appendChild(sumBtn);
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
-        authDomain: "blog-62e33.firebaseapp.com",
-        projectId: "blog-62e33",
-        storageBucket: "blog-62e33.firebasestorage.app",
-        appId: "1:804628373288:web:b29db5c1600b5792393a1d"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const ADMIN_EMAIL = "ahmedail5852q@gmail.com";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/execا"; // الرابط من Google Apps Script
-    let isAdmin = false;
-
-    window.openTab = (evt, tabId) => {
-        const tabContents = document.getElementsByClassName("tab-content");
-        for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
-        const tabBtns = document.getElementsByClassName("tab-btn");
-        for (let i = 0; i < tabBtns.length; i++) tabBtns[i].classList.remove("active");
-        document.getElementById(tabId).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    };
-
-    onAuthStateChanged(auth, (user) => {
-        if (user && user.email === ADMIN_EMAIL) {
-            isAdmin = true;
-            document.getElementById('admin-section').style.display = 'block';
-            document.getElementById('admin-badge').style.display = 'block';
-        }
-    });
-
-    document.getElementById('uploadBtn').onclick = async () => {
-        const file = document.getElementById('filePicker').files[0];
-        const name = document.getElementById('fileName').value;
-        const type = document.getElementById('fileType').value;
-        if(!file || !name) return alert("أكمل البيانات");
-
-        const statusText = document.getElementById('status');
-        statusText.innerHTML = `<span class="loader-ring"></span> جاري الرفع إلى Drive...`;
-        
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const base64Data = reader.result.split(',')[1];
-            try {
-                // إرسال الملف لجوجل درايف
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        fileBase64: base64Data,
-                        fileName: name + ".pdf",
-                        contentType: file.type
-                    })
-                });
-                
-                const resData = await response.json();
-
-                if(resData.status === "success") {
-                    // حفظ الرابط في Firestore
-                    await addDoc(collection(db, "library_content"), {
-                        title: name, 
-                        fileUrl: resData.url, 
-                        category: type, 
-                        createdAt: serverTimestamp()
-                    });
-                    statusText.innerHTML = "✅ تم النشر بنجاح";
-                    document.getElementById('fileName').value = "";
-                } else {
-                    throw new Error("خطأ من السكريبت");
-                }
-            } catch (e) { 
-                statusText.innerHTML = "❌ فشل الرفع: تأكد من رابط السكريبت";
-                console.error(e);
+                // أزرار المحاضرات (PDF)
+                let lecBtn = document.createElement('a');
+                lecBtn.className = 'item-link';
+                lecBtn.href = lecturePdfLinks[i];
+                lecBtn.target = "_blank";
+                lecBtn.innerText = `ملف محاضرة ${i + 1}`;
+                lecContainer.appendChild(lecBtn);
             }
-        };
-    };
-
-    window.deleteFile = async (id) => {
-        if(confirm("حذف السجل؟ (لن يحذف الملف من درايف)")) {
-            await deleteDoc(doc(db, "library_content", id));
         }
-    };
 
-    onSnapshot(query(collection(db, "library_content"), orderBy("createdAt", "desc")), (snapshot) => {
-        const lGrid = document.getElementById('lectures-grid');
-        const sGrid = document.getElementById('summaries-grid');
-        lGrid.innerHTML = ''; sGrid.innerHTML = '';
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
+        }
 
-        snapshot.forEach(docSnap => {
-            const d = docSnap.data();
-            const btnDel = isAdmin ? `<button class="btn-delete" onclick="deleteFile('${docSnap.id}')" style="display:flex">🗑️</button>` : '';
-            const html = `<div class="card">${btnDel}<h3>${d.title}</h3><a href="${d.fileUrl}" target="_blank" class="btn-dl">⬇️ فتح من Drive</a></div>`;
-            
-            if(d.category === 'lectures') lGrid.innerHTML += html;
-            else sGrid.innerHTML += html;
-        });
-    });
-</script>
+        window.onload = generateButtons;
+    </script>
 </body>
 </html>

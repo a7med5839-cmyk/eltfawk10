@@ -1,367 +1,176 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مكتبة التفوق | نظام الإدارة المتكامل</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة التفوق - مكتبة الـ PDF</title>
+    <style>
+        :root {
+            --bg-color: #050a18;
+            --container-bg: #0a1226;
+            --accent-color: #00f2ff;
+            --text-color: #ffffff;
+            --secondary-text: #a0a0a0;
+            --pdf-color: #ff4b4b; /* لون مميز لملفات PDF */
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-<style>
-:root {
---primary-cyan:#00f2fe;
---accent-blue:#4facfe;
---bg-deep:#020617;
---glass:rgba(255,255,255,0.03);
---border:rgba(34,211,238,0.15);
---danger:#ff4b2b;
-}
+        .header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
 
-body{
-background:radial-gradient(circle at top right,#0f172a,var(--bg-deep));
-color:white;
-font-family:'Tajawal',sans-serif;
-margin:0;
-min-height:100vh;
-}
+        .tabs-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            padding: 5px;
+            margin-bottom: 30px;
+        }
 
-header{
-padding:20px 5%;
-background:rgba(8,51,68,0.2);
-backdrop-filter:blur(10px);
-border-bottom:1px solid var(--border);
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--secondary-text);
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-header h1{
-margin:0;
-font-size:1.5rem;
-background:linear-gradient(90deg,var(--primary-cyan),var(--accent-blue));
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+        }
 
-.container{
-width:95%;
-max-width:1200px;
-margin:30px auto;
-}
+        .content-section {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
 
-#admin-section{
-display:none;
-background:rgba(0,242,254,0.05);
-border:1px dashed var(--primary-cyan);
-padding:25px;
-border-radius:20px;
-margin-bottom:30px;
-}
+        .content-section.active { display: grid; }
 
-.upload-form{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-align-items:end;
-}
+        .item-link {
+            text-decoration: none;
+            background: var(--container-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            color: var(--text-color);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
 
-input,select{
-background:#0f172a;
-border:1px solid var(--border);
-color:white;
-padding:12px;
-border-radius:8px;
-width:100%;
-}
+        .item-link::before {
+            content: "📄"; /* أيقونة ملف */
+            font-size: 24px;
+        }
 
-.btn-upload{
-background:var(--primary-cyan);
-color:#020617;
-border:none;
-padding:14px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.tabs-nav{
-display:flex;
-gap:10px;
-margin-bottom:30px;
-background:var(--glass);
-padding:10px;
-border-radius:15px;
-border:1px solid var(--border);
-}
-
-.tab-btn{
-flex:1;
-padding:15px;
-border:none;
-background:transparent;
-color:#94a3b8;
-font-weight:bold;
-cursor:pointer;
-border-radius:10px;
-}
-
-.tab-btn.active{
-background:var(--primary-cyan);
-color:#020617;
-}
-
-.tab-content{display:none;}
-.tab-content.active{display:block;}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:20px;
-}
-
-.card{
-background:var(--glass);
-border:1px solid var(--border);
-border-radius:15px;
-padding:25px;
-text-align:center;
-position:relative;
-}
-
-.btn-dl{
-display:inline-block;
-width:100%;
-background:rgba(0,242,254,0.1);
-color:var(--primary-cyan);
-padding:12px;
-border-radius:8px;
-text-decoration:none;
-border:1px solid var(--primary-cyan);
-font-weight:bold;
-}
-
-.btn-delete{
-position:absolute;
-top:10px;
-left:10px;
-background:rgba(255,75,43,0.1);
-color:var(--danger);
-border:1px solid var(--danger);
-border-radius:50%;
-width:32px;
-height:32px;
-cursor:pointer;
-display:none;
-align-items:center;
-justify-content:center;
-}
-
-.loader-ring{
-border:2px solid #f3f3f3;
-border-top:2px solid var(--primary-cyan);
-border-radius:50%;
-width:15px;
-height:15px;
-animation:spin 1s linear infinite;
-display:inline-block;
-margin-left:8px;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-</style>
+        .item-link:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.2);
+        }
+        
+        /* علامة تمييز لملفات المحاضرات */
+        #lectures .item-link::before {
+            content: "📚"; 
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-<h1>🚀 مكتبة التفوق</h1>
-<div id="admin-badge" style="display:none;">المشرف: Ahmed</div>
-</header>
+    <div class="header">مكتبة التفوق 🚀</div>
 
-<div class="container">
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="showSection('summaries', this)">📝 ملفات التلخيص</button>
+        <button class="tab-btn" onclick="showSection('lectures', this)">📂 ملفات المحاضرات</button>
+    </div>
 
-<div id="admin-section">
-<h3>📤 إدارة الملفات</h3>
+    <div id="summaries" class="content-section active"></div>
+    <div id="lectures" class="content-section"></div>
 
-<div class="upload-form">
+    <script>
+        // --- ضع روابط ملفات الـ PDF هنا ---
+        // ملاحظة: تأكد أن الرابط ينتهي بـ .pdf أو رابط مباشر للملف
+        const summaryPdfLinks = [
+            "path/to/summary1.pdf", "path/to/summary2.pdf", "path/to/summary3.pdf",
+            "path/to/summary4.pdf", "path/to/summary5.pdf", "path/to/summary6.pdf",
+            "path/to/summary7.pdf", "path/to/summary8.pdf", "path/to/summary9.pdf",
+            "path/to/summary10.pdf"
+        ];
 
-<input type="text" id="fileName" placeholder="اسم الملف">
+        const lecturePdfLinks = [
+            "path/to/lecture1.pdf", "path/to/lecture2.pdf", "path/to/lecture3.pdf",
+            "path/to/lecture4.pdf", "path/to/lecture5.pdf", "path/to/lecture6.pdf",
+            "path/to/lecture7.pdf", "path/to/lecture8.pdf", "path/to/lecture9.pdf",
+            "path/to/lecture10.pdf"
+        ];
 
-<select id="fileType">
-<option value="lectures">المحاضرات</option>
-<option value="summaries">التلخيصات</option>
-</select>
+        function generateButtons() {
+            const sumContainer = document.getElementById('summaries');
+            const lecContainer = document.getElementById('lectures');
 
-<input type="file" id="filePicker" accept=".pdf">
+            for (let i = 0; i < 10; i++) {
+                // أزرار التلخيص (PDF)
+                let sumBtn = document.createElement('a');
+                sumBtn.className = 'item-link';
+                sumBtn.href = summaryPdfLinks[i];
+                sumBtn.target = "_blank";
+                sumBtn.innerText = `تحميل تلخيص ${i + 1}`;
+                sumContainer.appendChild(sumBtn);
 
-<button class="btn-upload" id="uploadBtn">نشر الآن</button>
+                // أزرار المحاضرات (PDF)
+                let lecBtn = document.createElement('a');
+                lecBtn.className = 'item-link';
+                lecBtn.href = lecturePdfLinks[i];
+                lecBtn.target = "_blank";
+                lecBtn.innerText = `ملف محاضرة ${i + 1}`;
+                lecContainer.appendChild(lecBtn);
+            }
+        }
 
-</div>
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
+        }
 
-<div id="status"></div>
-</div>
-
-<div class="tabs-nav">
-<button class="tab-btn active" onclick="openTab(event,'lectures-slide')">المحاضرات</button>
-<button class="tab-btn" onclick="openTab(event,'summaries-slide')">التلخيصات</button>
-</div>
-
-<div id="lectures-slide" class="tab-content active">
-<div class="grid" id="lectures-grid"></div>
-</div>
-
-<div id="summaries-slide" class="tab-content">
-<div class="grid" id="summaries-grid"></div>
-</div>
-
-</div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore,collection,addDoc,deleteDoc,doc,query,onSnapshot,orderBy,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig={
-apiKey:"AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
-authDomain:"blog-62e33.firebaseapp.com",
-projectId:"blog-62e33",
-storageBucket:"blog-62e33.firebasestorage.app",
-appId:"1:804628373288:web:b29db5c1600b5792393a1d"
-};
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
-
-const ADMIN_EMAIL="ahmedail5852q@gmail.com";
-
-/* ✅ الرابط المصحح */
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec";
-
-let isAdmin=false;
-
-window.openTab=(evt,tabId)=>{
-document.querySelectorAll(".tab-content").forEach(e=>e.classList.remove("active"));
-document.querySelectorAll(".tab-btn").forEach(e=>e.classList.remove("active"));
-document.getElementById(tabId).classList.add("active");
-evt.currentTarget.classList.add("active");
-};
-
-onAuthStateChanged(auth,(user)=>{
-if(user && user.email===ADMIN_EMAIL){
-isAdmin=true;
-document.getElementById("admin-section").style.display="block";
-document.getElementById("admin-badge").style.display="block";
-}
-});
-
-document.getElementById("uploadBtn").onclick=()=>{
-
-const file=document.getElementById("filePicker").files[0];
-const name=document.getElementById("fileName").value;
-const type=document.getElementById("fileType").value;
-
-if(!file || !name) return alert("ادخل اسم الملف واختر PDF");
-
-const reader=new FileReader();
-
-reader.readAsDataURL(file);
-
-reader.onload=async()=>{
-
-const base64Data=reader.result.split(",")[1];
-
-try{
-
-const response=await fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-action:"upload",
-fileBase64:base64Data,
-fileName:name+".pdf",
-contentType:file.type
-})
-});
-
-const resData=await response.json();
-
-if(resData.status==="success"){
-
-await addDoc(collection(db,"library_content"),{
-title:name,
-fileUrl:resData.url,
-fileId:resData.fileId,
-category:type,
-createdAt:serverTimestamp()
-});
-
-document.getElementById("status").innerHTML="تم النشر بنجاح";
-
-}else{
-throw new Error();
-}
-
-}catch{
-document.getElementById("status").innerHTML="خطأ في رفع الملف";
-}
-
-};
-};
-
-window.deleteFile=async(docId,driveId)=>{
-
-if(confirm("حذف الملف ؟")){
-
-if(driveId){
-
-await fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-action:"delete",
-fileId:driveId
-})
-});
-
-}
-
-await deleteDoc(doc(db,"library_content",docId));
-
-}
-};
-
-onSnapshot(query(collection(db,"library_content"),orderBy("createdAt","desc")),snap=>{
-
-const lGrid=document.getElementById("lectures-grid");
-const sGrid=document.getElementById("summaries-grid");
-
-lGrid.innerHTML="";
-sGrid.innerHTML="";
-
-snap.forEach(d=>{
-
-const data=d.data();
-
-const delBtn=isAdmin?`<button class="btn-delete" onclick="deleteFile('${d.id}','${data.fileId}')" style="display:flex">🗑️</button>`:"";
-
-const card=`
-<div class="card">
-${delBtn}
-<h3>${data.title}</h3>
-<a href="${data.fileUrl}" target="_blank" class="btn-dl">تحميل PDF</a>
-</div>`;
-
-if(data.category==="lectures") lGrid.innerHTML+=card;
-else sGrid.innerHTML+=card;
-
-});
-
-});
-
-</script>
-
+        window.onload = generateButtons;
+    </script>
 </body>
 </html>
