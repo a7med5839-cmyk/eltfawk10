@@ -30,7 +30,6 @@
 
         .container { width: 95%; max-width: 1200px; margin: 30px auto; }
 
-        /* منطقة المشرف */
         #admin-section {
             display: none; background: rgba(0, 242, 254, 0.05); border: 1px dashed var(--primary-cyan);
             padding: 25px; border-radius: 20px; margin-bottom: 30px; animation: fadeIn 0.5s ease;
@@ -42,7 +41,6 @@
         .btn-upload { background: var(--primary-cyan); color: #020617; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-upload:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
 
-        /* نظام التبويبات */
         .tabs-nav {
             display: flex; gap: 10px; margin-bottom: 30px; background: var(--glass);
             padding: 10px; border-radius: 15px; border: 1px solid var(--border);
@@ -61,7 +59,6 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* شبكة عرض الملفات */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card {
             background: var(--glass); border: 1px solid var(--border); border-radius: 15px;
@@ -98,11 +95,11 @@
 <div class="container">
     
     <div id="admin-section">
-        <h3 style="margin-top:0; color: var(--primary-cyan); margin-bottom: 20px;">📤 رفع ملف PDF إلى Google Drive</h3>
+        <h3 style="margin-top:0; color: var(--primary-cyan); margin-bottom: 20px;">📤 إدارة الملفات (خاص بالمشرف)</h3>
         <div class="upload-form">
             <div>
                 <label style="display:block; margin-bottom:8px; font-size:13px;">عنوان الملف:</label>
-                <input type="text" id="fileName" placeholder="مثال: مراجعة الميد تيرم">
+                <input type="text" id="fileName" placeholder="اسم الملف">
             </div>
             <div>
                 <label style="display:block; margin-bottom:8px; font-size:13px;">القسم:</label>
@@ -140,7 +137,6 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, collection, addDoc, deleteDoc, doc, query, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
         authDomain: "blog-62e33.firebaseapp.com",
@@ -154,12 +150,11 @@
     const db = getFirestore(app);
 
     const ADMIN_EMAIL = "ahmedail5852q@gmail.com";
-    // رابط السكريبت المدمج
-    const SCRIPT_URL = "https://script.https://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/execgoogle.com/macros/s/https://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec/exec"; 
+    // *** استبدل الرابط أدناه برابط الـ Web App الخاص بك من Google Apps Script ***
+    const SCRIPT_URL = "https://scripthttps://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec"; 
     
     let isAdmin = false;
 
-    // دالة تبديل التبويبات
     window.openTab = (evt, tabId) => {
         const tabContents = document.getElementsByClassName("tab-content");
         for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
@@ -169,7 +164,6 @@
         evt.currentTarget.classList.add("active");
     };
 
-    // التحقق من صلاحيات المشرف
     onAuthStateChanged(auth, (user) => {
         if (user && user.email === ADMIN_EMAIL) {
             isAdmin = true;
@@ -178,23 +172,21 @@
         }
     });
 
-    // منطق الرفع
     document.getElementById('uploadBtn').onclick = async () => {
         const file = document.getElementById('filePicker').files[0];
         const name = document.getElementById('fileName').value;
         const type = document.getElementById('fileType').value;
         
-        if(!file || !name) return alert("يرجى إكمال البيانات واختيار ملف PDF");
+        if(!file || !name) return alert("يرجى إدخال اسم الملف واختياره");
 
         const statusDiv = document.getElementById('status');
-        statusDiv.innerHTML = `<span class="loader-ring"></span> جاري الرفع إلى Google Drive... يرجى الانتظار`;
+        statusDiv.innerHTML = `<span class="loader-ring"></span> جاري الرفع إلى Google Drive...`;
         
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {
             const base64Data = reader.result.split(',')[1];
             try {
-                // 1. الإرسال إلى Google Apps Script
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -208,51 +200,44 @@
                 const resData = await response.json();
 
                 if(resData.status === "success") {
-                    // 2. تخزين البيانات في Firebase Firestore
                     await addDoc(collection(db, "library_content"), {
                         title: name, 
                         fileUrl: resData.url, 
-                        fileId: resData.fileId, // المعرف ضروري لعملية الحذف
+                        fileId: resData.fileId, 
                         category: type, 
                         createdAt: serverTimestamp()
                     });
                     
-                    statusDiv.innerHTML = "✅ تم النشر بنجاح على الموقع وفي درايف";
+                    statusDiv.innerHTML = "✅ تم النشر بنجاح";
                     document.getElementById('fileName').value = "";
                     document.getElementById('filePicker').value = "";
                 } else {
                     throw new Error(resData.error);
                 }
             } catch (e) { 
-                statusDiv.innerHTML = "❌ فشل الرفع: تأكد من إعدادات السكريبت وصلاحيات المجلد";
+                statusDiv.innerHTML = "❌ خطأ: تأكد من إعدادات الـ Web App وصلاحيات المجلد";
                 console.error(e);
             }
         };
     };
 
-    // منطق الحذف (Drive + Firestore)
     window.deleteFile = async (docId, driveId) => {
-        if(confirm("سيتم حذف الملف نهائياً من الموقع ومن حساب Google Drive. هل أنت متأكد؟")) {
+        if(confirm("سيتم حذف الملف نهائياً من الموقع والدرايف. هل أنت متأكد؟")) {
             try {
-                // 1. حذف الملف من Drive عبر السكريبت
                 if (driveId) {
                     await fetch(SCRIPT_URL, {
                         method: 'POST',
                         body: JSON.stringify({ action: "delete", fileId: driveId })
                     });
                 }
-
-                // 2. حذف السجل من قاعدة بيانات الموقع
                 await deleteDoc(doc(db, "library_content", docId));
                 alert("تم الحذف بنجاح");
             } catch (err) {
-                alert("حدث خطأ أثناء محاولة الحذف");
-                console.error(err);
+                alert("حدث خطأ أثناء الحذف");
             }
         }
     };
 
-    // جلب البيانات لحظياً من Firebase
     onSnapshot(query(collection(db, "library_content"), orderBy("createdAt", "desc")), (snapshot) => {
         const lGrid = document.getElementById('lectures-grid');
         const sGrid = document.getElementById('summaries-grid');
