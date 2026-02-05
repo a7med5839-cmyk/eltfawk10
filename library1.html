@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة التفوق | نظام درايف</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>مكتبة التفوق | نظام الإدارة المتكامل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-cyan: #00f2fe;
@@ -28,17 +28,21 @@
 
         header h1 { margin: 0; font-size: 1.5rem; background: linear-gradient(90deg, var(--primary-cyan), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .container { width: 90%; max-width: 1100px; margin: 30px auto; }
+        .container { width: 95%; max-width: 1200px; margin: 30px auto; }
 
+        /* منطقة المشرف */
         #admin-section {
             display: none; background: rgba(0, 242, 254, 0.05); border: 1px dashed var(--primary-cyan);
-            padding: 20px; border-radius: 20px; margin-bottom: 30px;
+            padding: 25px; border-radius: 20px; margin-bottom: 30px; animation: fadeIn 0.5s ease;
         }
 
-        .upload-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: end; }
-        input, select { background: #0f172a; border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; font-family: 'Tajawal'; width: 100%; box-sizing: border-box; }
-        .btn-upload { background: var(--primary-cyan); color: #020617; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .upload-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end; }
+        input, select { background: #0f172a; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; font-family: 'Tajawal'; width: 100%; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary-cyan); box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+        .btn-upload { background: var(--primary-cyan); color: #020617; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-upload:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
 
+        /* نظام التبويبات */
         .tabs-nav {
             display: flex; gap: 10px; margin-bottom: 30px; background: var(--glass);
             padding: 10px; border-radius: 15px; border: 1px solid var(--border);
@@ -47,34 +51,40 @@
         .tab-btn {
             flex: 1; padding: 15px; border: none; background: transparent; color: #94a3b8;
             font-family: 'Tajawal'; font-weight: bold; cursor: pointer; border-radius: 10px;
-            transition: 0.3s; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.3s; font-size: 1rem;
         }
 
         .tab-btn.active { background: var(--primary-cyan); color: #020617; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
 
-        .tab-content { display: none; animation: fadeIn 0.5s ease; }
-        .tab-content.active { display: block; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* شبكة عرض الملفات */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card {
             background: var(--glass); border: 1px solid var(--border); border-radius: 15px;
-            padding: 20px; transition: 0.3s; position: relative; overflow: hidden;
+            padding: 25px; transition: 0.3s; position: relative; overflow: hidden; text-align: center;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary-cyan); }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary-cyan); background: rgba(0, 242, 254, 0.03); }
+        .card h3 { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5; }
+        
         .btn-dl {
             display: inline-block; width: 100%; text-align: center; background: rgba(0, 242, 254, 0.1);
-            color: var(--primary-cyan); padding: 10px; border-radius: 8px; text-decoration: none;
-            margin-top: 10px; border: 1px solid var(--primary-cyan); font-weight: bold; font-size: 0.9rem;
+            color: var(--primary-cyan); padding: 12px; border-radius: 8px; text-decoration: none;
+            border: 1px solid var(--primary-cyan); font-weight: bold; font-size: 0.9rem; transition: 0.3s;
         }
+        .btn-dl:hover { background: var(--primary-cyan); color: #000; }
+
         .btn-delete {
             position: absolute; top: 10px; left: 10px; background: rgba(255, 75, 43, 0.1);
             color: var(--danger); border: 1px solid var(--danger); border-radius: 50%;
-            width: 28px; height: 28px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px;
+            width: 32px; height: 32px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: 0.3s;
         }
+        .btn-delete:hover { background: var(--danger); color: white; }
 
-        .loader-ring { border: 2px solid #f3f3f3; border-top: 2px solid var(--primary-cyan); border-radius: 50%; width: 15px; height: 15px; animation: spin 1s linear infinite; display: inline-block; }
+        .loader-ring { border: 2px solid #f3f3f3; border-top: 2px solid var(--primary-cyan); border-radius: 50%; width: 15px; height: 15px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left: 8px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -82,25 +92,32 @@
 
 <header>
     <h1>🚀 مكتبة التفوق</h1>
-    <div id="admin-badge" style="display:none; font-size: 12px; background: var(--primary-cyan); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold;">المشرف:  Ahmed El_samahy</div>
+    <div id="admin-badge" style="display:none; font-size: 12px; background: var(--primary-cyan); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold;">المشرف: Ahmed El_samahy</div>
 </header>
 
 <div class="container">
     
     <div id="admin-section">
-        <h3 style="margin-top:0; color: var(--primary-cyan);">📤 إضافة من Google Drive</h3>
+        <h3 style="margin-top:0; color: var(--primary-cyan); margin-bottom: 20px;">📤 رفع ملف PDF إلى Google Drive</h3>
         <div class="upload-form">
-            <div><input type="text" id="fileName" placeholder="اسم الملف"></div>
             <div>
+                <label style="display:block; margin-bottom:8px; font-size:13px;">عنوان الملف:</label>
+                <input type="text" id="fileName" placeholder="مثال: مراجعة الميد تيرم">
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:8px; font-size:13px;">القسم:</label>
                 <select id="fileType">
                     <option value="lectures">🎥 المحاضرات</option>
                     <option value="summaries">📄 التلخيصات</option>
                 </select>
             </div>
-            <div><input type="file" id="filePicker" accept=".pdf"></div>
+            <div>
+                <label style="display:block; margin-bottom:8px; font-size:13px;">اختر PDF:</label>
+                <input type="file" id="filePicker" accept=".pdf">
+            </div>
             <button class="btn-upload" id="uploadBtn">نشر الآن</button>
         </div>
-        <div id="status" style="margin-top:10px; font-size:13px;"></div>
+        <div id="status" style="margin-top:20px; font-size:14px; font-weight: bold;"></div>
     </div>
 
     <div class="tabs-nav">
@@ -123,6 +140,7 @@
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, collection, addDoc, deleteDoc, doc, query, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+    // إعدادات Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
         authDomain: "blog-62e33.firebaseapp.com",
@@ -136,9 +154,12 @@
     const db = getFirestore(app);
 
     const ADMIN_EMAIL = "ahmedail5852q@gmail.com";
-    const SCRIPT_URL = "https://script.google.com/httphttps://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/execs://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec"; // الرابط من Google Apps Script
+    // رابط السكريبت المدمج
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcm5A_HL2h8NBnvSuuCUwdBQyC50ho5pS9ed0Vy_odpbUmS88GzvIZc3XriOZk5egTig/exec"; 
+    
     let isAdmin = false;
 
+    // دالة تبديل التبويبات
     window.openTab = (evt, tabId) => {
         const tabContents = document.getElementsByClassName("tab-content");
         for (let i = 0; i < tabContents.length; i++) tabContents[i].classList.remove("active");
@@ -148,6 +169,7 @@
         evt.currentTarget.classList.add("active");
     };
 
+    // التحقق من صلاحيات المشرف
     onAuthStateChanged(auth, (user) => {
         if (user && user.email === ADMIN_EMAIL) {
             isAdmin = true;
@@ -156,24 +178,27 @@
         }
     });
 
+    // منطق الرفع
     document.getElementById('uploadBtn').onclick = async () => {
         const file = document.getElementById('filePicker').files[0];
         const name = document.getElementById('fileName').value;
         const type = document.getElementById('fileType').value;
-        if(!file || !name) return alert("أكمل البيانات");
+        
+        if(!file || !name) return alert("يرجى إكمال البيانات واختيار ملف PDF");
 
-        const statusText = document.getElementById('status');
-        statusText.innerHTML = `<span class="loader-ring"></span> جاري الرفع إلى Drive...`;
+        const statusDiv = document.getElementById('status');
+        statusDiv.innerHTML = `<span class="loader-ring"></span> جاري الرفع إلى Google Drive... يرجى الانتظار`;
         
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {
             const base64Data = reader.result.split(',')[1];
             try {
-                // إرسال الملف لجوجل درايف
+                // 1. الإرسال إلى Google Apps Script
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({
+                        action: "upload",
                         fileBase64: base64Data,
                         fileName: name + ".pdf",
                         contentType: file.type
@@ -183,31 +208,51 @@
                 const resData = await response.json();
 
                 if(resData.status === "success") {
-                    // حفظ الرابط في Firestore
+                    // 2. تخزين البيانات في Firebase Firestore
                     await addDoc(collection(db, "library_content"), {
                         title: name, 
                         fileUrl: resData.url, 
+                        fileId: resData.fileId, // المعرف ضروري لعملية الحذف
                         category: type, 
                         createdAt: serverTimestamp()
                     });
-                    statusText.innerHTML = "✅ تم النشر بنجاح";
+                    
+                    statusDiv.innerHTML = "✅ تم النشر بنجاح على الموقع وفي درايف";
                     document.getElementById('fileName').value = "";
+                    document.getElementById('filePicker').value = "";
                 } else {
-                    throw new Error("خطأ من السكريبت");
+                    throw new Error(resData.error);
                 }
             } catch (e) { 
-                statusText.innerHTML = "❌ فشل الرفع: تأكد من رابط السكريبت";
+                statusDiv.innerHTML = "❌ فشل الرفع: تأكد من إعدادات السكريبت وصلاحيات المجلد";
                 console.error(e);
             }
         };
     };
 
-    window.deleteFile = async (id) => {
-        if(confirm("حذف السجل؟ (لن يحذف الملف من درايف)")) {
-            await deleteDoc(doc(db, "library_content", id));
+    // منطق الحذف (Drive + Firestore)
+    window.deleteFile = async (docId, driveId) => {
+        if(confirm("سيتم حذف الملف نهائياً من الموقع ومن حساب Google Drive. هل أنت متأكد؟")) {
+            try {
+                // 1. حذف الملف من Drive عبر السكريبت
+                if (driveId) {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "delete", fileId: driveId })
+                    });
+                }
+
+                // 2. حذف السجل من قاعدة بيانات الموقع
+                await deleteDoc(doc(db, "library_content", docId));
+                alert("تم الحذف بنجاح");
+            } catch (err) {
+                alert("حدث خطأ أثناء محاولة الحذف");
+                console.error(err);
+            }
         }
     };
 
+    // جلب البيانات لحظياً من Firebase
     onSnapshot(query(collection(db, "library_content"), orderBy("createdAt", "desc")), (snapshot) => {
         const lGrid = document.getElementById('lectures-grid');
         const sGrid = document.getElementById('summaries-grid');
@@ -215,8 +260,13 @@
 
         snapshot.forEach(docSnap => {
             const d = docSnap.data();
-            const btnDel = isAdmin ? `<button class="btn-delete" onclick="deleteFile('${docSnap.id}')" style="display:flex">🗑️</button>` : '';
-            const html = `<div class="card">${btnDel}<h3>${d.title}</h3><a href="${d.fileUrl}" target="_blank" class="btn-dl">⬇️ فتح من Drive</a></div>`;
+            const btnDel = isAdmin ? `<button class="btn-delete" onclick="deleteFile('${docSnap.id}', '${d.fileId}')" style="display:flex">🗑️</button>` : '';
+            const html = `
+                <div class="card">
+                    ${btnDel}
+                    <h3>${d.title}</h3>
+                    <a href="${d.fileUrl}" target="_blank" class="btn-dl">⬇️ تحميل PDF</a>
+                </div>`;
             
             if(d.category === 'lectures') lGrid.innerHTML += html;
             else sGrid.innerHTML += html;
