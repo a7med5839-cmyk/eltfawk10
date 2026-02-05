@@ -3,132 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty of AI Interface</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>AI Faculty - Sky Blue Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #050720;
-            --card-bg: rgba(10, 13, 54, 0.8); /* جعل الخلفية شفافة قليلاً */
-            --accent-pink: #ff33ff;
-            --text-gray: #a5a5cc;
+            /* نظام ألوان السماوي التقني */
+            --sky-blue: #00d4ff;
+            --deep-blue: #001220;
+            --glass-blue: rgba(0, 212, 255, 0.03);
+            --border-blue: rgba(0, 212, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
         }
 
         body {
-            /* إضافة صورة خلفية افتراضية للروبوت */
-            background: linear-gradient(rgba(5, 7, 32, 0.8), rgba(5, 7, 32, 0.8)), 
-                        url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Cairo', sans-serif;
-            color: white;
+            background-color: var(--deep-blue);
+            /* صورة خلفية روبوتات - يمكنك استبدال الرابط بصورتك الخاصة */
+            background-image: url('https://images.unsplash.com/photo-1546776230-bb862948da36?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* طبقة تظليل مائلة للزرقة لتعزيز الطابع السماوي */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0, 40, 80, 0.4) 0%, rgba(0, 5, 15, 0.9) 100%);
+            z-index: 1;
+        }
+
+        /* جزيئات ضوئية سماوية */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-image: radial-gradient(circle, var(--sky-blue) 0.5px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.15;
         }
 
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(15px); /* تأثير ضبابي خلف البطاقة */
-            border: 1.5px solid rgba(255, 51, 255, 0.2);
-            border-radius: 45px;
+            position: relative;
+            z-index: 10;
+            width: 420px;
             padding: 60px 40px;
+            background: var(--glass-blue);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border-radius: 45px;
+            border: 1px solid var(--border-blue);
             text-align: center;
-            width: 360px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.1), 
+                        inset 0 0 20px rgba(0, 212, 255, 0.05);
+            animation: slideUp 1s ease-out;
         }
 
-        .card:hover {
-            transform: scale(1.02);
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* أنيميشن الروبوت */
-        @keyframes blink {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .robot-glow {
+        .robot-icon {
             width: 100px;
             height: 100px;
-            background-color: var(--accent-pink);
-            margin: 0 auto 40px;
-            border-radius: 25px;
-            position: relative;
-            box-shadow: 0 0 40px rgba(255, 51, 255, 0.6);
+            background: linear-gradient(135deg, #00d4ff, #0072ff);
+            margin: 0 auto 30px;
+            border-radius: 30px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: blink 3s infinite ease-in-out;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5),
+                        0 0 60px rgba(0, 212, 255, 0.2);
+            animation: float 3s infinite ease-in-out;
         }
 
-        /* ... بقية الـ CSS الخاص بالروبوت كما هو ... */
-        .robot-glow::before, .robot-glow::after {
-            content: '';
-            position: absolute;
-            background: var(--accent-pink);
-            width: 15px;
-            height: 40px;
-            border-radius: 10px;
-        }
-        .robot-glow::before { left: -20px; }
-        .robot-glow::after { right: -20px; }
-
-        .eyes { display: flex; gap: 15px; margin-bottom: 10px; }
-        .eyes span { width: 12px; height: 12px; background: #0a0d36; border-radius: 50%; }
-        .mouth { width: 35px; height: 6px; background: #0a0d36; border-radius: 10px; }
-
-        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; }
-        .en-subtitle { color: var(--text-gray); margin-bottom: 35px; }
-
-        /* تعديل الزر ليكون رابطاً */
-        .entry-link {
-            text-decoration: none;
-            display: block;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); shadow: 0 10px 30px rgba(0, 212, 255, 0.5); }
+            50% { transform: translateY(-10px); shadow: 0 20px 40px rgba(0, 212, 255, 0.7); }
         }
 
-        .entry-btn {
-            background: linear-gradient(90deg, #202c63 0%, #4b5d74 100%);
-            color: white;
-            border: none;
-            padding: 18px 50px;
-            border-radius: 60px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
+        h1 {
+            color: #fff;
+            font-size: 2.6rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .subtitle {
+            color: var(--sky-blue);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 45px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
             width: 100%;
-            transition: all 0.3s ease;
-            font-family: 'Cairo', sans-serif;
+            padding: 18px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--sky-blue);
+            border-radius: 20px;
+            color: var(--sky-blue);
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
 
-        .entry-btn:hover {
-            letter-spacing: 1px;
-            box-shadow: 0 0 30px rgba(0, 198, 255, 0.5);
+        .btn:hover {
+            background: var(--sky-blue);
+            color: #000;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
         }
+
+        .btn span {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover span {
+            transform: translateX(-8px);
+        }
+
+        /* لمعة سريعة تمر على الزر */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -100%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(45deg);
+            transition: 0.6s;
+        }
+
+        .btn:hover::after {
+            left: 150%;
+        }
+
     </style>
 </head>
 <body>
 
+    <div class="particles"></div>
+
     <div class="card">
-        <div class="robot-glow">
-            <div class="eyes"><span></span><span></span></div>
-            <div class="mouth"></div>
+        <div class="robot-icon">
+            <svg width="60" viewBox="0 0 24 24" fill="white">
+                <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.59,5.39 13,5.73V7H14A7,7 0 0,1 21,14V16H19V14A5,5 0 0,0 14,9H10A5,5 0 0,0 5,14V16H3V14A7,7 0 0,1 10,7H11V5.73C10.41,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A2.5,2.5 0 0,1 10,15.5A2.5,2.5 0 0,1 7.5,18A2.5,2.5 0 0,1 5,15.5A2.5,2.5 0 0,1 7.5,13M16.5,13A2.5,2.5 0 0,1 19,15.5A2.5,2.5 0 0,1 16.5,18A2.5,2.5 0 0,1 14,15.5A2.5,2.5 0 0,1 16.5,13Z" />
+            </svg>
         </div>
-
+        
         <h1>ذكاء اصطناعي</h1>
-        <p class="en-subtitle">Faculty of Artificial Intelligence</p>
+        <p class="subtitle">Faculty of Artificial Intelligence</p>
 
-        <a href="password.html" class="entry-link">
-            <button class="entry-btn">
-                دخول الكلية <span>➜</span>
-            </button>
+        <a href="password.html" class="btn">
+            دخول الكلية
+            <span>←</span>
         </a>
     </div>
 
