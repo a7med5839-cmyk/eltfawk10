@@ -46,6 +46,7 @@
             color: white;
             box-sizing: border-box;
             outline: none;
+            text-align: right;
         }
 
         input:focus { border-color: var(--primary-cyan); }
@@ -59,11 +60,19 @@
             transition: 0.3s;
             border: none;
             margin-top: 10px;
+            font-family: 'Tajawal', sans-serif;
         }
 
         .btn-google { background: white; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-login { background: transparent; border: 2px solid var(--primary-cyan); color: var(--primary-cyan); }
         .btn-login:hover { background: var(--primary-cyan); color: #000; }
+        
+        .btn-signup { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: #cbd5e1; 
+            border: 1px solid #334155; 
+        }
+        .btn-signup:hover { background: rgba(255, 255, 255, 0.2); color: white; }
 
         .divider { margin: 20px 0; color: #64748b; font-size: 14px; }
     </style>
@@ -84,13 +93,21 @@
     <input type="password" id="password" placeholder="كلمة المرور">
 
     <button class="btn btn-login" id="loginBtn">دخول للمنصة</button>
+    <button class="btn btn-signup" id="signUpBtn">تسجيل طالب جديد ✨</button>
 </div>
 
 <script type="module">
+    // استيراد الدوال اللازمة من Firebase SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { 
+        getAuth, 
+        signInWithEmailAndPassword, 
+        createUserWithEmailAndPassword, 
+        signInWithPopup, 
+        GoogleAuthProvider 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // بياناتك من سكرين شوت Firebase
+    // إعدادات Firebase الخاصة بمشروعك
     const firebaseConfig = {
         apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
         authDomain: "blog-62e33.firebaseapp.com",
@@ -100,34 +117,60 @@
         appId: "1:804628373288:web:b29db5c1600b5792393a1d"
     };
 
+    // تهيئة التطبيق
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // دالة التوجيه الموحدة
+    // دالة التوجيه لصفحة لوحة التحكم
     const redirectToDashboard = () => {
-        window.location.href = "dashboard.html"; // اسم صفحة لوحة التحكم
+        window.location.href = "dashboard.html"; 
     };
 
-    // تسجيل جوجل مع التوجيه
-    document.getElementById('googleBtn').onclick = async () => {
+    // 1. وظيفة تسجيل طالب جديد (Sign Up)
+    document.getElementById('signUpBtn').onclick = async () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        
+        if (!email || !pass) {
+            alert("يرجى إدخال البريد وكلمة المرور أولاً");
+            return;
+        }
+
         try {
-            await signInWithPopup(auth, provider);
-            redirectToDashboard(); // توجيه بعد النجاح
+            await createUserWithEmailAndPassword(auth, email, pass);
+            alert("تم إنشاء حساب الطالب بنجاح!");
+            redirectToDashboard();
         } catch (error) {
-            alert("خطأ: " + error.message);
+            if (error.code === 'auth/email-already-in-use') {
+                alert("هذا البريد مسجل بالفعل، جرب تسجيل الدخول.");
+            } else if (error.code === 'auth/weak-password') {
+                alert("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
+            } else {
+                alert("حدث خطأ أثناء التسجيل: " + error.message);
+            }
         }
     };
 
-    // تسجيل الإيميل مع التوجيه
+    // 2. وظيفة تسجيل الدخول (Sign In)
     document.getElementById('loginBtn').onclick = async () => {
         const email = document.getElementById('email').value;
         const pass = document.getElementById('password').value;
         try {
             await signInWithEmailAndPassword(auth, email, pass);
-            redirectToDashboard(); // توجيه بعد النجاح
+            redirectToDashboard();
         } catch (error) {
-            alert("بيانات الدخول غير صحيحة");
+            alert("فشل الدخول: تأكد من صحة البيانات أو قم بإنشاء حساب جديد.");
+        }
+    };
+
+    // 3. وظيفة تسجيل الدخول بواسطة Google
+    document.getElementById('googleBtn').onclick = async () => {
+        try {
+            await signInWithPopup(auth, provider);
+            redirectToDashboard();
+        } catch (error) {
+            alert("خطأ في تسجيل Google: " + error.message);
         }
     };
 </script>
