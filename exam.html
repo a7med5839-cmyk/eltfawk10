@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار التفوق/title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-cyan: #00f2fe;
+            --dark-cyan: #083344;
+            --bg-deep: #020617;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(34, 211, 238, 0.2);
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        /* شاشة التحقق من الأمان */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-deep); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; color: var(--primary-cyan);
+        }
+
+        header {
+            width: 100%; padding: 15px 5%;
+            background: rgba(8, 51, 68, 0.4);
+            backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            box-sizing: border-box;
+        }
+
+        .container { width: 90%; max-width: 750px; margin-top: 30px; margin-bottom: 50px; flex-grow: 1; }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* شريط التقدم */
+        .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        #progress-fill { width: 0%; height: 100%; background: var(--primary-cyan); transition: 0.4s; box-shadow: 0 0 10px var(--primary-cyan); }
+
+        .q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.6; text-align: center; }
+
+        .options-grid { display: grid; gap: 12px; }
+
+        .option-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: right;
+            font-family: 'Tajawal';
+            font-size: 16px;
+        }
+
+        .option-btn:hover { background: rgba(0, 242, 254, 0.1); border-color: var(--primary-cyan); transform: scale(1.01); }
+        .option-btn.selected { background: var(--primary-cyan); color: var(--dark-cyan); font-weight: bold; border-color: white; }
+
+        .btn-confirm {
+            width: 100%; margin-top: 25px; padding: 15px; border-radius: 12px; border: none;
+            background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
+            color: var(--dark-cyan); font-weight: bold; cursor: pointer; font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .btn-confirm:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
+
+        /* شاشة النتائج */
+        .score-box { font-size: 60px; color: var(--primary-cyan); margin: 20px 0; font-weight: bold; text-align: center; }
+        .locked-badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 5px 15px; border-radius: 50px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
+
+        footer { padding: 20px; color: #64748b; font-size: 13px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="loader">جارٍ التأكد من هويتك الرقمية... 🔐</div>
+
+<header>
+    <div style="font-weight: bold; color: var(--primary-cyan); font-size: 1.2rem;">🚀 اختبار منصة بطوط</div>
+    <div id="user-display" style="font-size: 13px; opacity: 0.8;"></div>
+</header>
+
+<div class="container">
+    <div id="quiz-screen" class="glass-card" style="display:none;">
+        <div class="progress-container"><div id="progress-fill"></div></div>
+        <div id="q-number" style="color: var(--primary-cyan); font-size: 14px; margin-bottom: 10px;">سؤال 1 من 15</div>
+        <div class="q-text" id="question-text">تحميل السؤال...</div>
+        <div class="options-grid" id="options-container"></div>
+        <button class="btn-confirm" id="next-btn">تأكيد الإجابة والتحرك للسؤال التالي</button>
+    </div>
+
+    <div id="result-screen" class="glass-card" style="display:none; text-align: center;">
+        <span class="locked-badge">🛡️ تم قفل الدرجة وإرسالها للمشرف</span>
+        <h2>النتيجة النهائية</h2>
+        <div class="score-box" id="final-score">0%</div>
+        <p style="color: #94a3b8; margin-bottom: 25px;">لا يمكن إعادة الاختبار أو تعديل الدرجة حالياً.</p>
+        <button class="btn-confirm" onclick="location.href='dashboard.html'">العودة للوحة التحكم</button>
+    </div>
+</div>
+
+<footer>
+    تم التطوير وبرمجة النظام بواسطة <b>MOHAMED AMR</b> | 2026 ©
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
+        authDomain: "blog-62e33.firebaseapp.com",
+        projectId: "blog-62e33",
+        storageBucket: "blog-62e33.firebasestorage.app",
+        messagingSenderId: "804628373288",
+        appId: "1:804628373288:web:b29db5c1600b5792393a1d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // بنك الأسئلة (15 سؤالاً)
+    const questions = [
+        { q: "ما هي لغة البرمجة التي تُستخدم لتصميم هيكل صفحات الويب؟", opts: ["HTML", "Python", "CSS", "SQL"], ans: 0 },
+        { q: "أي من اللغات التالية تُستخدم لإضافة تنسيقات جمالية للموقع؟", opts: ["PHP", "CSS", "C#", "HTML"], ans: 1 },
+        { q: "ما هي الدالة المستخدمة لعرض رسالة تنبيه في JavaScript؟", opts: ["msg()", "prompt()", "alert()", "confirm()"], ans: 2 },
+        { q: "ما هو ناتج عملية 10 * 10؟", opts: ["10", "100", "1000", "20"], ans: 1 },
+        { q: "أي كوكب هو الأقرب إلى الشمس؟", opts: ["المريخ", "عطارد", "الزهرة", "المشتري"], ans: 1 },
+        { q: "ما هو أكبر حيوان في العالم؟", opts: ["الفيل", "الحوت الأزرق", "الزرافة", "القرش"], ans: 1 },
+        { q: "كم عدد أضلاع المثلث؟", opts: ["2", "3", "4", "5"], ans: 1 },
+        { q: "ما هي عاصمة المملكة العربية السعودية؟", opts: ["جدة", "مكة", "الرياض", "الدمام"], ans: 2 },
+        { q: "أي لغة برمجية تُستخدم بكثرة في الذكاء الاصطناعي؟", opts: ["Java", "Python", "C++", "JavaScript"], ans: 1 },
+        { q: "ما هي سرعة الضوء التقريبية؟", opts: ["300 ألف كم/ث", "150 ألف كم/ث", "500 ألف كم/ث", "100 ألف كم/ث"], ans: 0 },
+        { q: "من هو مؤسس شركة مايكروسوفت؟", opts: ["ستيف جوبز", "بيل غيتس", "مارك زوكربيرغ", "إيلون ماسك"], ans: 1 },
+        { q: "ما هو العنصر الكيميائي الذي رمزه O؟", opts: ["الذهب", "الحديد", "الأكسجين", "الهيدروجين"], ans: 2 },
+        { q: "كم دقيقة في الساعة الواحدة؟", opts: ["50", "60", "70", "100"], ans: 1 },
+        { q: "ما هو المحيط الذي يحد الوطن العربي من الغرب؟", opts: ["الهندي", "الهادي", "الأطلسي", "المتجمد"], ans: 2 },
+        { q: "هل هذه المنصة رائعة؟", opts: ["نعم جداً", "بالتأكيد", "الأفضل على الإطلاق", "كل ما سبق"], ans: 3 }
+    ];
+
+    let currentUser = null;
+    let currentQ = 0;
+    let score = 0;
+    let selected = null;
+
+    // معالجة مشكلة تسجيل الدخول
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('user-display').innerText = `المستخدم: ${user.displayName || user.email}`;
+            loadQuestion();
+        } else {
+            // انتظار بسيط للتأكد من حالة الاتصال
+            setTimeout(() => {
+                if(!auth.currentUser) window.location.href = 'index.html';
+            }, 2500);
+        }
+    });
+
+    function loadQuestion() {
+        const q = questions[currentQ];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('q-number').innerText = `سؤال ${currentQ + 1} من ${questions.length}`;
+        
+        const progress = ((currentQ + 1) / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = progress + "%";
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        selected = null;
+
+        q.opts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                selected = i;
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    document.getElementById('next-btn').onclick = async () => {
+        if (selected === null) {
+            alert("يرجى اختيار إجابة قبل الانتقال!");
+            return;
+        }
+
+        if (selected === questions[currentQ].ans) score++;
+        
+        currentQ++;
+        if (currentQ < questions.length) {
+            loadQuestion();
+        } else {
+            finalizeQuiz();
+        }
+    };
+
+    async function finalizeQuiz() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        
+        const finalPct = Math.round((score / questions.length) * 100);
+        document.getElementById('final-score').innerText = finalPct + "%";
+
+        // حفظ النتيجة وقفل التعديل في Firestore
+        try {
+            await setDoc(doc(db, "exam_results", currentUser.uid), {
+                student: currentUser.displayName || currentUser.email,
+                final_score: finalPct,
+                correct_count: score,
+                is_locked: true,
+                submitted_at: serverTimestamp()
+            });
+        } catch (error) {
+            console.error("خطأ في حفظ البيانات:", error);
+        }
+    }
+</script>
+</body>
+</html>
