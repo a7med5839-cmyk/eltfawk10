@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty of AI Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050720;
+            --card-bg: rgba(10, 13, 54, 0.8); /* جعل الخلفية شفافة قليلاً */
+            --accent-pink: #ff33ff;
+            --text-gray: #a5a5cc;
+        }
+
+        body {
+            /* إضافة صورة خلفية افتراضية للروبوت */
+            background: linear-gradient(rgba(5, 7, 32, 0.8), rgba(5, 7, 32, 0.8)), 
+                        url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            color: white;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px); /* تأثير ضبابي خلف البطاقة */
+            border: 1.5px solid rgba(255, 51, 255, 0.2);
+            border-radius: 45px;
+            padding: 60px 40px;
+            text-align: center;
+            width: 360px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        /* أنيميشن الروبوت */
+        @keyframes blink {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .robot-glow {
+            width: 100px;
+            height: 100px;
+            background-color: var(--accent-pink);
+            margin: 0 auto 40px;
+            border-radius: 25px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(255, 51, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: blink 3s infinite ease-in-out;
+        }
+
+        /* ... بقية الـ CSS الخاص بالروبوت كما هو ... */
+        .robot-glow::before, .robot-glow::after {
+            content: '';
+            position: absolute;
+            background: var(--accent-pink);
+            width: 15px;
+            height: 40px;
+            border-radius: 10px;
+        }
+        .robot-glow::before { left: -20px; }
+        .robot-glow::after { right: -20px; }
+
+        .eyes { display: flex; gap: 15px; margin-bottom: 10px; }
+        .eyes span { width: 12px; height: 12px; background: #0a0d36; border-radius: 50%; }
+        .mouth { width: 35px; height: 6px; background: #0a0d36; border-radius: 10px; }
+
+        h1 { font-size: 2.8rem; margin: 0; font-weight: 700; }
+        .en-subtitle { color: var(--text-gray); margin-bottom: 35px; }
+
+        /* تعديل الزر ليكون رابطاً */
+        .entry-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .entry-btn {
+            background: linear-gradient(90deg, #202c63 0%, #4b5d74 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .entry-btn:hover {
+            letter-spacing: 1px;
+            box-shadow: 0 0 30px rgba(0, 198, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="robot-glow">
+            <div class="eyes"><span></span><span></span></div>
+            <div class="mouth"></div>
+        </div>
+
+        <h1>ذكاء اصطناعي</h1>
+        <p class="en-subtitle">Faculty of Artificial Intelligence</p>
+
+        <a href="تسجيل الدخول .html" class="entry-link">
+            <button class="entry-btn">
+                دخول الكلية <span>➜</span>
+            </button>
+        </a>
+    </div>
+
+</body>
+</html>
