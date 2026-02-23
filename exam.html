@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار التفوق</title> <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>اختبار التفوق المطور 2026</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* حافظ على نفس الـ CSS الخاص بك هنا فهو ممتاز */
         :root {
             --primary-cyan: #00f2fe;
             --dark-cyan: #083344;
             --bg-deep: #020617;
             --glass: rgba(255, 255, 255, 0.05);
             --border: rgba(34, 211, 238, 0.2);
+            --success: #10b981;
+            --error: #ef4444;
         }
+
         body {
             background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
             color: white;
@@ -23,12 +26,14 @@
             min-height: 100vh;
             align-items: center;
         }
+
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-deep); z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             font-size: 20px; color: var(--primary-cyan);
         }
+
         header {
             width: 100%; padding: 15px 5%;
             background: rgba(8, 51, 68, 0.4);
@@ -37,7 +42,9 @@
             border-bottom: 1px solid var(--border);
             box-sizing: border-box;
         }
+
         .container { width: 90%; max-width: 750px; margin-top: 30px; margin-bottom: 50px; flex-grow: 1; }
+        
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -45,11 +52,21 @@
             border-radius: 25px;
             padding: 35px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s ease-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
         #progress-fill { width: 0%; height: 100%; background: var(--primary-cyan); transition: 0.4s; box-shadow: 0 0 10px var(--primary-cyan); }
-        .q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.6; text-align: center; }
+
+        .q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.6; text-align: center; min-height: 70px; }
+        
         .options-grid { display: grid; gap: 12px; }
+        
         .option-btn {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border);
@@ -61,15 +78,46 @@
             text-align: right;
             font-family: 'Tajawal';
             font-size: 16px;
+            position: relative;
+            overflow: hidden;
         }
-        .option-btn:hover { background: rgba(0, 242, 254, 0.1); border-color: var(--primary-cyan); transform: scale(1.01); }
-        .option-btn.selected { background: var(--primary-cyan); color: var(--dark-cyan); font-weight: bold; border-color: white; }
+
+        .option-btn:hover:not(:disabled) { background: rgba(0, 242, 254, 0.1); border-color: var(--primary-cyan); }
+        .option-btn.selected { border-color: var(--primary-cyan); background: rgba(0, 242, 254, 0.2); }
+        
+        /* ألوان التصحيح */
+        .option-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .option-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); animation: shake 0.4s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .nav-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        
+        .btn-confirm, .btn-nav {
+            padding: 15px; border-radius: 12px; border: none;
+            font-weight: bold; cursor: pointer; font-size: 16px;
+            transition: 0.3s; font-family: 'Tajawal';
+        }
+
         .btn-confirm {
-            width: 100%; margin-top: 25px; padding: 15px; border-radius: 12px; border: none;
+            flex: 2;
             background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
-            color: var(--dark-cyan); font-weight: bold; cursor: pointer; font-size: 18px;
-            transition: 0.3s;
+            color: var(--dark-cyan);
         }
+
+        .btn-nav {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
         .score-box { font-size: 60px; color: var(--primary-cyan); margin: 20px 0; font-weight: bold; text-align: center; }
         .locked-badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 5px 15px; border-radius: 50px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
         footer { padding: 20px; color: #64748b; font-size: 13px; text-align: center; }
@@ -90,14 +138,18 @@
         <div id="q-number" style="color: var(--primary-cyan); font-size: 14px; margin-bottom: 10px;">سؤال 1 من 15</div>
         <div class="q-text" id="question-text">تحميل السؤال...</div>
         <div class="options-grid" id="options-container"></div>
-        <button class="btn-confirm" id="next-btn">تأكيد الإجابة والتحرك للسؤال التالي</button>
+        
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prev-btn" disabled>السابق</button>
+            <button class="btn-confirm" id="next-btn">تأكيد الإجابة</button>
+        </div>
     </div>
 
     <div id="result-screen" class="glass-card" style="display:none; text-align: center;">
         <span class="locked-badge">🛡️ تم قفل الدرجة وإرسالها للمشرف</span>
         <h2>النتيجة النهائية</h2>
         <div class="score-box" id="final-score">0%</div>
-        <p style="color: #94a3b8; margin-bottom: 25px;">لا يمكن إعادة الاختبار أو تعديل الدرجة حالياً.</p>
+        <p id="result-text" style="color: #94a3b8; margin-bottom: 25px;"></p>
         <button class="btn-confirm" onclick="location.href='dashboard.html'">العودة للوحة التحكم</button>
     </div>
 </div>
@@ -144,8 +196,8 @@
 
     let currentUser = null;
     let currentQ = 0;
-    let score = 0;
-    let selected = null;
+    let userAnswers = new Array(questions.length).fill(null); // تخزين إجابات المستخدم
+    let confirmedAnswers = new Array(questions.length).fill(false); // هل تم تأكيد السؤال؟
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -155,32 +207,45 @@
             document.getElementById('user-display').innerText = `المستخدم: ${user.displayName || user.email}`;
             loadQuestion();
         } else {
-            // تحسين منطق التحويل ليكون أكثر أماناً
-            setTimeout(() => {
-                if (!auth.currentUser) window.location.href = 'index.html';
-            }, 3000);
+            setTimeout(() => { if (!auth.currentUser) window.location.href = 'index.html'; }, 3000);
         }
     });
 
     function loadQuestion() {
-        if (currentQ >= questions.length) return;
         const q = questions[currentQ];
+        const container = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        
+        // تحديث النصوص والتقدم
         document.getElementById('question-text').innerText = q.q;
         document.getElementById('q-number').innerText = `سؤال ${currentQ + 1} من ${questions.length}`;
+        document.getElementById('progress-fill').style.width = ((currentQ + 1) / questions.length) * 100 + "%";
         
-        const progress = ((currentQ + 1) / questions.length) * 100;
-        document.getElementById('progress-fill').style.width = progress + "%";
-
-        const container = document.getElementById('options-container');
         container.innerHTML = '';
-        selected = null;
+        prevBtn.disabled = currentQ === 0;
+        
+        // تغيير نص الزر في السؤال الأخير
+        nextBtn.innerText = confirmedAnswers[currentQ] ? (currentQ === questions.length - 1 ? "إنهاء الاختبار" : "السؤال التالي") : "تأكيد الإجابة";
 
         q.opts.forEach((opt, i) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
             btn.innerText = opt;
+            
+            // استعادة الاختيار السابق إن وجد
+            if (userAnswers[currentQ] === i) btn.classList.add('selected');
+            
+            // تطبيق ألوان التصحيح إذا تم التأكيد مسبقاً
+            if (confirmedAnswers[currentQ]) {
+                btn.disabled = true;
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === userAnswers[currentQ]) btn.classList.add('wrong');
+            }
+
             btn.onclick = () => {
-                selected = i;
+                if (confirmedAnswers[currentQ]) return;
+                userAnswers[currentQ] = i;
                 document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
             };
@@ -188,40 +253,58 @@
         });
     }
 
-    document.getElementById('next-btn').onclick = async () => {
-        if (selected === null) {
-            alert("يرجى اختيار إجابة قبل الانتقال!");
+    document.getElementById('next-btn').onclick = () => {
+        if (userAnswers[currentQ] === null) {
+            alert("يرجى اختيار إجابة أولاً!");
             return;
         }
 
-        if (selected === questions[currentQ].ans) score++;
-        
-        currentQ++;
-        if (currentQ < questions.length) {
+        // إذا لم يتم التأكيد بعد، قم بالتصحيح الفوري
+        if (!confirmedAnswers[currentQ]) {
+            confirmedAnswers[currentQ] = true;
+            loadQuestion(); // إعادة التحميل لإظهار الألوان
+            return;
+        }
+
+        // الانتقال للسؤال التالي أو الإنهاء
+        if (currentQ < questions.length - 1) {
+            currentQ++;
             loadQuestion();
         } else {
             finalizeQuiz();
         }
     };
 
+    document.getElementById('prev-btn').onclick = () => {
+        if (currentQ > 0) {
+            currentQ--;
+            loadQuestion();
+        }
+    };
+
     async function finalizeQuiz() {
+        let finalScore = 0;
+        userAnswers.forEach((ans, index) => {
+            if (ans === questions[index].ans) finalScore++;
+        });
+
+        const finalPct = Math.round((finalScore / questions.length) * 100);
+        
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
-        
-        const finalPct = Math.round((score / questions.length) * 100);
         document.getElementById('final-score').innerText = finalPct + "%";
+        document.getElementById('result-text').innerText = `لقد أجبت على ${finalScore} من أصل ${questions.length} أسئلة بشكل صحيح.`;
 
         try {
             await setDoc(doc(db, "exam_results", currentUser.uid), {
                 student: currentUser.displayName || currentUser.email,
                 final_score: finalPct,
-                correct_count: score,
+                correct_count: finalScore,
                 is_locked: true,
                 submitted_at: serverTimestamp()
             });
         } catch (error) {
-            console.error("خطأ في حفظ البيانات:", error);
-            // يمكنك إضافة تنبيه هنا للمستخدم في حالة فشل الاتصال بقاعدة البيانات
+            console.error("خطأ في الحفظ:", error);
         }
     }
 </script>
