@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار التفوق المطور 2026</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-cyan: #00f2fe;
+            --dark-cyan: #083344;
+            --bg-deep: #020617;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(34, 211, 238, 0.2);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-deep); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; color: var(--primary-cyan);
+        }
+
+        header {
+            width: 100%; padding: 15px 5%;
+            background: rgba(8, 51, 68, 0.4);
+            backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            box-sizing: border-box;
+        }
+
+        .container { width: 90%; max-width: 750px; margin-top: 30px; margin-bottom: 50px; flex-grow: 1; }
+        
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        #progress-fill { width: 0%; height: 100%; background: var(--primary-cyan); transition: 0.4s; box-shadow: 0 0 10px var(--primary-cyan); }
+
+        .q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.6; text-align: center; min-height: 70px; }
+        
+        .options-grid { display: grid; gap: 12px; }
+        
+        .option-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: right;
+            font-family: 'Tajawal';
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover:not(:disabled) { background: rgba(0, 242, 254, 0.1); border-color: var(--primary-cyan); }
+        .option-btn.selected { border-color: var(--primary-cyan); background: rgba(0, 242, 254, 0.2); }
+        
+        /* ألوان التصحيح */
+        .option-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .option-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); animation: shake 0.4s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .nav-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        
+        .btn-confirm, .btn-nav {
+            padding: 15px; border-radius: 12px; border: none;
+            font-weight: bold; cursor: pointer; font-size: 16px;
+            transition: 0.3s; font-family: 'Tajawal';
+        }
+
+        .btn-confirm {
+            flex: 2;
+            background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
+            color: var(--dark-cyan);
+        }
+
+        .btn-nav {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .score-box { font-size: 60px; color: var(--primary-cyan); margin: 20px 0; font-weight: bold; text-align: center; }
+        .locked-badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 5px 15px; border-radius: 50px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
+        footer { padding: 20px; color: #64748b; font-size: 13px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="loader">جارٍ التأكد من هويتك الرقمية... 🔐</div>
+
+<header>
+    <div style="font-weight: bold; color: var(--primary-cyan); font-size: 1.2rem;">🚀اختبار التصميم المنطقي</div>
+    <div id="user-display" style="font-size: 13px; opacity: 0.8;"></div>
+</header>
+
+<div class="container">
+    <div id="quiz-screen" class="glass-card" style="display:none;">
+        <div class="progress-container"><div id="progress-fill"></div></div>
+        <div id="q-number" style="color: var(--primary-cyan); font-size: 14px; margin-bottom: 10px;">سؤال 1 من 15</div>
+        <div class="q-text" id="question-text">تحميل السؤال...</div>
+        <div class="options-grid" id="options-container"></div>
+        
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prev-btn" disabled>السابق</button>
+            <button class="btn-confirm" id="next-btn">تأكيد الإجابة</button>
+        </div>
+    </div>
+
+    <div id="result-screen" class="glass-card" style="display:none; text-align: center;">
+        <span class="locked-badge">🛡️ اتمني لكم النجاح</span>
+        <h2>النتيجة النهائية</h2>
+        <div class="score-box" id="final-score">0%</div>
+        <p id="result-text" style="color: #94a3b8; margin-bottom: 25px;"></p>
+        <button class="btn-confirm" onclick="location.href='dashboard.html'">العودة للوحة التحكم</button>
+    </div>
+</div>
+
+<footer>
+    تم التطوير وبرمجة النظام بواسطة <b> Ahmed El_Samahy</b> | 2026 ©
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
+        authDomain: "blog-62e33.firebaseapp.com",
+        projectId: "blog-62e33",
+        storageBucket: "blog-62e33.firebasestorage.app",
+        messagingSenderId: "804628373288",
+        appId: "1:804628373288:web:b29db5c1600b5792393a1d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const questions = [
+        { q: "ما هي لغة البرمجة التي تُستخدم لتصميم هيكل صفحات الويب؟", opts: ["HTML", "Python", "CSS", "SQL"], ans: 0 },
+        { q: "أي من اللغات التالية تُستخدم لإضافة تنسيقات جمالية للموقع؟", opts: ["PHP", "CSS", "C#", "HTML"], ans: 1 },
+        { q: "ما هي الدالة المستخدمة لعرض رسالة تنبيه في JavaScript؟", opts: ["msg()", "prompt()", "alert()", "confirm()"], ans: 2 },
+        { q: "ما هو ناتج عملية 10 * 10؟", opts: ["10", "100", "1000", "20"], ans: 1 },
+        { q: "أي كوكب هو الأقرب إلى الشمس؟", opts: ["المريخ", "عطارد", "الزهرة", "المشتري"], ans: 1 },
+        { q: "ما هو أكبر حيوان في العالم؟", opts: ["الفيل", "الحوت الأزرق", "الزرافة", "القرش"], ans: 1 },
+        { q: "كم عدد أضلاع المثلث؟", opts: ["2", "3", "4", "5"], ans: 1 },
+        { q: "ما هي عاصمة المملكة العربية السعودية؟", opts: ["جدة", "مكة", "الرياض", "الدمام"], ans: 2 },
+        { q: "أي لغة برمجية تُستخدم بكثرة في الذكاء الاصطناعي؟", opts: ["Java", "Python", "C++", "JavaScript"], ans: 1 },
+        { q: "ما هي سرعة الضوء التقريبية؟", opts: ["300 ألف كم/ث", "150 ألف كم/ث", "500 ألف كم/ث", "100 ألف كم/ث"], ans: 0 },
+        { q: "من هو مؤسس شركة مايكروسوفت؟", opts: ["ستيف جوبز", "بيل غيتس", "مارك زوكربيرغ", "إيلون ماسك"], ans: 1 },
+        { q: "ما هو العنصر الكيميائي الذي رمزه O؟", opts: ["الذهب", "الحديد", "الأكسجين", "الهيدروجين"], ans: 2 },
+        { q: "كم دقيقة في الساعة الواحدة؟", opts: ["50", "60", "70", "100"], ans: 1 },
+        { q: "ما هو المحيط الذي يحد الوطن العربي من الغرب؟", opts: ["الهندي", "الهادي", "الأطلسي", "المتجمد"], ans: 2 },
+        { q: "هل هذه المنصة رائعة؟", opts: ["نعم جداً", "بالتأكيد", "الأفضل على الإطلاق", "كل ما سبق"], ans: 3 }
+    ];
+
+    let currentUser = null;
+    let currentQ = 0;
+    let userAnswers = new Array(questions.length).fill(null); // تخزين إجابات المستخدم
+    let confirmedAnswers = new Array(questions.length).fill(false); // هل تم تأكيد السؤال؟
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('user-display').innerText = `المستخدم: ${user.displayName || user.email}`;
+            loadQuestion();
+        } else {
+            setTimeout(() => { if (!auth.currentUser) window.location.href = 'index.html'; }, 3000);
+        }
+    });
+
+    function loadQuestion() {
+        const q = questions[currentQ];
+        const container = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        
+        // تحديث النصوص والتقدم
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('q-number').innerText = `سؤال ${currentQ + 1} من ${questions.length}`;
+        document.getElementById('progress-fill').style.width = ((currentQ + 1) / questions.length) * 100 + "%";
+        
+        container.innerHTML = '';
+        prevBtn.disabled = currentQ === 0;
+        
+        // تغيير نص الزر في السؤال الأخير
+        nextBtn.innerText = confirmedAnswers[currentQ] ? (currentQ === questions.length - 1 ? "إنهاء الاختبار" : "السؤال التالي") : "تأكيد الإجابة";
+
+        q.opts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            
+            // استعادة الاختيار السابق إن وجد
+            if (userAnswers[currentQ] === i) btn.classList.add('selected');
+            
+            // تطبيق ألوان التصحيح إذا تم التأكيد مسبقاً
+            if (confirmedAnswers[currentQ]) {
+                btn.disabled = true;
+                if (i === q.ans) btn.classList.add('correct');
+                else if (i === userAnswers[currentQ]) btn.classList.add('wrong');
+            }
+
+            btn.onclick = () => {
+                if (confirmedAnswers[currentQ]) return;
+                userAnswers[currentQ] = i;
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    document.getElementById('next-btn').onclick = () => {
+        if (userAnswers[currentQ] === null) {
+            alert("يرجى اختيار إجابة أولاً!");
+            return;
+        }
+
+        // إذا لم يتم التأكيد بعد، قم بالتصحيح الفوري
+        if (!confirmedAnswers[currentQ]) {
+            confirmedAnswers[currentQ] = true;
+            loadQuestion(); // إعادة التحميل لإظهار الألوان
+            return;
+        }
+
+        // الانتقال للسؤال التالي أو الإنهاء
+        if (currentQ < questions.length - 1) {
+            currentQ++;
+            loadQuestion();
+        } else {
+            finalizeQuiz();
+        }
+    };
+
+    document.getElementById('prev-btn').onclick = () => {
+        if (currentQ > 0) {
+            currentQ--;
+            loadQuestion();
+        }
+    };
+
+    async function finalizeQuiz() {
+        let finalScore = 0;
+        userAnswers.forEach((ans, index) => {
+            if (ans === questions[index].ans) finalScore++;
+        });
+
+        const finalPct = Math.round((finalScore / questions.length) * 100);
+        
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('final-score').innerText = finalPct + "%";
+        document.getElementById('result-text').innerText = `لقد أجبت على ${finalScore} من أصل ${questions.length} أسئلة بشكل صحيح.`;
+
+        try {
+            await setDoc(doc(db, "exam_results", currentUser.uid), {
+                student: currentUser.displayName || currentUser.email,
+                final_score: finalPct,
+                correct_count: finalScore,
+                is_locked: true,
+                submitted_at: serverTimestamp()
+            });
+        } catch (error) {
+            console.error("خطأ في الحفظ:", error);
+        }
+    }
+</script>
+</body>
+</html>
