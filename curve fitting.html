@@ -20,81 +20,81 @@
             background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
             color: white;
             font-family: 'Tajawal', sans-serif;
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
+            margin: 0; 
+            padding: 10px; /* تقليل الحواف للموبايل */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        .container { width: 95%; max-width: 1100px; }
+        .container { 
+            width: 100%; 
+            max-width: 1100px; 
+        }
 
-        /* زر الرجوع العلوي */
+        /* زر الرجوع المتجاوب */
         .top-nav {
             width: 100%;
             display: flex;
             justify-content: flex-start;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
         .btn-back {
             background: var(--glass);
             border: 1px solid var(--border);
             color: var(--primary-cyan);
-            padding: 12px 24px;
-            border-radius: 15px;
+            padding: 10px 20px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: 0.3s all cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Tajawal';
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            transition: 0.3s;
             text-decoration: none;
-            font-size: 15px;
+            font-size: 14px;
             backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn-back:hover {
-            background: rgba(0, 242, 254, 0.15);
-            border-color: var(--primary-cyan);
-            transform: translateX(10px);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
-        }
-
-        /* الكروت والتصميم الزجاجي */
+        /* الكروت الزجاجية */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid var(--border);
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            margin-bottom: 25px;
-            animation: slideUp 0.6s ease-out;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .header { text-align: center; margin-bottom: 35px; }
+        .header { text-align: center; margin-bottom: 25px; padding: 0 10px; }
         .header h1 { 
             background: linear-gradient(90deg, #fff, var(--primary-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0; font-size: 2.5rem; 
+            margin: 0; 
+            font-size: clamp(1.5rem, 5vw, 2.5rem); /* حجم خط مرن */
         }
+        .header p { font-size: clamp(0.85rem, 3vw, 1rem); }
 
-        /* تخطيط الشبكة */
+        /* تخطيط الشبكة المتجاوب */
         .grid-layout {
             display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 25px;
+            grid-template-columns: 1fr; /* عمود واحد للموبايل افتراضياً */
+            gap: 20px;
         }
 
-        @media (max-width: 900px) { .grid-layout { grid-template-columns: 1fr; } }
+        /* شاشات اللابتوب والتابلت العريض */
+        @media (min-width: 992px) {
+            .grid-layout {
+                grid-template-columns: 380px 1fr; /* توزيع جانبي للابتوب */
+            }
+        }
 
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 10px; color: #94a3b8; font-weight: bold; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.9rem; }
         
         textarea {
             width: 100%;
@@ -102,62 +102,59 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             color: var(--primary-cyan);
-            padding: 15px;
+            padding: 12px;
             font-family: 'Courier New', monospace;
-            resize: none;
+            font-size: 16px; /* منع الزووم التلقائي في الآيفون */
+            resize: vertical;
             box-sizing: border-box;
-            transition: 0.3s;
         }
-
-        textarea:focus { outline: none; border-color: var(--primary-cyan); background: rgba(0,0,0,0.6); }
 
         .btn-calc {
             width: 100%;
-            padding: 18px;
+            padding: 15px;
             background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
             border: none; border-radius: 12px;
             color: var(--dark-cyan); font-weight: bold;
             cursor: pointer; transition: 0.3s;
             font-size: 16px;
+            margin-top: 10px;
         }
 
-        .btn-calc:hover { transform: scale(1.02); box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); }
-
-        /* صندوق النتائج والأزرار الإضافية */
+        /* صندوق النتائج */
         .result-box {
-            margin-top: 25px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             background: rgba(34, 211, 238, 0.1);
-            border-radius: 15px;
+            border-radius: 12px;
             border-right: 4px solid var(--primary-cyan);
         }
 
-        .equation { font-family: 'Courier New', monospace; font-size: 1.3rem; color: #fff; margin: 10px 0; }
-
-        .btn-export {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--primary-cyan);
-            border-radius: 10px;
-            color: var(--primary-cyan);
-            cursor: pointer;
-            font-family: 'Tajawal';
-            font-weight: bold;
-            transition: 0.3s;
-            width: 100%;
-            justify-content: center;
+        .equation { 
+            font-family: 'Courier New', monospace; 
+            font-size: clamp(1rem, 4vw, 1.2rem); 
+            color: #fff; 
+            word-break: break-all; /* كسر النص الطويل في الموبايل */
         }
 
-        .btn-export:hover {
-            background: var(--primary-cyan);
-            color: var(--dark-cyan);
+        /* حاوية الرسم البياني المتجاوبة */
+        .chart-container { 
+            position: relative; 
+            height: 300px; /* ارتفاع أصغر للموبايل */
+            width: 100%; 
         }
-        
-        .chart-container { position: relative; height: 500px; width: 100%; }
+
+        @media (min-width: 768px) {
+            .chart-container { height: 450px; } /* ارتفاع أكبر للتابلت واللابتوب */
+        }
+
+        footer { margin: 30px 0; color: #64748b; font-size: 12px; text-align: center; }
+
+        /* لمسات إضافية للجوال */
+        @media (max-width: 480px) {
+            body { padding: 15px 10px; }
+            .glass-card { padding: 15px; }
+            .btn-back { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
@@ -165,43 +162,43 @@
 <div class="container">
     <div class="top-nav">
         <a href="dashboard.html" class="btn-back">
-            <span style="font-size: 20px;">&#10095;</span>
+            <span>&#10095;</span>
             العودة للوحة التحكم
         </a>
     </div>
 
     <div class="header">
         <h1>Curve Fitting Analyzer</h1>
-        <p style="color: #64748b;">تحليل الانحدار الخطي وإسقاط منحنيات البيانات بدقة عالية</p>
+        <p style="color: #64748b;">تحليل الانحدار الخطي للبيانات بدقة عالية</p>
     </div>
 
     <div class="grid-layout">
         <div class="glass-card">
             <div class="input-group">
-                <label>إحداثيات X (القيم المستقلة):</label>
-                <textarea id="xValues" rows="4">1, 2, 3, 4, 5, 6</textarea>
+                <label>إحداثيات X (قيم مستقلة):</label>
+                <textarea id="xValues" rows="3">1, 2, 3, 4, 5, 6</textarea>
             </div>
             <div class="input-group">
-                <label>إحداثيات Y (القيم التابعة):</label>
-                <textarea id="yValues" rows="4">2.2, 3.8, 6.5, 8.0, 10.2, 12.1</textarea>
+                <label>إحداثيات Y (قيم تابعة):</label>
+                <textarea id="yValues" rows="3">2.2, 3.8, 6.5, 8.0, 10.2, 12.1</textarea>
             </div>
             <button class="btn-calc" onclick="calculateFit()">إجراء التحليل الرياضي ✨</button>
 
             <div id="results" class="result-box" style="display:none;">
                 <label>معادلة الخط المستقيم:</label>
                 <div class="equation" id="eqText">y = mx + c</div>
-                <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
-                <div style="display: flex; justify-content: space-between; font-size: 14px;">
-                    <span style="color: #94a3b8;">معامل الارتباط (R²):</span>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 10px;">
+                    <span style="color: #94a3b8;">الدقة (R²):</span>
                     <span id="rSquared" style="color: var(--primary-cyan); font-weight: bold;">0</span>
                 </div>
                 
-                <button class="btn-export" onclick="exportChart()">
-                    <span>📥</span> تصدير الرسم كصورة PNG
+                <button class="btn-export" onclick="exportChart()" style="width: 100%; margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--primary-cyan); border-radius: 8px; color: var(--primary-cyan); cursor: pointer;">
+                    📥 حفظ الرسم كصورة
                 </button>
             </div>
         </div>
 
+        
         <div class="glass-card">
             <div class="chart-container">
                 <canvas id="myChart"></canvas>
@@ -210,7 +207,7 @@
     </div>
 </div>
 
-<footer style="margin: 40px 0; color: #64748b; font-size: 13px; text-align: center;">
+<footer>
     نظام تحليل البيانات | مبرمج بواسطة <b>Ahmed El_Samahy</b> | 2026 ©
 </footer>
 
@@ -237,19 +234,11 @@
             sumY2 += yRaw[i] * yRaw[i];
         }
 
-        // حسابات الميل (Slope) والجزء المقطوع (Intercept)
         const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
         const c = (sumY - m * sumX) / n;
+        const rVal = (n * sumXY - sumX * sumY) / Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+        const r2 = Math.pow(rVal, 2);
 
-        // حساب R-Squared (الدقة)
-        const numR = (n * sumXY - sumX * sumY);
-        const denR = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
-        const r2 = Math.pow(numR / denR, 2);
-
-        showUI(m, c, r2, xRaw, yRaw);
-    }
-
-    function showUI(m, c, r2, xRaw, yRaw) {
         document.getElementById('results').style.display = 'block';
         const sign = c >= 0 ? "+" : "-";
         document.getElementById('eqText').innerText = `y = ${m.toFixed(3)}x ${sign} ${Math.abs(c).toFixed(3)}`;
@@ -261,11 +250,9 @@
     function renderChart(xRaw, yRaw, m, c) {
         const minX = Math.min(...xRaw);
         const maxX = Math.max(...xRaw);
-        const pad = (maxX - minX) * 0.15;
-
         const trendLine = [
-            { x: minX - pad, y: m * (minX - pad) + c },
-            { x: maxX + pad, y: m * (maxX + pad) + c }
+            { x: minX, y: m * minX + c },
+            { x: maxX, y: m * maxX + c }
         ];
 
         if (chart) chart.destroy();
@@ -275,40 +262,33 @@
             type: 'scatter',
             data: {
                 datasets: [{
-                    label: 'النقاط المدخلة',
+                    label: 'البيانات',
                     data: xRaw.map((x, i) => ({ x: x, y: yRaw[i] })),
-                    backgroundColor: '#00f2fe',
-                    pointRadius: 7
+                    backgroundColor: '#00f2fe'
                 }, {
-                    label: 'خط الملاءمة الأنسب',
+                    label: 'خط الانحدار',
                     data: trendLine,
                     type: 'line',
                     borderColor: '#ff0077',
-                    borderWidth: 3,
-                    borderDash: [6, 4],
-                    fill: false,
-                    pointRadius: 0
+                    pointRadius: 0,
+                    fill: false
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#fff' } } },
                 scales: {
-                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
-                },
-                plugins: {
-                    legend: { labels: { color: '#fff', font: { family: 'Tajawal', size: 14 } } }
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
                 }
             }
         });
     }
 
-    // دالة تصدير الرسم كصورة
     function exportChart() {
-        if (!chart) return;
         const link = document.createElement('a');
-        link.download = 'Analysis-Result.png';
+        link.download = 'Curve-Analysis.png';
         link.href = chart.toBase64Image();
         link.click();
     }
