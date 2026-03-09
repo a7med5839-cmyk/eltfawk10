@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Root Finder</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f1f5f9;
+            --input-bg: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        h1, h2 {
+            color: var(--accent-color);
+            text-align: center;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--input-bg);
+            color: white;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, opacity 0.2s;
+            font-size: 1.1rem;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        #result-section {
+            display: none;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #475569;
+            text-align: center;
+        }
+
+        th {
+            background-color: #334155;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            th, td { padding: 5px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1> F$S</h1>
+        <div class="input-group">
+            <div class="field">
+                <label>الطريقة</label>
+                <select id="method">
+                    <option value="falsePosition">False Position</option>
+                    <option value="secant">Secant Method</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>الدالة f(x) (مثال: x*x - 4)</label>
+                <input type="text" id="equation" value="x*x - 4">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <div class="field">
+                <label id="label-x0">x₀ (أو xₐ)</label>
+                <input type="number" id="x0" value="0" step="any">
+            </div>
+            <div class="field">
+                <label id="label-x1">x₁ (أو x_b)</label>
+                <input type="number" id="x1" value="3" step="any">
+            </div>
+            <div class="field">
+                <label>نسبة الخطأ ε (%)</label>
+                <input type="number" id="tol" value="0.01" step="any">
+            </div>
+        </div>
+
+        <button onclick="calculate()">احسب الجذر ورسم البيان</button>
+    </div>
+
+    <div id="result-section" class="card">
+        <h2>النتائج والتقارب</h2>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div style="overflow-x: auto;">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Iteration</th>
+                        <th>xᵢ</th>
+                        <th>f(xᵢ)</th>
+                        <th>Error %</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let myChart = null;
+
+    function f(x, equation) {
+        try {
+            // تحويل النص إلى معادلة رياضية بسيطة
+            return eval(equation.replace(/x/g, `(${x})`));
+        } catch (e) {
+            return NaN;
+        }
+    }
+
+    function calculate() {
+        const method = document.getElementById('method').value;
+        const equation = document.getElementById('equation').value;
+        let x0 = parseFloat(document.getElementById('x0').value);
+        let x1 = parseFloat(document.getElementById('x1').value);
+        const tol = parseFloat(document.getElementById('tol').value);
+
+        let data = [];
+        let xr = 0, xrOld = 0, error = 100;
+        let iter = 0;
+        const maxIter = 50;
+
+        if (method === 'falsePosition') {
+            if (f(x0, equation) * f(x1, equation) >= 0) {
+                alert("خطأ: f(xa) * f(xb) يجب أن يكون أصغر من صفر في طريقة False Position");
+                return;
+            }
+        }
+
+        while (error > tol && iter < maxIter) {
+            iter++;
+            xrOld = xr;
+
+            let fx0 = f(x0, equation);
+            let fx1 = f(x1, equation);
+
+            // القانون الموحد تقريباً مع اختلاف التحديث
+            xr = x1 - (fx1 * (x0 - x1)) / (fx0 - fx1);
+            
+            if (iter > 1) {
+                error = Math.abs((xr - xrOld) / xr) * 100;
+            }
+
+            data.push({ iter, xr, fxr: f(xr, equation), error });
+
+            if (method === 'falsePosition') {
+                if (f(x0, equation) * f(xr, equation) < 0) x1 = xr;
+                else x0 = xr;
+            } else {
+                x0 = x1;
+                x1 = xr;
+            }
+        }
+
+        displayResults(data);
+        renderChart(data);
+    }
+
+    function displayResults(data) {
+        const tbody = document.querySelector("#resultsTable tbody");
+        tbody.innerHTML = "";
+        document.getElementById('result-section').style.display = "block";
+
+        data.forEach(row => {
+            const tr = `<tr>
+                <td>${row.iter}</td>
+                <td>${row.xr.toFixed(6)}</td>
+                <td>${row.fxr.toFixed(6)}</td>
+                <td>${row.iter === 1 ? '-' : row.error.toFixed(4) + '%'}</td>
+            </tr>`;
+            tbody.innerHTML += tr;
+        });
+    }
+
+    function renderChart(data) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        if (myChart) myChart.destroy();
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.map(d => `Iter ${d.iter}`),
+                datasets: [{
+                    label: 'قيمة الجذر (xr) عبر التكرارات',
+                    data: data.map(d => d.xr),
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { grid: { color: '#334155' }, ticks: { color: '#f1f5f9' } },
+                    x: { grid: { color: '#334155' }, ticks: { color: '#f1f5f9' } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#f1f5f9' } }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

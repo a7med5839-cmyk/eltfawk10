@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L $ N & RMSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .btn-primary { background-color: #3b82f6; transition: 0.3s; }
+        .btn-primary:hover { background-color: #2563eb; transform: translateY(-2px); }
+        input { border: 1px solid #475569 !important; }
+    </style>
+</head>
+<body class="p-5 md:p-10">
+
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold text-blue-400 mb-8 text-center">📊 L $ N & RMSE</h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="card col-span-1">
+                <h2 class="text-xl font-semibold mb-4 text-blue-300 border-b border-slate-600 pb-2">⚙️ الإعدادات</h2>
+                
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-slate-300">قيم X الأصلية:</label>
+                    <input id="xInput" type="text" value="1, 2, 3, 4, 5" class="w-full p-2 rounded bg-slate-800 text-white outline-none">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-slate-300">قيم Y الأصلية:</label>
+                    <input id="yInput" type="text" value="10, 22, 15, 30, 25" class="w-full p-2 rounded bg-slate-800 text-white outline-none">
+                </div>
+
+                <div class="mb-6 border-t border-slate-700 pt-4">
+                    <label class="block text-sm mb-1 text-yellow-400">التنبؤ عند x:</label>
+                    <input id="targetX" type="number" value="1.5" step="0.1" class="w-full p-2 rounded bg-slate-800 text-white outline-none">
+                </div>
+
+                <button onclick="calculateAll()" class="btn-primary w-full py-3 rounded-lg font-bold shadow-lg">تحديث الحسابات</button>
+            </div>
+
+            <div class="lg:col-span-3 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="card border-l-4 border-blue-500">
+                        <span class="text-slate-400 text-xs uppercase tracking-wider">Lagrange Result</span>
+                        <div id="lagrangeRes" class="text-2xl font-mono font-bold text-blue-400">--</div>
+                    </div>
+                    <div class="card border-l-4 border-green-500">
+                        <span class="text-slate-400 text-xs uppercase tracking-wider">Newton Result</span>
+                        <div id="newtonRes" class="text-2xl font-mono font-bold text-green-400">--</div>
+                    </div>
+                    <div class="card border-l-4 border-red-500">
+                        <span class="text-slate-400 text-xs uppercase tracking-wider font-bold">RMSE (Error)</span>
+                        <div id="rmseRes" class="text-2xl font-mono font-bold text-red-400">--</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-slate-300">الرسم البياني للمنحنى</h3>
+                        <button onclick="downloadChart()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-md border border-slate-500 transition">📥 حفظ الصورة</button>
+                    </div>
+                    <div class="relative h-[400px]">
+                        <canvas id="interpolationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myChart;
+
+        // دالة لاجرانج للحساب
+        function lagrange(xPoints, yPoints, xi) {
+            let result = 0;
+            for (let i = 0; i < xPoints.length; i++) {
+                let term = yPoints[i];
+                for (let j = 0; j < xPoints.length; j++) {
+                    if (j !== i) term *= (xi - xPoints[j]) / (xPoints[i] - xPoints[j]);
+                }
+                result += term;
+            }
+            return result;
+        }
+
+        // دالة نيوتن
+        function newton(x, y, xi) {
+            let n = x.length;
+            let f = Array.from({ length: n }, () => Array(n).fill(0));
+            for (let i = 0; i < n; i++) f[i][0] = y[i];
+            for (let j = 1; j < n; j++) {
+                for (let i = 0; i < n - j; i++) {
+                    f[i][j] = (f[i + 1][j - 1] - f[i][j - 1]) / (x[i + j] - x[i]);
+                }
+            }
+            let res = f[0][0];
+            let product = 1;
+            for (let i = 1; i < n; i++) {
+                product *= (xi - x[i - 1]);
+                res += f[0][i] * product;
+            }
+            return res;
+        }
+
+        // حساب RMSE بناءً على المعادلة في الصورة
+        function calculateRMSE(xPoints, yPoints) {
+            let sumSquaredError = 0;
+            let n = xPoints.length;
+            
+            xPoints.forEach((xi, index) => {
+                // نحسب القيمة التقديرية عند نفس النقطة x الأصلية
+                // في الاستكمال المثالي، الخطأ عند النقاط الأصلية يكون صفراً
+                // لكننا نحسبه هنا لمحاكاة وظيفة الكود في الصورة
+                let predictedY = lagrange(xPoints, yPoints, xi); 
+                sumSquaredError += Math.pow(yPoints[index] - predictedY, 2);
+            });
+            
+            return Math.sqrt(sumSquaredError / n);
+        }
+
+        function calculateAll() {
+            const xPoints = document.getElementById('xInput').value.split(',').map(Number);
+            const yPoints = document.getElementById('yInput').value.split(',').map(Number);
+            const targetX = parseFloat(document.getElementById('targetX').value);
+
+            if(xPoints.length !== yPoints.length) {
+                alert("تأكد أن عدد قيم X يساوي عدد قيم Y");
+                return;
+            }
+
+            const resL = lagrange(xPoints, yPoints, targetX);
+            const resN = newton(xPoints, yPoints, targetX);
+            const rmse = calculateRMSE(xPoints, yPoints);
+
+            document.getElementById('lagrangeRes').innerText = resL.toFixed(5);
+            document.getElementById('newtonRes').innerText = resN.toFixed(5);
+            document.getElementById('rmseRes').innerText = rmse.toExponential(4);
+
+            updateChart(xPoints, yPoints, targetX, resL);
+        }
+
+        function updateChart(xPoints, yPoints, targetX, targetY) {
+            const ctx = document.getElementById('interpolationChart').getContext('2d');
+            
+            const curveX = [];
+            const curveY = [];
+            const minX = Math.min(...xPoints) - 0.5;
+            const maxX = Math.max(...xPoints) + 0.5;
+            
+            for (let i = minX; i <= maxX; i += 0.1) {
+                curveX.push(i.toFixed(2));
+                curveY.push(lagrange(xPoints, yPoints, i));
+            }
+
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: curveX,
+                    datasets: [
+                        {
+                            label: 'المنحنى (Polynomial)',
+                            data: curveY,
+                            borderColor: '#3b82f6',
+                            borderWidth: 3,
+                            pointRadius: 0,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'النقاط الحقيقية',
+                            data: xPoints.map((x, i) => ({x: x, y: yPoints[i]})),
+                            backgroundColor: '#ef4444',
+                            type: 'scatter',
+                            pointRadius: 7
+                        },
+                        {
+                            label: 'التنبؤ المطلوب',
+                            data: [{x: targetX, y: targetY}],
+                            backgroundColor: '#fbbf24',
+                            type: 'scatter',
+                            pointRadius: 12,
+                            pointStyle: 'star'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { type: 'linear', grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#f8fafc', font: { size: 12 } } }
+                    }
+                }
+            });
+        }
+
+        function downloadChart() {
+            const link = document.createElement('a');
+            link.download = 'interpolation_analysis.png';
+            link.href = document.getElementById('interpolationChart').toDataURL('image/png');
+            link.click();
+        }
+
+        window.onload = calculateAll;
+    </script>
+</body>
+</html>

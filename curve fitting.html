@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محلل ملاءمة المنحنيات | Curve Fitting Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-cyan: #00f2fe;
+            --dark-cyan: #083344;
+            --bg-deep: #020617;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(34, 211, 238, 0.2);
+            --pink: #ff0077;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { width: 95%; max-width: 1100px; }
+
+        /* زر الرجوع العلوي */
+        .top-nav {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            color: var(--primary-cyan);
+            padding: 12px 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s all cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Tajawal';
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-size: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            background: rgba(0, 242, 254, 0.15);
+            border-color: var(--primary-cyan);
+            transform: translateX(10px);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        }
+
+        /* الكروت والتصميم الزجاجي */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header { text-align: center; margin-bottom: 35px; }
+        .header h1 { 
+            background: linear-gradient(90deg, #fff, var(--primary-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0; font-size: 2.5rem; 
+        }
+
+        /* تخطيط الشبكة */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) { .grid-layout { grid-template-columns: 1fr; } }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 10px; color: #94a3b8; font-weight: bold; }
+        
+        textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--primary-cyan);
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            resize: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        textarea:focus { outline: none; border-color: var(--primary-cyan); background: rgba(0,0,0,0.6); }
+
+        .btn-calc {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
+            border: none; border-radius: 12px;
+            color: var(--dark-cyan); font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .btn-calc:hover { transform: scale(1.02); box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); }
+
+        /* صندوق النتائج والأزرار الإضافية */
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(34, 211, 238, 0.1);
+            border-radius: 15px;
+            border-right: 4px solid var(--primary-cyan);
+        }
+
+        .equation { font-family: 'Courier New', monospace; font-size: 1.3rem; color: #fff; margin: 10px 0; }
+
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--primary-cyan);
+            border-radius: 10px;
+            color: var(--primary-cyan);
+            cursor: pointer;
+            font-family: 'Tajawal';
+            font-weight: bold;
+            transition: 0.3s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-export:hover {
+            background: var(--primary-cyan);
+            color: var(--dark-cyan);
+        }
+        
+        .chart-container { position: relative; height: 500px; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-nav">
+        <a href="dashboard.html" class="btn-back">
+            <span style="font-size: 20px;">&#10095;</span>
+            العودة للوحة التحكم
+        </a>
+    </div>
+
+    <div class="header">
+        <h1>Curve Fitting Analyzer</h1>
+        <p style="color: #64748b;">تحليل الانحدار الخطي وإسقاط منحنيات البيانات بدقة عالية</p>
+    </div>
+
+    <div class="grid-layout">
+        <div class="glass-card">
+            <div class="input-group">
+                <label>إحداثيات X (القيم المستقلة):</label>
+                <textarea id="xValues" rows="4">1, 2, 3, 4, 5, 6</textarea>
+            </div>
+            <div class="input-group">
+                <label>إحداثيات Y (القيم التابعة):</label>
+                <textarea id="yValues" rows="4">2.2, 3.8, 6.5, 8.0, 10.2, 12.1</textarea>
+            </div>
+            <button class="btn-calc" onclick="calculateFit()">إجراء التحليل الرياضي ✨</button>
+
+            <div id="results" class="result-box" style="display:none;">
+                <label>معادلة الخط المستقيم:</label>
+                <div class="equation" id="eqText">y = mx + c</div>
+                <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                    <span style="color: #94a3b8;">معامل الارتباط (R²):</span>
+                    <span id="rSquared" style="color: var(--primary-cyan); font-weight: bold;">0</span>
+                </div>
+                
+                <button class="btn-export" onclick="exportChart()">
+                    <span>📥</span> تصدير الرسم كصورة PNG
+                </button>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer style="margin: 40px 0; color: #64748b; font-size: 13px; text-align: center;">
+    نظام تحليل البيانات | مبرمج بواسطة <b>Ahmed El_Samahy</b> | 2026 ©
+</footer>
+
+<script>
+    let chart;
+
+    function calculateFit() {
+        const xRaw = document.getElementById('xValues').value.split(/[\s,]+/).filter(v => v !== "").map(Number);
+        const yRaw = document.getElementById('yValues').value.split(/[\s,]+/).filter(v => v !== "").map(Number);
+
+        if (xRaw.length !== yRaw.length || xRaw.length < 2) {
+            alert("⚠️ تنبيه: يرجى إدخال عدد متساوٍ من قيم X و Y.");
+            return;
+        }
+
+        const n = xRaw.length;
+        let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+
+        for (let i = 0; i < n; i++) {
+            sumX += xRaw[i];
+            sumY += yRaw[i];
+            sumXY += xRaw[i] * yRaw[i];
+            sumX2 += xRaw[i] * xRaw[i];
+            sumY2 += yRaw[i] * yRaw[i];
+        }
+
+        // حسابات الميل (Slope) والجزء المقطوع (Intercept)
+        const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        const c = (sumY - m * sumX) / n;
+
+        // حساب R-Squared (الدقة)
+        const numR = (n * sumXY - sumX * sumY);
+        const denR = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+        const r2 = Math.pow(numR / denR, 2);
+
+        showUI(m, c, r2, xRaw, yRaw);
+    }
+
+    function showUI(m, c, r2, xRaw, yRaw) {
+        document.getElementById('results').style.display = 'block';
+        const sign = c >= 0 ? "+" : "-";
+        document.getElementById('eqText').innerText = `y = ${m.toFixed(3)}x ${sign} ${Math.abs(c).toFixed(3)}`;
+        document.getElementById('rSquared').innerText = (r2 * 100).toFixed(2) + "%";
+
+        renderChart(xRaw, yRaw, m, c);
+    }
+
+    function renderChart(xRaw, yRaw, m, c) {
+        const minX = Math.min(...xRaw);
+        const maxX = Math.max(...xRaw);
+        const pad = (maxX - minX) * 0.15;
+
+        const trendLine = [
+            { x: minX - pad, y: m * (minX - pad) + c },
+            { x: maxX + pad, y: m * (maxX + pad) + c }
+        ];
+
+        if (chart) chart.destroy();
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'النقاط المدخلة',
+                    data: xRaw.map((x, i) => ({ x: x, y: yRaw[i] })),
+                    backgroundColor: '#00f2fe',
+                    pointRadius: 7
+                }, {
+                    label: 'خط الملاءمة الأنسب',
+                    data: trendLine,
+                    type: 'line',
+                    borderColor: '#ff0077',
+                    borderWidth: 3,
+                    borderDash: [6, 4],
+                    fill: false,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#fff', font: { family: 'Tajawal', size: 14 } } }
+                }
+            }
+        });
+    }
+
+    // دالة تصدير الرسم كصورة
+    function exportChart() {
+        if (!chart) return;
+        const link = document.createElement('a');
+        link.download = 'Analysis-Result.png';
+        link.href = chart.toBase64Image();
+        link.click();
+    }
+
+    window.onload = calculateFit;
+</script>
+</body>
+</html>
