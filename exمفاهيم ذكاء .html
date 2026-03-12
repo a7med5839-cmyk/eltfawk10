@@ -177,21 +177,21 @@
     const db = getFirestore(app);
 
     const questions = [
-        { q: "ما هي لغة البرمجة التي تُستخدم لتصميم هيكل صفحات الويب؟", opts: ["HTML", "Python", "CSS", "SQL"], ans: 0 },
-        { q: "أي من اللغات التالية تُستخدم لإضافة تنسيقات جمالية للموقع؟", opts: ["PHP", "CSS", "C#", "HTML"], ans: 1 },
-        { q: "ما هي الدالة المستخدمة لعرض رسالة تنبيه في JavaScript؟", opts: ["msg()", "prompt()", "alert()", "confirm()"], ans: 2 },
-        { q: "ما هو ناتج عملية 10 * 10؟", opts: ["10", "100", "1000", "20"], ans: 1 },
-        { q: "أي كوكب هو الأقرب إلى الشمس؟", opts: ["المريخ", "عطارد", "الزهرة", "المشتري"], ans: 1 },
-        { q: "ما هو أكبر حيوان في العالم؟", opts: ["الفيل", "الحوت الأزرق", "الزرافة", "القرش"], ans: 1 },
-        { q: "كم عدد أضلاع المثلث؟", opts: ["2", "3", "4", "5"], ans: 1 },
-        { q: "ما هي عاصمة المملكة العربية السعودية؟", opts: ["جدة", "مكة", "الرياض", "الدمام"], ans: 2 },
-        { q: "أي لغة برمجية تُستخدم بكثرة في الذكاء الاصطناعي؟", opts: ["Java", "Python", "C++", "JavaScript"], ans: 1 },
-        { q: "ما هي سرعة الضوء التقريبية؟", opts: ["300 ألف كم/ث", "150 ألف كم/ث", "500 ألف كم/ث", "100 ألف كم/ث"], ans: 0 },
-        { q: "من هو مؤسس شركة مايكروسوفت؟", opts: ["ستيف جوبز", "بيل غيتس", "مارك زوكربيرغ", "إيلون ماسك"], ans: 1 },
-        { q: "ما هو العنصر الكيميائي الذي رمزه O؟", opts: ["الذهب", "الحديد", "الأكسجين", "الهيدروجين"], ans: 2 },
-        { q: "كم دقيقة في الساعة الواحدة؟", opts: ["50", "60", "70", "100"], ans: 1 },
-        { q: "ما هو المحيط الذي يحد الوطن العربي من الغرب؟", opts: ["الهندي", "الهادي", "الأطلسي", "المتجمد"], ans: 2 },
-        { q: "هل هذه المنصة رائعة؟", opts: ["نعم جداً", "بالتأكيد", "الأفضل على الإطلاق", "كل ما سبق"], ans: 3 }
+        { q: "Intelligence is the ability to", opts: ["Store files", "Learn, understand and think", "Delete programs", "Control hardware"], ans: 1 },
+        { q: "Artificial Intelligence is the study of", opts: ["Making computers faster", "Making computers do tasks that require human intelligence", "Designing computer hardware", "Storing information only"], ans: 0 },
+        { q: "The test used to determine whether a machine behaves like a human is called ", opts: ["Boolean Test", "AI Test", "Turing Test", "Logic Test"], ans: 2 },
+        { q: "In the Turing Test, the computer communicates using", opts: ["Signals", "Natural Language", "Images only", "Machine code"], ans: 1 },
+        { q: "Which of the following is required for passing the Turing Test", opts: ["Machine Learning", "All of the above", "Knowledge Representation", "Natural Language Processing"], ans: 1 },
+        { q: "AI includes the study of", opts: ["All of the above", "Planning", "Reasoning", "Learning"], ans: 0 },
+        { q: "A reasoning problem tries to", opts: ["Delete data", "Reach a goal from an initial state", "Increase memory", "Stop the program"], ans: 1 },
+        { q: "Which of the following is a knowledge representation technique", opts: ["All of the above", "Frames", "Production Rules", "Semantic Networks"], ans: 0 },
+        { q: "Planning in AI is concerned with", opts: ["Storing data", "Determining steps to achieve a goal", "Deleting information", "Increasing processor speed"], ans: 1 },
+        { q: " Logic programming is based on", opts: ["Hardware desig ", "Image processing ", "Networking", "Mathematical logic"], ans: 3 },
+        { q: "The most famous language for logic programming is", opts: [" Java", " PROLOG", " C++ ", "Python "], ans: 1 },
+        { q: " Soft computing includes", opts: ["Fuzzy Logic", "Neural Networks", "All of the above", "Genetic Algorithms"], ans: 2 },
+        { q: "Fuzzy Logic deals with values between", opts: ["0 and 1", "1 and 10", "0 and 100", "-1 and 1"], ans:0 },
+        { q: "Artificial Neural Networks are inspired by", opts: ["Hard disks", "Internet systems", "Human brain neurons", "Computer processors"], ans: 2 },
+        { q: "Which of the following is an application of AI", opts: ["All of the above", "Computer Vision", "Speech Recognition", "Expert Systems  "], ans:0 }
     ];
 
     let currentUser = null;
@@ -309,4 +309,5 @@
     }
 </script>
 </body>
+
 </html>
