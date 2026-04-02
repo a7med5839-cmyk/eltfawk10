@@ -3,311 +3,1320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار التفوق المطور 2026</title> 
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>كويز حقوق الإنسان ومكافحة الفساد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --primary-cyan: #00f2fe;
-            --dark-cyan: #083344;
-            --bg-deep: #020617;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(34, 211, 238, 0.2);
-            --success: #10b981;
-            --error: #ef4444;
+            --bg: #060d18;
+            --bg2: #0c1629;
+            --card: #111d35;
+            --card-hover: #162545;
+            --border: #1e3055;
+            --fg: #e8edf5;
+            --muted: #7a8ba8;
+            --accent: #10b981;
+            --accent2: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --wrong: #ef4444;
+            --wrong-glow: rgba(239, 68, 68, 0.15);
+            --gold: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.12);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
-            color: white;
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
             min-height: 100vh;
-            align-items: center;
+            overflow-x: hidden;
         }
 
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-deep); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 20px; color: var(--primary-cyan);
+        /* === خلفية متحركة === */
+        .bg-effects {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.25;
+            animation: blobFloat 20s ease-in-out infinite alternate;
+        }
+        .bg-blob:nth-child(1) {
+            width: 500px; height: 500px;
+            background: var(--accent);
+            top: -10%; right: -10%;
+            animation-delay: 0s;
+        }
+        .bg-blob:nth-child(2) {
+            width: 400px; height: 400px;
+            background: #0ea5e9;
+            bottom: -15%; left: -10%;
+            animation-delay: -7s;
+        }
+        .bg-blob:nth-child(3) {
+            width: 300px; height: 300px;
+            background: var(--gold);
+            top: 40%; left: 50%;
+            opacity: 0.1;
+            animation-delay: -14s;
+        }
+        @keyframes blobFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.1); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+            100% { transform: translate(10px, -20px) scale(1.05); }
         }
 
-        header {
-            width: 100%; padding: 15px 5%;
-            background: rgba(8, 51, 68, 0.4);
-            backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border);
-            box-sizing: border-box;
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
         }
 
-        .container { width: 90%; max-width: 750px; margin-top: 30px; margin-bottom: 50px; flex-grow: 1; }
-        
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            padding: 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s ease-out;
+        /* === الحاوية الرئيسية === */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        /* === الشاشة الرئيسية === */
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeSlideIn 0.5s ease; }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-        #progress-fill { width: 0%; height: 100%; background: var(--primary-cyan); transition: 0.4s; box-shadow: 0 0 10px var(--primary-cyan); }
-
-        .q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.6; text-align: center; min-height: 70px; }
-        
-        .options-grid { display: grid; gap: 12px; }
-        
-        .option-btn {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            padding: 15px 20px;
-            border-radius: 12px;
+        .home-header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        .home-header .icon-wrap {
+            width: 90px; height: 90px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
             color: white;
+            box-shadow: 0 8px 32px var(--accent-glow);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px var(--accent-glow); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 48px rgba(16,185,129,0.25); }
+        }
+        .home-header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--fg), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .home-header p {
+            color: var(--muted);
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 30px 0 40px;
+            padding: 16px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item .num {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent);
+        }
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* === بطاقات المستويات === */
+        .levels-grid {
+            display: grid;
+            gap: 16px;
+        }
+        .level-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
             cursor: pointer;
-            transition: 0.3s;
-            text-align: right;
-            font-family: 'Tajawal';
-            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 20px;
             position: relative;
             overflow: hidden;
         }
-
-        .option-btn:hover:not(:disabled) { background: rgba(0, 242, 254, 0.1); border-color: var(--primary-cyan); }
-        .option-btn.selected { border-color: var(--primary-cyan); background: rgba(0, 242, 254, 0.2); }
-        
-        /* ألوان التصحيح */
-        .option-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
-        .option-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); animation: shake 0.4s; }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+        .level-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, var(--accent-glow));
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-
-        .nav-buttons { display: flex; gap: 10px; margin-top: 25px; }
-        
-        .btn-confirm, .btn-nav {
-            padding: 15px; border-radius: 12px; border: none;
-            font-weight: bold; cursor: pointer; font-size: 16px;
-            transition: 0.3s; font-family: 'Tajawal';
+        .level-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px var(--accent-glow);
         }
+        .level-card:hover::before { opacity: 1; }
 
-        .btn-confirm {
-            flex: 2;
-            background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
-            color: var(--dark-cyan);
+        .level-icon {
+            width: 56px; height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
         }
+        .level-card:nth-child(1) .level-icon { background: rgba(16,185,129,0.15); color: #10b981; }
+        .level-card:nth-child(2) .level-icon { background: rgba(14,165,233,0.15); color: #0ea5e9; }
+        .level-card:nth-child(3) .level-icon { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .level-card:nth-child(4) .level-icon { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .level-card:nth-child(5) .level-icon { background: rgba(168,85,247,0.15); color: #a855f7; }
 
-        .btn-nav {
+        .level-info {
             flex: 1;
-            background: rgba(255,255,255,0.1);
-            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        .level-info h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .level-info p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 300;
+        }
+        .level-badge {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === شاشة الاختبار === */
+        .quiz-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+        .quiz-level-name {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .quiz-score-live {
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .progress-wrap {
+            background: var(--bg2);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 28px;
+            overflow: hidden;
             border: 1px solid var(--border);
         }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
 
-        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+        .question-counter {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+        .question-counter span { color: var(--fg); font-weight: 700; }
 
-        .score-box { font-size: 60px; color: var(--primary-cyan); margin: 20px 0; font-weight: bold; text-align: center; }
-        .locked-badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 5px 15px; border-radius: 50px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
-        footer { padding: 20px; color: #64748b; font-size: 13px; text-align: center; }
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 28px;
+            margin-bottom: 24px;
+            animation: questionIn 0.4s ease;
+        }
+        @keyframes questionIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .question-type-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .badge-mcq { background: rgba(14,165,233,0.15); color: #0ea5e9; }
+        .badge-tf { background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.9;
+            color: var(--fg);
+        }
+
+        .options-list {
+            display: grid;
+            gap: 12px;
+        }
+        .option-btn {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.98rem;
+            color: var(--fg);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--accent);
+            background: var(--card-hover);
+            transform: translateX(-4px);
+        }
+        .option-btn .opt-letter {
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .option-btn:hover:not(.disabled) .opt-letter {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .option-btn.correct {
+            border-color: var(--accent) !important;
+            background: var(--accent-glow) !important;
+        }
+        .option-btn.correct .opt-letter {
+            background: var(--accent) !important;
+            color: white !important;
+            border-color: var(--accent) !important;
+        }
+        .option-btn.wrong {
+            border-color: var(--wrong) !important;
+            background: var(--wrong-glow) !important;
+        }
+        .option-btn.wrong .opt-letter {
+            background: var(--wrong) !important;
+            color: white !important;
+            border-color: var(--wrong) !important;
+        }
+        .option-btn.disabled { cursor: default; opacity: 0.6; }
+        .option-btn.correct.disabled { opacity: 1; }
+        .option-btn.show-correct {
+            border-color: var(--accent) !important;
+            opacity: 1 !important;
+        }
+        .option-btn.show-correct .opt-letter {
+            background: var(--accent) !important;
+            color: white !important;
+            border-color: var(--accent) !important;
+        }
+
+        /* أزرار صح وغلط */
+        .tf-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .tf-btn {
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            background: var(--card);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .tf-btn:hover:not(.disabled) {
+            transform: translateY(-3px);
+        }
+        .tf-btn.tf-true:hover:not(.disabled) {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+        .tf-btn.tf-false:hover:not(.disabled) {
+            border-color: var(--wrong);
+            background: var(--wrong-glow);
+            color: var(--wrong);
+        }
+        .tf-btn.correct {
+            border-color: var(--accent) !important;
+            background: var(--accent-glow) !important;
+            color: var(--accent) !important;
+        }
+        .tf-btn.wrong {
+            border-color: var(--wrong) !important;
+            background: var(--wrong-glow) !important;
+            color: var(--wrong) !important;
+        }
+        .tf-btn.disabled { cursor: default; }
+        .tf-btn.show-correct {
+            border-color: var(--accent) !important;
+            background: var(--accent-glow) !important;
+            color: var(--accent) !important;
+            opacity: 1 !important;
+        }
+
+        .next-btn-wrap {
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .next-btn-wrap.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        .next-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            padding: 14px 48px;
+            border-radius: 14px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(16,185,129,0.3);
+        }
+
+        .explanation-box {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.7;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .explanation-box i { color: var(--gold); margin-left: 6px; }
+
+        /* === شاشة النتائج === */
+        .results-screen {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .results-circle {
+            width: 180px; height: 180px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        .results-circle svg {
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+        .results-circle .bg-ring {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 10;
+        }
+        .results-circle .fg-ring {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1.5s ease;
+        }
+        .results-circle .fg-ring.low { stroke: var(--wrong); }
+        .results-circle .fg-ring.mid { stroke: var(--gold); }
+        .results-circle .center-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .results-circle .center-text .pct {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+        .results-circle .center-text .pct-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .results-grade {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+        .results-message {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 32px;
+            font-weight: 300;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+        .r-stat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 12px;
+        }
+        .r-stat .r-num {
+            font-size: 1.6rem;
+            font-weight: 900;
+        }
+        .r-stat .r-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .r-stat.green .r-num { color: var(--accent); }
+        .r-stat.red .r-num { color: var(--wrong); }
+        .r-stat.blue .r-num { color: #0ea5e9; }
+
+        .results-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+        .r-btn {
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .r-btn:hover { transform: translateY(-2px); }
+        .r-btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .r-btn.secondary {
+            background: var(--card);
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+        .r-btn.ghost {
+            background: transparent;
+            color: var(--muted);
+        }
+
+        /* === شاشة المراجعة === */
+        .review-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .review-header h2 { font-size: 1.3rem; font-weight: 700; }
+        .back-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--fg);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .back-btn:hover { border-color: var(--accent); }
+
+        .review-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .review-item.review-correct { border-right: 4px solid var(--accent); }
+        .review-item.review-wrong { border-right: 4px solid var(--wrong); }
+
+        .review-q-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .review-q-num {
+            width: 30px; height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .review-correct .review-q-num { background: var(--accent-glow); color: var(--accent); }
+        .review-wrong .review-q-num { background: var(--wrong-glow); color: var(--wrong); }
+
+        .review-q-text {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.8;
+            flex: 1;
+        }
+        .review-answers {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .review-your-ans { color: var(--wrong); }
+        .review-your-ans span { font-weight: 700; }
+        .review-correct-ans { color: var(--accent); }
+        .review-correct-ans span { font-weight: 700; }
+
+        /* === توست === */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 999;
+            transition: transform 0.4s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.correct-toast {
+            background: var(--accent);
+            color: white;
+        }
+        .toast.wrong-toast {
+            background: var(--wrong);
+            color: white;
+        }
+
+        /* === ريسبونسيف === */
+        @media (max-width: 640px) {
+            .home-header h1 { font-size: 1.6rem; }
+            .stats-bar { gap: 20px; padding: 12px 16px; }
+            .stat-item .num { font-size: 1.3rem; }
+            .level-card { padding: 18px 16px; gap: 14px; }
+            .level-info h3 { font-size: 1rem; }
+            .question-card { padding: 24px 20px; }
+            .question-text { font-size: 1.05rem; }
+            .option-btn { padding: 14px 16px; font-size: 0.9rem; }
+            .tf-btn { padding: 20px 16px; font-size: 1.05rem; }
+            .results-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .r-stat { padding: 14px 8px; }
+            .r-stat .r-num { font-size: 1.3rem; }
+        }
+
+        /* === سكرولبار === */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div id="loader">جارٍ التأكد من هويتك الرقمية... 🔐</div>
+<div class="bg-effects">
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+</div>
+<div class="bg-grid"></div>
 
-<header>
-    <div style="font-weight: bold; color: var(--primary-cyan); font-size: 1.2rem;">🚀  اختبار القاضيا المجتمعية</div>
-    <div id="user-display" style="font-size: 13px; opacity: 0.8;"></div>
-</header>
+<!-- توست -->
+<div class="toast" id="toast"></div>
 
-<div class="container">
-    <div id="quiz-screen" class="glass-card" style="display:none;">
-        <div class="progress-container"><div id="progress-fill"></div></div>
-        <div id="q-number" style="color: var(--primary-cyan); font-size: 14px; margin-bottom: 10px;">سؤال 1 من 15</div>
-        <div class="q-text" id="question-text">تحميل السؤال...</div>
-        <div class="options-grid" id="options-container"></div>
-        
-        <div class="nav-buttons">
-            <button class="btn-nav" id="prev-btn" disabled>السابق</button>
-            <button class="btn-confirm" id="next-btn">تأكيد الإجابة</button>
+<div class="app-container">
+
+    <!-- ===== الشاشة الرئيسية ===== -->
+    <div class="screen active" id="homeScreen">
+        <div class="home-header">
+            <div class="icon-wrap">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h1>حقوق الإنسان ومكافحة الفساد</h1>
+            <p>اختبر معلوماتك في حقوق الإنسان بأسئلة متنوعة وبدون ضغط وقت</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="num" id="totalQ">0</div>
+                <div class="label">سؤال متاح</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">5</div>
+                <div class="label">مستويات</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">3</div>
+                <div class="label">أنواع أسئلة</div>
+            </div>
+        </div>
+
+        <div class="levels-grid" id="levelsGrid"></div>
+    </div>
+
+    <!-- ===== شاشة الاختبار ===== -->
+    <div class="screen" id="quizScreen">
+        <div class="quiz-top-bar">
+            <div class="quiz-level-name" id="quizLevelName"></div>
+            <div class="quiz-score-live" id="quizScoreLive"></div>
+        </div>
+        <div class="progress-wrap">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="question-counter">
+            السؤال <span id="currentQ">1</span> من <span id="totalQs">20</span>
+        </div>
+        <div id="questionArea"></div>
+        <div class="next-btn-wrap" id="nextBtnWrap">
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">
+                <span id="nextBtnText">السؤال التالي</span>
+            </button>
         </div>
     </div>
 
-    <div id="result-screen" class="glass-card" style="display:none; text-align: center;">
-        <span class="locked-badge">🛡️ اتمني لكم النجاح</span>
-        <h2>النتيجة النهائية</h2>
-        <div class="score-box" id="final-score">0%</div>
-        <p id="result-text" style="color: #94a3b8; margin-bottom: 25px;"></p>
-        <button class="btn-confirm" onclick="location.href='dashboard.html'">العودة للوحة التحكم</button>
+    <!-- ===== شاشة النتائج ===== -->
+    <div class="screen" id="resultsScreen">
+        <div class="results-screen">
+            <div class="results-circle">
+                <svg viewBox="0 0 160 160">
+                    <circle class="bg-ring" cx="80" cy="80" r="70"/>
+                    <circle class="fg-ring" id="resultRing" cx="80" cy="80" r="70"/>
+                </svg>
+                <div class="center-text">
+                    <div class="pct" id="resultPct">0%</div>
+                    <div class="pct-label">النتيجة</div>
+                </div>
+            </div>
+            <div class="results-grade" id="resultGrade"></div>
+            <div class="results-message" id="resultMessage"></div>
+            <div class="results-stats">
+                <div class="r-stat green">
+                    <div class="r-num" id="rCorrect">0</div>
+                    <div class="r-label">صحيح</div>
+                </div>
+                <div class="r-stat red">
+                    <div class="r-num" id="rWrong">0</div>
+                    <div class="r-label">خطأ</div>
+                </div>
+                <div class="r-stat blue">
+                    <div class="r-num" id="rTotal">0</div>
+                    <div class="r-label">إجمالي</div>
+                </div>
+            </div>
+            <div class="results-actions">
+                <button class="r-btn primary" onclick="showReview()">مراجعة الإجابات</button>
+                <button class="r-btn secondary" onclick="retryQuiz()">إعادة الاختبار</button>
+                <button class="r-btn ghost" onclick="goHome()">العودة للقائمة</button>
+            </div>
+        </div>
     </div>
+
+    <!-- ===== شاشة المراجعة ===== -->
+    <div class="screen" id="reviewScreen">
+        <div class="review-header">
+            <h2><i class="fa-solid fa-list-check" style="color:var(--accent);margin-left:8px;"></i> مراجعة الإجابات</h2>
+            <button class="back-btn" onclick="showScreen('resultsScreen')">
+                <i class="fa-solid fa-arrow-right"></i> رجوع
+            </button>
+        </div>
+        <div id="reviewList"></div>
+    </div>
+
 </div>
 
-<footer>
-    تم التطوير وبرمجة النظام بواسطة <b> Ahmed El_Samahy</b> | 2026 ©
-</footer>
+<script>
+// ========== بنك الأسئلة ==========
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const questions = {
+    // === المستوى الأساسي ===
+    easy: [
+        { t: "نشأت فكرة حقوق الإنسان أساسًا من:", type: "mcq", o: ["الثورة الصناعية", "حاجة الإنسان لتنظيم حياته مع الآخرين", "التطور التكنولوجي", "الحروب الحديثة"], a: 1 },
+        { t: "الهدف الأساسي من حقوق الإنسان هو:", type: "mcq", o: ["زيادة السلطة", "حماية كرامة الإنسان", "تنظيم التجارة", "تقليل السكان"], a: 1 },
+        { t: "تعتبر الأديان السماوية مصدرًا لـ:", type: "mcq", o: ["القوانين الاقتصادية", "حقوق الإنسان", "التكنولوجيا", "التجارة"], a: 1 },
+        { t: "المواطنة تعني:", type: "mcq", o: ["حقوق فقط", "واجبات فقط", "حقوق وواجبات", "سلطة الدولة فقط"], a: 2 },
+        { t: "من مظاهر انتهاك حقوق الإنسان:", type: "mcq", o: ["العدالة", "الفساد", "التعليم", "الحرية"], a: 1 },
+        { t: "حقوق الإنسان تُمنح للإنسان لأنه:", type: "mcq", o: ["غني", "قوي", "إنسان فقط", "متعلم"], a: 2 },
+        { t: "في الحضارات القديمة كانت حقوق الإنسان:", type: "mcq", o: ["كاملة", "متساوية", "محدودة", "غير موجودة"], a: 2 },
+        { t: "ركزت اليهودية على:", type: "mcq", o: ["المساواة الكاملة", "الشعب المختار", "الحرية المطلقة", "الديمقراطية"], a: 1 },
+        { t: "دعت المسيحية إلى:", type: "mcq", o: ["العنف", "التسامح والرحمة", "التمييز", "السيطرة"], a: 1 },
+        { t: "من أهم مبادئ الإسلام:", type: "mcq", o: ["التفرقة", "الظلم", "المساواة والعدل", "الاستبداد"], a: 2 },
+        { t: "وثيقة الماجنا كارتا صدرت عام:", type: "mcq", o: ["1789", "1215", "1776", "1948"], a: 1 },
+        { t: "إعلان الاستقلال الأمريكي كان عام:", type: "mcq", o: ["1689", "1776", "1787", "1948"], a: 1 },
+        { t: "إعلان حقوق الإنسان والمواطن صدر في:", type: "mcq", o: ["إنجلترا", "أمريكا", "فرنسا", "ألمانيا"], a: 2 },
+        { t: "الإعلان العالمي لحقوق الإنسان صدر سنة:", type: "mcq", o: ["1919", "1945", "1948", "1966"], a: 2 },
+        { t: "من خصائص حقوق الإنسان:", type: "mcq", o: ["مؤقتة", "نسبية", "عالمية", "خاصة بدولة معينة"], a: 2 },
+        { t: "الحقوق لا يمكن التنازل عنها لأنها:", type: "mcq", o: ["اقتصادية", "ثابتة", "سياسية", "مؤقتة"], a: 1 },
+        { t: "من مصادر حقوق الإنسان:", type: "mcq", o: ["الألعاب", "القوانين والدساتير", "التكنولوجيا", "الإعلانات"], a: 1 },
+        { t: "العهد الدولي يشمل:", type: "mcq", o: ["التجارة", "الحقوق المدنية والسياسية", "الصناعة", "الزراعة"], a: 1 },
+        { t: "من أمثلة الاتفاقيات الدولية:", type: "mcq", o: ["قوانين المرور", "اتفاقية منع التعذيب", "قوانين التعليم", "قوانين العمل فقط"], a: 1 },
+        { t: "الهدف من القانون الدولي لحقوق الإنسان:", type: "mcq", o: ["السيطرة على الدول", "حماية الإنسان من الانتهاكات", "زيادة الضرائب", "تنظيم التجارة"], a: 1 },
+        // صح وغلط
+        { t: "حقوق الإنسان ظهرت في العصر الحديث فقط", type: "tf", a: false },
+        { t: "الإسلام لا يهتم بحقوق الإنسان", type: "tf", a: false },
+        { t: "المواطنة تعني حقوق فقط", type: "tf", a: false },
+        { t: "الفساد من أسباب انتهاك حقوق الإنسان", type: "tf", a: true },
+        { t: "جميع الناس متساوون في حقوق الإنسان", type: "tf", a: true },
+        { t: "الحقوق كانت كاملة في الحضارات القديمة", type: "tf", a: false },
+        { t: "المسيحية دعت إلى التسامح", type: "tf", a: true },
+        { t: "الإسلام يدعو إلى العدل والمساواة", type: "tf", a: true },
+        { t: "الإعلان العالمي صدر عام 1948", type: "tf", a: true },
+        { t: "حقوق الإنسان تختلف من شخص لآخر", type: "tf", a: false },
+    ],
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
-        authDomain: "blog-62e33.firebaseapp.com",
-        projectId: "blog-62e33",
-        storageBucket: "blog-62e33.firebasestorage.app",
-        messagingSenderId: "804628373288",
-        appId: "1:804628373288:web:b29db5c1600b5792393a1d"
-    };
+    // === المستوى المتوسط ===
+    medium: [
+        { t: "ساهمت الحضارة ____ في تجسيد فكرة حقوق الإنسان", type: "mcq", o: ["الإغريقية", "الرومانية", "اليونانية", "الفرعونية"], a: 2 },
+        { t: "أصدر ____ أولى وثائق حقوق الإنسان في تاريخ الإنسانية", type: "mcq", o: ["الفلاح المصري", "الفلاح الفرنسي", "الفلاح الإنجليزي", "الفلاح اليوناني"], a: 0 },
+        { t: "لم تعرف ____ فكرة حقوق الإنسان", type: "mcq", o: ["الإسلام", "الفراعنة", "المسيحية", "اليهودية"], a: 1 },
+        { t: "تعتبر ____ من أهم مصادر حقوق الإنسان على كافة المستويات", type: "mcq", o: ["الشريعة الإسلامية", "اليهودية", "القوانين الإقليمية", "الفلسفة اليونانية"], a: 0 },
+        { t: "من خصائص حقوق الإنسان أنها:", type: "mcq", o: ["لا تُشترى ولا تُكتسب", "يتم جمعها", "يمكن التنازل عنها", "تُشترى وتُورث"], a: 0 },
+        { t: "من المصادر الوطنية المكتوبة لحقوق الإنسان:", type: "mcq", o: ["إعلان الحقوق السياسية", "إعلان الحقوق الاقتصادية", "الدستور", "الميثاق الأعظم"], a: 2 },
+        { t: "الحق في الاسم من الحقوق:", type: "mcq", o: ["السياسية", "الاقتصادية", "الشخصية", "الصحية"], a: 2 },
+        { t: "تعرف ____ بأنها عالم أسرار الإنسان التي يحب ألا يطلع عليه غيره", type: "mcq", o: ["الخصوصية", "الموطن", "الاسم", "الجنسية"], a: 0 },
+        { t: "الحق في الزواج وتكوين الأسرة من الحقوق:", type: "mcq", o: ["الفردية", "الصحية", "الاقتصادية", "السياسية"], a: 0 },
+        { t: "____ هي أساس وقوام المجتمع وتحرص الدولة على تمسكها", type: "mcq", o: ["الرجل", "المرأة", "الثقافة", "الأسرة"], a: 3 },
+        { t: "الحق في مستوى معيشي مناسب من الحقوق:", type: "mcq", o: ["غير إنسانية", "الجماعية", "السياسية", "الفردية"], a: 3 },
+        { t: "الحق في التنقل من الحقوق:", type: "mcq", o: ["الفردية", "غير إنسانية", "السياسية", "الجماعية"], a: 0 },
+        { t: "الحق في الرعاية الصحية من الحقوق:", type: "mcq", o: ["الجماعية", "غير إنسانية", "السياسية", "الفردية"], a: 3 },
+        { t: "____ هو حق أو سلطة مباشرة على شيء ذي طبيعة مالية", type: "mcq", o: ["حق الصحة", "حق الاسم", "حق التملك", "حق التنقل"], a: 2 },
+        { t: "الحق في التملك من الحقوق:", type: "mcq", o: ["السياسية", "الفردية", "النظامية", "الجماعية"], a: 1 },
+        { t: "الحق في ____ هو المجهود البدني أو الذهني الذي يبذله الفرد لإنتاج سلعة أو خدمة", type: "mcq", o: ["الجنسية", "الصحة", "العمل", "الاسم"], a: 2 },
+        { t: "الحق في العمل من الحقوق:", type: "mcq", o: ["الجماعية", "الفردية والجماعية", "الفردية", "السياسية"], a: 1 },
+        { t: "____ هو أولى مراحل الارتقاء بالذهن وبناء الفكرة", type: "mcq", o: ["الحق في التعلم", "الحق في العمل", "الحق في الاسم", "الحق في الجنسية"], a: 0 },
+        { t: "يشمل _____ حرية اعتناق الآراء دون أي تدخل", type: "mcq", o: ["التنقل", "التعليم", "الحق في حرية الرأي", "الصحة"], a: 2 },
+        { t: "الحق في حرية التعبير من الحقوق:", type: "mcq", o: ["الجماعية", "الاقتصادية", "الإدارية", "الفردية"], a: 3 },
+        // صح وغلط
+        { t: "حقوق الإنسان ثابتة ولا يمكن سحبها", type: "tf", a: true },
+        { t: "القانون الدولي لا يهتم بحقوق الإنسان", type: "tf", a: false },
+        { t: "الدستور من مصادر حقوق الإنسان", type: "tf", a: true },
+        { t: "الحقوق غير مرتبطة ببعضها", type: "tf", a: false },
+        { t: "العهد الدولي يشمل حقوق الإنسان الأساسية", type: "tf", a: true },
+        { t: "الخصوصية تشمل الهاتف والمراسلات", type: "tf", a: true },
+        { t: "يمكن إجبار شخص على الزواج", type: "tf", a: false },
+        { t: "الدولة غير مسؤولة عن الصحة", type: "tf", a: false },
+        { t: "يمكن نزع الملكية بدون تعويض", type: "tf", a: false },
+        { t: "البيئة النظيفة من حقوق الإنسان", type: "tf", a: true },
+    ],
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    // === المستوى الصعب ===
+    hard: [
+        { t: "أي مما يلي يُعد الأساس الحقيقي لظهور قواعد حقوق الإنسان؟", type: "mcq", o: ["التطور الاقتصادي", "الحاجة إلى تنظيم العلاقات داخل المجتمع", "الحروب العالمية", "التقدم العلمي"], a: 1 },
+        { t: "أي العبارات التالية أدق؟", type: "mcq", o: ["حقوق الإنسان منحة من الدولة", "حقوق الإنسان تُكتسب بالتعليم", "حقوق الإنسان لصيقة بالإنسان لذاته", "حقوق الإنسان مرتبطة بالوظيفة"], a: 2 },
+        { t: "الفرق بين حقوق الإنسان في القديم والحديث:", type: "mcq", o: ["لم تكن موجودة قديمًا", "كانت شاملة قديمًا", "كانت مقصورة على فئات معينة قديمًا وأصبحت عامة حديثًا", "لم تتغير"], a: 2 },
+        { t: "أي مما يلي لا يُعد من خصائص حقوق الإنسان؟", type: "mcq", o: ["العالمية", "القابلية للتصرف", "المساواة", "الثبات"], a: 1 },
+        { t: "أي مما يلي يمثل مصدرًا دوليًا مباشرًا لحقوق الإنسان؟", type: "mcq", o: ["العادات الاجتماعية", "الدستور", "الاتفاقيات الدولية", "الفلسفة"], a: 2 },
+        { t: "أهمية وثيقة الماجنا كارتا تتمثل في:", type: "mcq", o: ["إعلان الاستقلال", "تقييد سلطة الحاكم", "إلغاء الضرائب", "نشر الديمقراطية عالميًا"], a: 1 },
+        { t: "أي من التالي يعبر عن مبدأ عالمية حقوق الإنسان؟", type: "mcq", o: ["تطبيق الحقوق داخل الدولة فقط", "اختلاف الحقوق حسب الثقافة", "تمتع جميع البشر بنفس الحقوق دون تمييز", "خضوع الحقوق للقانون الداخلي فقط"], a: 2 },
+        { t: "أي مما يلي يمثل انتهاكًا غير مباشر لحقوق الإنسان؟", type: "mcq", o: ["التعذيب", "منع التعليم", "الفساد الإداري", "الاعتقال التعسفي"], a: 2 },
+        { t: "العلاقة بين الحقوق والواجبات هي:", type: "mcq", o: ["منفصلة تمامًا", "متعارضة", "متكاملة", "غير موجودة"], a: 2 },
+        { t: "أي من التالي يُعد تطورًا حديثًا في حقوق الإنسان؟", type: "mcq", o: ["ظهور الفلسفة", "القوانين الرومانية", "إنشاء المنظمات الدولية", "الأديان"], a: 2 },
+        { t: "لماذا يُعد الإعلان العالمي وثيقة غير ملزمة قانونيًا؟", type: "mcq", o: ["لأنه غير مهم", "لأنه مجرد إعلان أخلاقي وليس معاهدة", "لأنه خاص بدولة واحدة", "لأنه قديم"], a: 1 },
+        { t: "أي مما يلي يعبر عن الحقوق المدنية؟", type: "mcq", o: ["الحق في التعليم", "الحق في العمل", "الحق في الحياة والحرية", "الحق في التأمين"], a: 2 },
+        { t: "أي مما يلي يمثل مبدأ عدم التمييز؟", type: "mcq", o: ["التفرقة حسب الدين", "المساواة بين جميع الأفراد", "إعطاء امتيازات لفئة", "اختلاف الحقوق حسب الدولة"], a: 1 },
+        { t: "أي مما يلي يعد نتيجة لغياب حقوق الإنسان؟", type: "mcq", o: ["الاستقرار", "التنمية", "الفوضى وعدم الاستقرار", "التقدم العلمي"], a: 2 },
+        { t: "أي مما يلي يعبر عن مفهوم ثبات الحقوق؟", type: "mcq", o: ["تتغير حسب الزمن", "تُسحب من الأفراد", "لا يمكن التنازل عنها أو إلغاؤها", "مرتبطة بالقانون فقط"], a: 2 },
+        { t: "أي من التالي يُعد مصدرًا تاريخيًا لحقوق الإنسان؟", type: "mcq", o: ["الأمم المتحدة", "الفلاسفة والأديان", "البرلمان", "القضاء"], a: 1 },
+        { t: "العهد الدولي للحقوق المدنية والسياسية يهدف إلى:", type: "mcq", o: ["تنظيم التجارة", "حماية الحريات الأساسية للأفراد", "تنظيم الصناعة", "دعم الاقتصاد"], a: 1 },
+        { t: "أي مما يلي يعبر عن مبدأ ترابط الحقوق؟", type: "mcq", o: ["كل حق مستقل تمامًا", "الحقوق تتعارض", "لا يمكن التمتع بحق دون الآخر", "الحقوق غير مهمة"], a: 2 },
+        { t: "متى بدأت حقوق الإنسان تأخذ طابعًا دوليًا؟", type: "mcq", o: ["العصور القديمة", "العصور الوسطى", "بعد الحرب العالمية الثانية", "قبل الميلاد"], a: 2 },
+        { t: "أي مما يلي يُعد مثالًا على الحقوق الاقتصادية؟", type: "mcq", o: ["حرية التعبير", "الحق في العمل", "الحق في الحياة", "حرية الدين"], a: 1 },
+        // صح وغلط tricky
+        { t: "حقوق الإنسان تعتمد على اعتراف الدولة بها", type: "tf", a: false },
+        { t: "جميع مصادر حقوق الإنسان قانونية فقط", type: "tf", a: false },
+        { t: "الحقوق المدنية والسياسية أقل أهمية من الاقتصادية", type: "tf", a: false },
+        { t: "يمكن التنازل عن حقوق الإنسان بمحض الإرادة", type: "tf", a: false },
+        { t: "المساواة تعني التطابق التام بين الأفراد", type: "tf", a: false },
+        { t: "الفساد قد يؤدي إلى انتهاك حقوق الإنسان بشكل غير مباشر", type: "tf", a: true },
+        { t: "الإعلان العالمي يُعد معاهدة ملزمة", type: "tf", a: false },
+        { t: "الحقوق مترابطة ولا يمكن فصلها", type: "tf", a: true },
+        { t: "الأديان لم يكن لها دور في حقوق الإنسان", type: "tf", a: false },
+        { t: "القانون الدولي يحمي الإنسان من تعسف الدولة", type: "tf", a: true },
+    ],
 
-    const questions = [
-        { q: "ما هي لغة البرمجة التي تُستخدم لتصميم هيكل صفحات الويب؟", opts: ["HTML", "Python", "CSS", "SQL"], ans: 0 },
-        { q: "أي من اللغات التالية تُستخدم لإضافة تنسيقات جمالية للموقع؟", opts: ["PHP", "CSS", "C#", "HTML"], ans: 1 },
-        { q: "ما هي الدالة المستخدمة لعرض رسالة تنبيه في JavaScript؟", opts: ["msg()", "prompt()", "alert()", "confirm()"], ans: 2 },
-        { q: "ما هو ناتج عملية 10 * 10؟", opts: ["10", "100", "1000", "20"], ans: 1 },
-        { q: "أي كوكب هو الأقرب إلى الشمس؟", opts: ["المريخ", "عطارد", "الزهرة", "المشتري"], ans: 1 },
-        { q: "ما هو أكبر حيوان في العالم؟", opts: ["الفيل", "الحوت الأزرق", "الزرافة", "القرش"], ans: 1 },
-        { q: "كم عدد أضلاع المثلث؟", opts: ["2", "3", "4", "5"], ans: 1 },
-        { q: "ما هي عاصمة المملكة العربية السعودية؟", opts: ["جدة", "مكة", "الرياض", "الدمام"], ans: 2 },
-        { q: "أي لغة برمجية تُستخدم بكثرة في الذكاء الاصطناعي؟", opts: ["Java", "Python", "C++", "JavaScript"], ans: 1 },
-        { q: "ما هي سرعة الضوء التقريبية؟", opts: ["300 ألف كم/ث", "150 ألف كم/ث", "500 ألف كم/ث", "100 ألف كم/ث"], ans: 0 },
-        { q: "من هو مؤسس شركة مايكروسوفت؟", opts: ["ستيف جوبز", "بيل غيتس", "مارك زوكربيرغ", "إيلون ماسك"], ans: 1 },
-        { q: "ما هو العنصر الكيميائي الذي رمزه O؟", opts: ["الذهب", "الحديد", "الأكسجين", "الهيدروجين"], ans: 2 },
-        { q: "كم دقيقة في الساعة الواحدة؟", opts: ["50", "60", "70", "100"], ans: 1 },
-        { q: "ما هو المحيط الذي يحد الوطن العربي من الغرب؟", opts: ["الهندي", "الهادي", "الأطلسي", "المتجمد"], ans: 2 },
-        { q: "هل هذه المنصة رائعة؟", opts: ["نعم جداً", "بالتأكيد", "الأفضل على الإطلاق", "كل ما سبق"], ans: 3 }
-    ];
+    // === المستوى الخبير ===
+    expert: [
+        { t: "أي من التالي يمثل انتهاكًا غير مباشر لحقوق الإنسان؟", type: "mcq", o: ["الاعتقال التعسفي", "التعذيب", "الفساد الإداري", "السجن"], a: 2 },
+        { t: "إذا وفرت الدولة تعليمًا لكن بجودة ضعيفة جدًا، فهذا:", type: "mcq", o: ["احترام كامل للحق", "انتهاك جزئي للحق في التعليم", "لا علاقة له بالحق", "حق مكتمل"], a: 1 },
+        { t: "منع شخص من السفر لأسباب قانونية يعد:", type: "mcq", o: ["انتهاكًا مطلقًا", "مسموحًا به إذا كان وفق القانون", "غير قانوني دائمًا", "جريمة"], a: 1 },
+        { t: "أي مما يلي يعبر بدقة عن ترابط الحقوق؟", type: "mcq", o: ["كل حق مستقل", "لا تأثير بين الحقوق", "انتهاك حق يؤثر على باقي الحقوق", "الحقوق غير مهمة"], a: 2 },
+        { t: "إعطاء وظيفة لشخص دون كفاءة بسبب الواسطة:", type: "mcq", o: ["عدل", "انتهاك لمبدأ المساواة", "حق طبيعي", "حرية شخصية"], a: 1 },
+        { t: "إذا تم احترام حرية التعبير لكن مع نشر كراهية:", type: "mcq", o: ["حق كامل", "استخدام خاطئ للحق", "لا مشكلة", "واجب"], a: 1 },
+        { t: "أي مما يلي يعبر عن انتهاك مركب؟", type: "mcq", o: ["حرمان من التعليم فقط", "منع العلاج فقط", "منع العمل والتعليم معًا", "حرية التعبير"], a: 2 },
+        { t: "الحق في الجنسية مهم لأنه:", type: "mcq", o: ["يعطي مال", "يحدد انتماء الفرد للدولة وحقوقه", "يحدد العمل", "يحدد التعليم"], a: 1 },
+        { t: "إذا أُجبر شخص على الزواج:", type: "mcq", o: ["ممارسة حق", "انتهاك لحرية الاختيار", "أمر طبيعي", "قانوني"], a: 1 },
+        { t: "حرمان فئة من العلاج بسبب الفقر يعد:", type: "mcq", o: ["عدل", "تمييز وانتهاك للحق في الصحة", "قانون", "تنظيم"], a: 1 },
+        { t: "أي مما يلي يمثل قيدًا مشروعًا على الحقوق؟", type: "mcq", o: ["منع الرأي", "منع السفر دون سبب", "تقييد الحرية لحماية الأمن العام وفق القانون", "التمييز"], a: 2 },
+        { t: "إذا تم توفير سكن بدون خدمات أساسية:", type: "mcq", o: ["تحقيق كامل للحق", "انتهاك للحق في مستوى معيشة مناسب", "لا علاقة", "حق مكتمل"], a: 1 },
+        { t: "الفرق بين الحقوق الفردية والجماعية:", type: "mcq", o: ["لا يوجد فرق", "الفردية للفرد والجماعية للشعب", "الجماعية أهم", "الفردية غير مهمة"], a: 1 },
+        { t: "أي مما يلي يعبر عن العدالة؟", type: "mcq", o: ["إعطاء كل الناس نفس الشيء", "إعطاء كل شخص ما يستحقه", "التمييز", "الظلم"], a: 1 },
+        { t: "منع التعليم عن الإناث:", type: "mcq", o: ["حرية", "انتهاك لمبدأ المساواة والحق في التعليم", "قانون", "تنظيم"], a: 1 },
+        { t: "تقييد حرية التعبير يكون مشروعًا عندما:", type: "mcq", o: ["يمنع الرأي", "يحمي المجتمع من الضرر", "يمنع الإعلام", "يمنع الكلام"], a: 1 },
+        { t: "إذا توفرت وظائف لكن برواتب غير عادلة:", type: "mcq", o: ["حق كامل", "انتهاك للحق في العمل اللائق", "لا مشكلة", "عدل"], a: 1 },
+        { t: "إذا تم التمييز بسبب الدين:", type: "mcq", o: ["حرية", "انتهاك لحقوق الإنسان", "قانون", "تنظيم"], a: 1 },
+        { t: "إذا وفرت الدولة خدمات لكنها غير متاحة للجميع:", type: "mcq", o: ["عدل", "انتهاك لمبدأ المساواة", "حق كامل", "قانون"], a: 1 },
+        { t: "حرمان شخص من محاكمة عادلة يؤدي إلى:", type: "mcq", o: ["تحقيق العدالة", "انتهاك خطير لحقوق الإنسان", "تنظيم", "قانون"], a: 1 },
+        // صح وغلط خبير
+        { t: "كل قيد على الحقوق يُعد انتهاكًا", type: "tf", a: false },
+        { t: "الحقوق يمكن تقييدها لحماية المجتمع", type: "tf", a: true },
+        { t: "المساواة تعني إعطاء الجميع نفس النتائج", type: "tf", a: false },
+        { t: "الفقر قد يؤدي لانتهاك حقوق الإنسان", type: "tf", a: true },
+        { t: "حرية التعبير مطلقة بدون قيود", type: "tf", a: false },
+        { t: "الدولة مسؤولة عن حماية الحقوق", type: "tf", a: true },
+        { t: "الكرامة الإنسانية أساس كل الحقوق", type: "tf", a: true },
+        { t: "المعاملة الإنسانية في السجون لم ترد ضمن حقوق الإنسان", type: "tf", a: false },
+        { t: "من الحقوق الفردية تجريم التعذيب والحق في الدفاع الشرعي وضمان الأمن الفردي في محاكمة عادلة", type: "tf", a: true },
+        { t: "آفة الفساد هي الأكثر فتكًا بالسلم والأمن الاجتماعي", type: "tf", a: true },
+        { t: "انتشر الرق وانتهاك حقوق الإنسان لدى الرومان والإغريق", type: "tf", a: true },
+        { t: "لا يشترط توافر الأمن والاستقرار للسماح للإنسان في الحياة وممارسة حقوقه", type: "tf", a: false },
+        { t: "عدم احترام الموظف العام مواعيد العمل لا يعد من الفساد الإداري", type: "tf", a: false },
+        { t: "غسيل الأموال تمثل جريمة لاحقة لنشاط جمع مال بطرق غير شرعية", type: "tf", a: true },
+        { t: "لا تعتبر حقوق الإنسان أساس الحرية والعدالة والسلام", type: "tf", a: false },
+        { t: "انتشار الجهل مع ثقافة متساهلة لا يعد من أسباب الفساد", type: "tf", a: false },
+        { t: "الأساس الأول لحقوق الإنسان هو الديانات السماوية ثم المواثيق والقوانين الدولية ثم الدساتير الوطنية", type: "tf", a: true },
+        { t: "أكد الإعلان العالمي لحقوق الإنسان على الحق في إنشاء النقابات والانضمام إليها", type: "tf", a: true },
+        { t: "لا يعتبر الفساد سوء سلوك ينعكس بالسلب على الآخرين", type: "tf", a: false },
+        { t: "الحق في الثقافة والحصول على المعلومات من حقوق الإنسان", type: "tf", a: true },
+    ]
+};
 
-    let currentUser = null;
-    let currentQ = 0;
-    let userAnswers = new Array(questions.length).fill(null); // تخزين إجابات المستخدم
-    let confirmedAnswers = new Array(questions.length).fill(false); // هل تم تأكيد السؤال؟
+// ========== بيانات المستويات ==========
+const levels = [
+    { key: "easy", name: "المستوى الأساسي", desc: "مبادئ عامة ونظريات أساسية", icon: "fa-book-open", color: "#10b981" },
+    { key: "medium", name: "المستوى المتوسط", desc: "الحقوق الفردية والمصادر التفصيلية", icon: "fa-graduation-cap", color: "#0ea5e9" },
+    { key: "hard", name: "المستوى الصعب", desc: "أسئلة تحليلية ومصطلحات دقيقة", icon: "fa-fire", color: "#f59e0b" },
+    { key: "expert", name: "المستوى الخبير", desc: "حالات معقدة وأسئلة محيرة", icon: "fa-skull-crossbones", color: "#ef4444" },
+    { key: "all", name: "اختبار شامل", desc: "أسئلة عشوائية من جميع المستويات", icon: "fa-trophy", color: "#a855f7" },
+];
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('quiz-screen').style.display = 'block';
-            document.getElementById('user-display').innerText = `المستخدم: ${user.displayName || user.email}`;
-            loadQuestion();
-        } else {
-            setTimeout(() => { if (!auth.currentUser) window.location.href = 'index.html'; }, 3000);
-        }
+// ========== حالة التطبيق ==========
+let currentLevel = null;
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let userAnswers = [];
+let answered = false;
+
+// ========== تهيئة ==========
+function init() {
+    // حساب إجمالي الأسئلة
+    let total = 0;
+    for (let key in questions) total += questions[key].length;
+    document.getElementById("totalQ").textContent = total;
+
+    // بناء بطاقات المستويات
+    const grid = document.getElementById("levelsGrid");
+    grid.innerHTML = "";
+    levels.forEach(lv => {
+        let count = lv.key === "all" ? 40 : questions[lv.key].length;
+        const card = document.createElement("div");
+        card.className = "level-card";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", `ابدأ ${lv.name}`);
+        card.innerHTML = `
+            <div class="level-icon"><i class="fa-solid ${lv.icon}"></i></div>
+            <div class="level-info">
+                <h3>${lv.name}</h3>
+                <p>${lv.desc}</p>
+            </div>
+            <div class="level-badge">${count} سؤال</div>
+        `;
+        card.addEventListener("click", () => startQuiz(lv.key));
+        card.addEventListener("keydown", (e) => { if (e.key === "Enter") startQuiz(lv.key); });
+        grid.appendChild(card);
     });
+}
 
-    function loadQuestion() {
-        const q = questions[currentQ];
-        const container = document.getElementById('options-container');
-        const nextBtn = document.getElementById('next-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        
-        // تحديث النصوص والتقدم
-        document.getElementById('question-text').innerText = q.q;
-        document.getElementById('q-number').innerText = `سؤال ${currentQ + 1} من ${questions.length}`;
-        document.getElementById('progress-fill').style.width = ((currentQ + 1) / questions.length) * 100 + "%";
-        
-        container.innerHTML = '';
-        prevBtn.disabled = currentQ === 0;
-        
-        // تغيير نص الزر في السؤال الأخير
-        nextBtn.innerText = confirmedAnswers[currentQ] ? (currentQ === questions.length - 1 ? "إنهاء الاختبار" : "السؤال التالي") : "تأكيد الإجابة";
+// ========== بدء الاختبار ==========
+function startQuiz(levelKey) {
+    currentLevel = levelKey;
+    currentIndex = 0;
+    score = 0;
+    userAnswers = [];
+    answered = false;
 
-        q.opts.forEach((opt, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt;
-            
-            // استعادة الاختيار السابق إن وجد
-            if (userAnswers[currentQ] === i) btn.classList.add('selected');
-            
-            // تطبيق ألوان التصحيح إذا تم التأكيد مسبقاً
-            if (confirmedAnswers[currentQ]) {
-                btn.disabled = true;
-                if (i === q.ans) btn.classList.add('correct');
-                else if (i === userAnswers[currentQ]) btn.classList.add('wrong');
-            }
+    if (levelKey === "all") {
+        // أخذ 40 سؤال عشوائي من كل المستويات
+        let allQ = [];
+        for (let key in questions) allQ = allQ.concat(questions[key]);
+        shuffleArray(allQ);
+        currentQuestions = allQ.slice(0, 40);
+    } else {
+        currentQuestions = [...questions[levelKey]];
+        shuffleArray(currentQuestions);
+    }
 
-            btn.onclick = () => {
-                if (confirmedAnswers[currentQ]) return;
-                userAnswers[currentQ] = i;
-                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-            };
-            container.appendChild(btn);
+    const lv = levels.find(l => l.key === levelKey);
+    document.getElementById("quizLevelName").textContent = lv.name;
+    document.getElementById("totalQs").textContent = currentQuestions.length;
+    updateScoreDisplay();
+    showScreen("quizScreen");
+    renderQuestion();
+}
+
+// ========== عرض السؤال ==========
+function renderQuestion() {
+    answered = false;
+    const q = currentQuestions[currentIndex];
+    const area = document.getElementById("questionArea");
+
+    document.getElementById("currentQ").textContent = currentIndex + 1;
+    document.getElementById("progressFill").style.width = ((currentIndex) / currentQuestions.length * 100) + "%";
+    document.getElementById("nextBtnWrap").classList.remove("show");
+
+    let html = `<div class="question-card">`;
+    html += `<span class="question-type-badge ${q.type === 'mcq' ? 'badge-mcq' : 'badge-tf'}">${q.type === 'mcq' ? 'اختيار من متعدد' : 'صح أو غلط'}</span>`;
+    html += `<div class="question-text">${q.t}</div>`;
+
+    if (q.type === "mcq") {
+        const letters = ["أ", "ب", "ج", "د"];
+        html += `<div class="options-list">`;
+        q.o.forEach((opt, i) => {
+            html += `<button class="option-btn" data-index="${i}" onclick="selectAnswer(${i})" aria-label="الخيار ${letters[i]}">
+                <span class="opt-letter">${letters[i]}</span>
+                <span>${opt}</span>
+            </button>`;
+        });
+        html += `</div>`;
+    } else {
+        html += `<div class="tf-options">
+            <button class="tf-btn tf-true" onclick="selectAnswer(true)" aria-label="صح">
+                <i class="fa-solid fa-check"></i> صح
+            </button>
+            <button class="tf-btn tf-false" onclick="selectAnswer(false)" aria-label="خطأ">
+                <i class="fa-solid fa-xmark"></i> خطأ
+            </button>
+        </div>`;
+    }
+
+    html += `</div>`;
+    area.innerHTML = html;
+}
+
+// ========== اختيار إجابة ==========
+function selectAnswer(val) {
+    if (answered) return;
+    answered = true;
+
+    const q = currentQuestions[currentIndex];
+    let isCorrect = false;
+
+    if (q.type === "mcq") {
+        isCorrect = val === q.a;
+        const btns = document.querySelectorAll(".option-btn");
+        btns.forEach((btn, i) => {
+            btn.classList.add("disabled");
+            if (i === q.a) btn.classList.add("correct");
+            if (i === val && !isCorrect) btn.classList.add("wrong");
+        });
+    } else {
+        isCorrect = val === q.a;
+        const btns = document.querySelectorAll(".tf-btn");
+        btns.forEach(btn => {
+            btn.classList.add("disabled");
+            const isTrueBtn = btn.classList.contains("tf-true");
+            if (isTrueBtn === q.a) btn.classList.add("correct");
+            if ((isTrueBtn === val) && !isCorrect) btn.classList.add("wrong");
         });
     }
 
-    document.getElementById('next-btn').onclick = () => {
-        if (userAnswers[currentQ] === null) {
-            alert("يرجى اختيار إجابة أولاً!");
-            return;
-        }
+    if (isCorrect) {
+        score++;
+        showToast("إجابة صحيحة", true);
+    } else {
+        showToast("إجابة خاطئة", false);
+    }
 
-        // إذا لم يتم التأكيد بعد، قم بالتصحيح الفوري
-        if (!confirmedAnswers[currentQ]) {
-            confirmedAnswers[currentQ] = true;
-            loadQuestion(); // إعادة التحميل لإظهار الألوان
-            return;
-        }
+    userAnswers.push({ question: q, userAnswer: val, correct: isCorrect });
+    updateScoreDisplay();
 
-        // الانتقال للسؤال التالي أو الإنهاء
-        if (currentQ < questions.length - 1) {
-            currentQ++;
-            loadQuestion();
+    // عرض زر التالي
+    setTimeout(() => {
+        const wrap = document.getElementById("nextBtnWrap");
+        const btnText = document.getElementById("nextBtnText");
+        btnText.textContent = currentIndex === currentQuestions.length - 1 ? "عرض النتائج" : "السؤال التالي";
+        wrap.classList.add("show");
+    }, 600);
+}
+
+// ========== السؤال التالي ==========
+function nextQuestion() {
+    currentIndex++;
+    if (currentIndex >= currentQuestions.length) {
+        showResults();
+    } else {
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+// ========== عرض النتائج ==========
+function showResults() {
+    document.getElementById("progressFill").style.width = "100%";
+    showScreen("resultsScreen");
+
+    const total = currentQuestions.length;
+    const pct = Math.round((score / total) * 100);
+
+    document.getElementById("rCorrect").textContent = score;
+    document.getElementById("rWrong").textContent = total - score;
+    document.getElementById("rTotal").textContent = total;
+    document.getElementById("resultPct").textContent = pct + "%";
+
+    // حلقة النتيجة
+    const ring = document.getElementById("resultRing");
+    const circumference = 2 * Math.PI * 70; // ~440
+    const offset = circumference - (pct / 100) * circumference;
+    ring.classList.remove("low", "mid");
+    if (pct < 50) ring.classList.add("low");
+    else if (pct < 75) ring.classList.add("mid");
+
+    setTimeout(() => {
+        ring.style.strokeDashoffset = offset;
+    }, 100);
+
+    // التقييم
+    let grade = "", message = "";
+    if (pct >= 90) { grade = "ممتاز"; message = "أداء رائع! أنت متمكن من المادة بجدارة"; }
+    else if (pct >= 75) { grade = "جيد جدًا"; message = "مستوى جيد جدًا، مع مزيد من المراجعة ستصل للأفضل"; }
+    else if (pct >= 60) { grade = "جيد"; message = "أداء مقبول، تحتاج لمراجعة بعض النقاط"; }
+    else if (pct >= 40) { grade = "مقبول"; message = "تحتاج لمراجعة جادة للمادة"; }
+    else { grade = "ضعيف"; message = "لا تقلق، عد للمادة وراجع جيدًا ثم حاول مرة أخرى"; }
+
+    document.getElementById("resultGrade").textContent = grade;
+    document.getElementById("resultMessage").textContent = message;
+}
+
+// ========== المراجعة ==========
+function showReview() {
+    showScreen("reviewScreen");
+    const list = document.getElementById("reviewList");
+    list.innerHTML = "";
+
+    userAnswers.forEach((ua, i) => {
+        const q = ua.question;
+        const item = document.createElement("div");
+        item.className = `review-item ${ua.correct ? "review-correct" : "review-wrong"}`;
+
+        let yourAnsText = "";
+        let correctAnsText = "";
+
+        if (q.type === "mcq") {
+            const letters = ["أ", "ب", "ج", "د"];
+            yourAnsText = q.o[ua.userAnswer] ? `${letters[ua.userAnswer]}. ${q.o[ua.userAnswer]}` : "لم يتم الاختيار";
+            correctAnsText = `${letters[q.a]}. ${q.o[q.a]}`;
         } else {
-            finalizeQuiz();
+            yourAnsText = ua.userAnswer === true ? "صح" : "خطأ";
+            correctAnsText = q.a === true ? "صح" : "خطأ";
         }
-    };
 
-    document.getElementById('prev-btn').onclick = () => {
-        if (currentQ > 0) {
-            currentQ--;
-            loadQuestion();
-        }
-    };
+        item.innerHTML = `
+            <div class="review-q-head">
+                <div class="review-q-num">${i + 1}</div>
+                <div class="review-q-text">${q.t}</div>
+            </div>
+            <div class="review-answers">
+                ${ua.correct ? '' : `<div class="review-your-ans"><i class="fa-solid fa-xmark"></i> إجابتك: <span>${yourAnsText}</span></div>`}
+                <div class="review-correct-ans"><i class="fa-solid fa-check"></i> الإجابة الصحيحة: <span>${correctAnsText}</span></div>
+            </div>
+        `;
+        list.appendChild(item);
+    });
+}
 
-    async function finalizeQuiz() {
-        let finalScore = 0;
-        userAnswers.forEach((ans, index) => {
-            if (ans === questions[index].ans) finalScore++;
-        });
+// ========== إعادة الاختبار ==========
+function retryQuiz() {
+    // إعادة تعيين حلقة النتيجة
+    document.getElementById("resultRing").style.strokeDashoffset = 440;
+    startQuiz(currentLevel);
+}
 
-        const finalPct = Math.round((finalScore / questions.length) * 100);
-        
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = finalPct + "%";
-        document.getElementById('result-text').innerText = `لقد أجبت على ${finalScore} من أصل ${questions.length} أسئلة بشكل صحيح.`;
+// ========== العودة للقائمة ==========
+function goHome() {
+    document.getElementById("resultRing").style.strokeDashoffset = 440;
+    showScreen("homeScreen");
+}
 
-        try {
-            await setDoc(doc(db, "exam_results", currentUser.uid), {
-                student: currentUser.displayName || currentUser.email,
-                final_score: finalPct,
-                correct_count: finalScore,
-                is_locked: true,
-                submitted_at: serverTimestamp()
-            });
-        } catch (error) {
-            console.error("خطأ في الحفظ:", error);
-        }
+// ========== أدوات مساعدة ==========
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function updateScoreDisplay() {
+    document.getElementById("quizScoreLive").innerHTML = `<i class="fa-solid fa-star"></i> ${score}`;
+}
+
+function showToast(msg, isCorrect) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.className = `toast ${isCorrect ? 'correct-toast' : 'wrong-toast'} show`;
+    setTimeout(() => toast.classList.remove("show"), 1500);
+}
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-</script>
-</body>
+    return arr;
+}
 
+// ========== لوحة المفاتيح ==========
+document.addEventListener("keydown", (e) => {
+    if (!document.getElementById("quizScreen").classList.contains("active")) return;
+
+    const q = currentQuestions[currentIndex];
+    if (answered) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            nextQuestion();
+        }
+        return;
+    }
+
+    if (q.type === "mcq") {
+        if (e.key === "1" || e.key === "a") selectAnswer(0);
+        else if (e.key === "2" || e.key === "b") selectAnswer(1);
+        else if (e.key === "3" || e.key === "c") selectAnswer(2);
+        else if (e.key === "4" || e.key === "d") selectAnswer(3);
+    } else {
+        if (e.key === "1" || e.key === "t") selectAnswer(true);
+        else if (e.key === "2" || e.key === "f") selectAnswer(false);
+    }
+});
+
+// ========== بدء التطبيق ==========
+init();
+</script>
+
+</body>
 </html>
