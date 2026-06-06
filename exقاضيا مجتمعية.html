@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كويز حقوق الإنسان ومكافحة الفساد</title>
+    <title>كويز حقوق الإنسان - الرحلة الفضائية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #060d18;
-            --bg2: #0c1629;
-            --card: #111d35;
-            --card-hover: #162545;
-            --border: #1e3055;
-            --fg: #e8edf5;
-            --muted: #7a8ba8;
-            --accent: #10b981;
-            --accent2: #059669;
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --wrong: #ef4444;
-            --wrong-glow: rgba(239, 68, 68, 0.15);
-            --gold: #f59e0b;
-            --gold-glow: rgba(245, 158, 11, 0.12);
+            --bg: #030014;
+            --bg2: #0a0a1f;
+            --card: rgba(15, 15, 35, 0.8);
+            --card-hover: rgba(25, 25, 55, 0.9);
+            --border: rgba(0, 210, 255, 0.2);
+            --fg: #e8f4ff;
+            --muted: #7a9cc6;
+            --accent: #00d2ff;
+            --accent2: #0099cc;
+            --accent-glow: rgba(0, 210, 255, 0.25);
+            --wrong: #ff3366;
+            --wrong-glow: rgba(255, 51, 102, 0.25);
+            --gold: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.2);
+            --purple: #9d00ff;
+            --purple-glow: rgba(157, 0, 255, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,208 +36,311 @@
             overflow-x: hidden;
         }
 
-        /* === خلفية متحركة === */
-        .bg-effects {
+        /* === الخلفية الفضائية === */
+        .space-bg {
             position: fixed;
             inset: 0;
             z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .bg-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.25;
-            animation: blobFloat 20s ease-in-out infinite alternate;
-        }
-        .bg-blob:nth-child(1) {
-            width: 500px; height: 500px;
-            background: var(--accent);
-            top: -10%; right: -10%;
-            animation-delay: 0s;
-        }
-        .bg-blob:nth-child(2) {
-            width: 400px; height: 400px;
-            background: #0ea5e9;
-            bottom: -15%; left: -10%;
-            animation-delay: -7s;
-        }
-        .bg-blob:nth-child(3) {
-            width: 300px; height: 300px;
-            background: var(--gold);
-            top: 40%; left: 50%;
-            opacity: 0.1;
-            animation-delay: -14s;
-        }
-        @keyframes blobFloat {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -40px) scale(1.1); }
-            66% { transform: translate(-20px, 30px) scale(0.95); }
-            100% { transform: translate(10px, -20px) scale(1.05); }
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(157, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0, 210, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 10, 40, 1) 0%, var(--bg) 100%);
         }
 
-        .bg-grid {
+        .stars {
             position: fixed;
             inset: 0;
             z-index: 0;
-            background-image:
-                linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
             pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: var(--opacity); transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(0.8); }
+        }
+
+        .shooting-star {
+            position: fixed;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            animation: shoot 3s ease-in-out infinite;
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0); opacity: 0; }
+            5% { opacity: 1; }
+            15% { transform: translateX(-300px) translateY(300px); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .nebula {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: nebulaFloat 30s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        .nebula-1 {
+            top: -200px;
+            right: -200px;
+            background: radial-gradient(circle, var(--purple) 0%, transparent 70%);
+        }
+
+        .nebula-2 {
+            bottom: -200px;
+            left: -200px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            animation-delay: -15s;
+        }
+
+        @keyframes nebulaFloat {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, 30px) rotate(180deg); }
+            100% { transform: translate(-30px, 50px) rotate(360deg); }
         }
 
         /* === الحاوية الرئيسية === */
         .app-container {
             position: relative;
             z-index: 1;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             min-height: 100vh;
         }
 
-        /* === الشاشة الرئيسية === */
         .screen { display: none; }
-        .screen.active { display: block; animation: fadeSlideIn 0.5s ease; }
+        .screen.active { display: block; animation: warpIn 0.6s ease-out; }
 
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes warpIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(20px); filter: blur(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
         }
 
+        /* === الشاشة الرئيسية === */
         .home-header {
             text-align: center;
             padding: 60px 0 40px;
         }
-        .home-header .icon-wrap {
-            width: 90px; height: 90px;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border-radius: 24px;
+
+        .planet-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
+        }
+
+        .planet {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            box-shadow: 
+                0 0 60px var(--accent-glow),
+                inset -20px -20px 40px rgba(0,0,0,0.4),
+                inset 10px 10px 20px rgba(255,255,255,0.1);
+            animation: planetPulse 4s ease-in-out infinite, planetRotate 20s linear infinite;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 50px;
             color: white;
-            box-shadow: 0 8px 32px var(--accent-glow);
-            animation: iconPulse 3s ease-in-out infinite;
         }
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 8px 32px var(--accent-glow); }
-            50% { transform: scale(1.05); box-shadow: 0 12px 48px rgba(16,185,129,0.25); }
+
+        .planet-ring {
+            position: absolute;
+            inset: -15px;
+            border: 2px solid rgba(0, 210, 255, 0.3);
+            border-radius: 50%;
+            animation: ringRotate 10s linear infinite;
         }
+
+        .planet-ring::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -5px;
+            right: -5px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transform: rotateX(75deg);
+        }
+
+        @keyframes planetPulse {
+            0%, 100% { box-shadow: 0 0 60px var(--accent-glow); }
+            50% { box-shadow: 0 0 100px rgba(0, 210, 255, 0.4); }
+        }
+
+        @keyframes planetRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes ringRotate {
+            from { transform: rotateX(75deg) rotateZ(0deg); }
+            to { transform: rotateX(75deg) rotateZ(360deg); }
+        }
+
         .home-header h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--fg), var(--accent));
+            background: linear-gradient(135deg, var(--fg), var(--accent), var(--purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 10px;
+            text-shadow: 0 0 30px var(--accent-glow);
         }
+
         .home-header p {
             color: var(--muted);
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 300;
         }
 
         .stats-bar {
             display: flex;
             justify-content: center;
-            gap: 32px;
+            gap: 24px;
             margin: 30px 0 40px;
-            padding: 16px 24px;
+            padding: 20px 30px;
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
         }
-        .stat-item {
-            text-align: center;
-        }
+
+        .stat-item { text-align: center; }
+
         .stat-item .num {
-            font-size: 1.6rem;
+            font-size: 2rem;
             font-weight: 900;
-            color: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .stat-item .label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--muted);
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         /* === بطاقات المستويات === */
         .levels-grid {
             display: grid;
-            gap: 16px;
+            gap: 18px;
         }
+
         .level-card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 24px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
             gap: 20px;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
+
         .level-card::before {
             content: '';
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, transparent, var(--accent-glow));
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s;
         }
+
+        .level-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
         .level-card:hover {
             border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 32px var(--accent-glow);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 210, 255, 0.15),
+                0 0 20px var(--accent-glow);
         }
+
         .level-card:hover::before { opacity: 1; }
+        .level-card:hover::after { left: 100%; }
 
         .level-icon {
-            width: 56px; height: 56px;
-            border-radius: 14px;
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 26px;
             flex-shrink: 0;
             position: relative;
             z-index: 1;
         }
-        .level-card:nth-child(1) .level-icon { background: rgba(16,185,129,0.15); color: #10b981; }
-        .level-card:nth-child(2) .level-icon { background: rgba(14,165,233,0.15); color: #0ea5e9; }
-        .level-card:nth-child(3) .level-icon { background: rgba(245,158,11,0.15); color: #f59e0b; }
-        .level-card:nth-child(4) .level-icon { background: rgba(239,68,68,0.15); color: #ef4444; }
-        .level-card:nth-child(5) .level-icon { background: rgba(168,85,247,0.15); color: #a855f7; }
 
-        .level-info {
-            flex: 1;
-            position: relative;
-            z-index: 1;
+        .level-card:nth-child(1) .level-icon { 
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05)); 
+            color: #10b981; 
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
         }
-        .level-info h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 4px;
+        .level-card:nth-child(2) .level-icon { 
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(0, 210, 255, 0.05)); 
+            color: var(--accent); 
+            box-shadow: 0 0 20px var(--accent-glow);
         }
-        .level-info p {
-            font-size: 0.85rem;
-            color: var(--muted);
-            font-weight: 300;
+        .level-card:nth-child(3) .level-icon { 
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05)); 
+            color: var(--gold); 
+            box-shadow: 0 0 20px var(--gold-glow);
         }
+        .level-card:nth-child(4) .level-icon { 
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.2), rgba(255, 51, 102, 0.05)); 
+            color: var(--wrong); 
+            box-shadow: 0 0 20px var(--wrong-glow);
+        }
+        .level-card:nth-child(5) .level-icon { 
+            background: linear-gradient(135deg, rgba(157, 0, 255, 0.2), rgba(157, 0, 255, 0.05)); 
+            color: var(--purple); 
+            box-shadow: 0 0 20px var(--purple-glow);
+        }
+
+        .level-info { flex: 1; position: relative; z-index: 1; }
+        .level-info h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+        .level-info p { font-size: 0.9rem; color: var(--muted); font-weight: 300; }
+
         .level-badge {
-            background: var(--bg2);
+            background: linear-gradient(135deg, var(--bg2), var(--card));
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 6px 14px;
-            font-size: 0.8rem;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
             color: var(--accent);
             font-weight: 700;
             white-space: nowrap;
@@ -244,291 +349,446 @@
         }
 
         /* === شاشة الاختبار === */
-        .quiz-top-bar {
+        .quiz-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             padding: 0 4px;
         }
-        .quiz-level-name {
-            font-size: 0.9rem;
-            color: var(--accent);
+
+        .quiz-level-name { 
+            font-size: 0.95rem; 
+            color: var(--accent); 
             font-weight: 600;
-        }
-        .quiz-score-live {
-            font-size: 0.9rem;
-            color: var(--gold);
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .progress-wrap {
-            background: var(--bg2);
+        .quiz-score-live { 
+            font-size: 1rem; 
+            color: var(--gold); 
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-container {
+            margin-bottom: 24px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            height: 8px;
-            margin-bottom: 28px;
+            height: 10px;
             overflow: hidden;
             border: 1px solid var(--border);
         }
+
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            background: linear-gradient(90deg, var(--accent), var(--purple));
             border-radius: 10px;
-            transition: width 0.5s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            overflow: hidden;
         }
+
         .progress-fill::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 2s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShimmer 2s infinite;
         }
-        @keyframes shimmer {
+
+        @keyframes progressShimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
 
-        .question-counter {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--muted);
-            margin-bottom: 20px;
-        }
-        .question-counter span { color: var(--fg); font-weight: 700; }
-
-        .question-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px 28px;
-            margin-bottom: 24px;
-            animation: questionIn 0.4s ease;
-        }
-        @keyframes questionIn {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .question-type-badge {
-            display: inline-block;
-            padding: 4px 14px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        .badge-mcq { background: rgba(14,165,233,0.15); color: #0ea5e9; }
-        .badge-tf { background: rgba(245,158,11,0.15); color: #f59e0b; }
-
-        .question-text {
-            font-size: 1.15rem;
-            font-weight: 600;
-            line-height: 1.9;
-            color: var(--fg);
-        }
-
-        .options-list {
-            display: grid;
-            gap: 12px;
-        }
-        .option-btn {
-            background: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 16px 20px;
-            text-align: right;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.98rem;
-            color: var(--fg);
+        /* === شريط التنقل بين الأسئلة === */
+        .question-nav {
             display: flex;
-            align-items: center;
-            gap: 14px;
-            position: relative;
-            overflow: hidden;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            max-height: 120px;
+            overflow-y: auto;
         }
-        .option-btn:hover:not(.disabled) {
-            border-color: var(--accent);
-            background: var(--card-hover);
-            transform: translateX(-4px);
-        }
-        .option-btn .opt-letter {
-            width: 34px; height: 34px;
+
+        .nav-dot {
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
             background: var(--bg2);
             border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-            transition: all 0.25s;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--muted);
         }
+
+        .nav-dot:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .nav-dot.current {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .nav-dot.answered {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .nav-dot.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .nav-dot.wrong {
+            background: rgba(255, 51, 102, 0.2);
+            border-color: var(--wrong);
+            color: var(--wrong);
+        }
+
+        /* === بطاقة السؤال === */
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            animation: questionSlide 0.5s ease-out;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--purple), var(--accent));
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        @keyframes questionSlide {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .question-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .badge-mcq { 
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.15), rgba(0, 210, 255, 0.05)); 
+            color: var(--accent); 
+            border: 1px solid rgba(0, 210, 255, 0.3);
+        }
+        .badge-tf { 
+            background: linear-gradient(135deg, rgba(157, 0, 255, 0.15), rgba(157, 0, 255, 0.05)); 
+            color: var(--purple); 
+            border: 1px solid rgba(157, 0, 255, 0.3);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 2;
+            color: var(--fg);
+        }
+
+        /* === خيارات الاختيار من متعدد === */
+        .options-list { display: grid; gap: 14px; }
+
+        .option-btn {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 22px;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            color: var(--fg);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, var(--accent-glow));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--accent);
+            transform: translateX(-6px);
+            box-shadow: 0 8px 25px var(--accent-glow);
+        }
+
+        .option-btn:hover:not(.disabled)::before { opacity: 1; }
         .option-btn:hover:not(.disabled) .opt-letter {
             background: var(--accent);
-            color: white;
+            color: var(--bg);
             border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
+
+        .opt-letter {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
         .option-btn.correct {
-            border-color: var(--accent) !important;
-            background: var(--accent-glow) !important;
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.15) !important;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
         }
+
         .option-btn.correct .opt-letter {
-            background: var(--accent) !important;
+            background: #10b981 !important;
             color: white !important;
-            border-color: var(--accent) !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
+
         .option-btn.wrong {
             border-color: var(--wrong) !important;
             background: var(--wrong-glow) !important;
         }
+
         .option-btn.wrong .opt-letter {
             background: var(--wrong) !important;
             color: white !important;
             border-color: var(--wrong) !important;
         }
-        .option-btn.disabled { cursor: default; opacity: 0.6; }
+
+        .option-btn.disabled { cursor: default; opacity: 0.5; }
         .option-btn.correct.disabled { opacity: 1; }
+
         .option-btn.show-correct {
-            border-color: var(--accent) !important;
+            border-color: #10b981 !important;
             opacity: 1 !important;
-        }
-        .option-btn.show-correct .opt-letter {
-            background: var(--accent) !important;
-            color: white !important;
-            border-color: var(--accent) !important;
+            background: rgba(16, 185, 129, 0.1) !important;
         }
 
-        /* أزرار صح وغلط */
+        /* === أزرار صح وخطأ === */
         .tf-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 18px;
         }
+
         .tf-btn {
-            padding: 24px;
-            border-radius: 16px;
+            padding: 30px;
+            border-radius: 20px;
             border: 2px solid var(--border);
             background: var(--card);
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 12px;
+            backdrop-filter: blur(5px);
         }
-        .tf-btn:hover:not(.disabled) {
-            transform: translateY(-3px);
-        }
+
+        .tf-btn i { font-size: 2rem; }
+
+        .tf-btn:hover:not(.disabled) { transform: translateY(-5px); }
+
         .tf-btn.tf-true:hover:not(.disabled) {
-            border-color: var(--accent);
-            background: var(--accent-glow);
-            color: var(--accent);
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2);
         }
+
         .tf-btn.tf-false:hover:not(.disabled) {
             border-color: var(--wrong);
             background: var(--wrong-glow);
             color: var(--wrong);
+            box-shadow: 0 15px 30px var(--wrong-glow);
         }
+
         .tf-btn.correct {
-            border-color: var(--accent) !important;
-            background: var(--accent-glow) !important;
-            color: var(--accent) !important;
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.2) !important;
+            color: #10b981 !important;
         }
+
         .tf-btn.wrong {
             border-color: var(--wrong) !important;
             background: var(--wrong-glow) !important;
             color: var(--wrong) !important;
         }
+
         .tf-btn.disabled { cursor: default; }
         .tf-btn.show-correct {
-            border-color: var(--accent) !important;
-            background: var(--accent-glow) !important;
-            color: var(--accent) !important;
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.15) !important;
+            color: #10b981 !important;
             opacity: 1 !important;
         }
 
-        .next-btn-wrap {
-            text-align: center;
-            margin-top: 20px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            pointer-events: none;
+        /* === أزرار التحكم === */
+        .control-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
         }
-        .next-btn-wrap.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-        }
-        .next-btn {
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: white;
-            border: none;
-            padding: 14px 48px;
+
+        .ctrl-btn {
+            padding: 14px 28px;
             border-radius: 14px;
+            border: none;
             font-family: 'Cairo', sans-serif;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s;
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-        .next-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(16,185,129,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .explanation-box {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-top: 16px;
-            font-size: 0.9rem;
-            color: var(--muted);
-            line-height: 1.7;
-            animation: fadeSlideIn 0.3s ease;
+        .ctrl-btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            box-shadow: 0 8px 25px var(--accent-glow);
         }
-        .explanation-box i { color: var(--gold); margin-left: 6px; }
+
+        .ctrl-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 210, 255, 0.35);
+        }
+
+        .ctrl-btn.secondary {
+            background: var(--card);
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+
+        .ctrl-btn.secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .ctrl-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
 
         /* === شاشة النتائج === */
-        .results-screen {
-            text-align: center;
-            padding: 40px 0;
+        .results-screen { text-align: center; padding: 40px 0; }
+
+        .results-visual {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 40px;
         }
-        .results-circle {
-            width: 180px; height: 180px;
-            margin: 0 auto 30px;
+
+        .results-ring {
+            width: 100%;
+            height: 100%;
             position: relative;
         }
-        .results-circle svg {
-            width: 100%; height: 100%;
+
+        .results-ring svg {
+            width: 100%;
+            height: 100%;
             transform: rotate(-90deg);
         }
-        .results-circle .bg-ring {
+
+        .ring-bg {
             fill: none;
-            stroke: var(--border);
-            stroke-width: 10;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 8;
         }
-        .results-circle .fg-ring {
+
+        .ring-progress {
             fill: none;
-            stroke: var(--accent);
-            stroke-width: 10;
+            stroke: url(#ringGradient);
+            stroke-width: 8;
             stroke-linecap: round;
-            stroke-dasharray: 440;
-            stroke-dashoffset: 440;
-            transition: stroke-dashoffset 1.5s ease;
+            stroke-dasharray: 628;
+            stroke-dashoffset: 628;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 10px var(--accent));
         }
-        .results-circle .fg-ring.low { stroke: var(--wrong); }
-        .results-circle .fg-ring.mid { stroke: var(--gold); }
-        .results-circle .center-text {
+
+        .results-center {
             position: absolute;
             inset: 0;
             display: flex;
@@ -536,84 +796,111 @@
             align-items: center;
             justify-content: center;
         }
-        .results-circle .center-text .pct {
-            font-size: 2.5rem;
+
+        .results-pct {
+            font-size: 3.5rem;
             font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .results-circle .center-text .pct-label {
-            font-size: 0.8rem;
+
+        .results-label {
+            font-size: 0.9rem;
             color: var(--muted);
         }
 
         .results-grade {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 900;
             margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--fg), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .results-message {
             color: var(--muted);
-            font-size: 1rem;
-            margin-bottom: 32px;
+            font-size: 1.1rem;
+            margin-bottom: 36px;
             font-weight: 300;
         }
 
         .results-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 36px;
+            gap: 14px;
+            margin-bottom: 40px;
         }
+
         .r-stat {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px 12px;
+            border-radius: 18px;
+            padding: 22px 16px;
+            backdrop-filter: blur(10px);
         }
+
+        .r-stat .r-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
         .r-stat .r-num {
-            font-size: 1.6rem;
+            font-size: 2rem;
             font-weight: 900;
         }
+
         .r-stat .r-label {
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             color: var(--muted);
-            margin-top: 2px;
+            margin-top: 4px;
         }
-        .r-stat.green .r-num { color: var(--accent); }
+
+        .r-stat.green .r-num { color: #10b981; }
+        .r-stat.green .r-icon { color: #10b981; }
         .r-stat.red .r-num { color: var(--wrong); }
-        .r-stat.blue .r-num { color: #0ea5e9; }
+        .r-stat.red .r-icon { color: var(--wrong); }
+        .r-stat.blue .r-num { color: var(--accent); }
+        .r-stat.blue .r-icon { color: var(--accent); }
 
         .results-actions {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-width: 360px;
+            gap: 14px;
+            max-width: 380px;
             margin: 0 auto;
         }
+
         .r-btn {
-            padding: 14px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: 16px;
             border: none;
             font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .r-btn:hover { transform: translateY(-2px); }
+
+        .r-btn:hover { transform: translateY(-3px); }
         .r-btn.primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            background: linear-gradient(135deg, var(--accent), var(--purple));
             color: white;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
         .r-btn.secondary {
             background: var(--card);
             color: var(--fg);
             border: 1px solid var(--border);
         }
-        .r-btn.ghost {
-            background: transparent;
-            color: var(--muted);
-        }
+        .r-btn.ghost { background: transparent; color: var(--muted); }
 
         /* === شاشة المراجعة === */
         .review-header {
@@ -624,112 +911,160 @@
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
-        .review-header h2 { font-size: 1.3rem; font-weight: 700; }
+
+        .review-header h2 { 
+            font-size: 1.4rem; 
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .back-btn {
             background: var(--card);
             border: 1px solid var(--border);
             color: var(--fg);
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-family: 'Cairo', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .back-btn:hover { border-color: var(--accent); }
+
+        .back-btn:hover { 
+            border-color: var(--accent); 
+            color: var(--accent);
+        }
 
         .review-item {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(10px);
         }
-        .review-item.review-correct { border-right: 4px solid var(--accent); }
-        .review-item.review-wrong { border-right: 4px solid var(--wrong); }
+
+        .review-item.review-correct { 
+            border-right: 4px solid #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), transparent);
+        }
+        .review-item.review-wrong { 
+            border-right: 4px solid var(--wrong);
+            background: linear-gradient(135deg, var(--wrong-glow), transparent);
+        }
 
         .review-q-head {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 14px;
+            margin-bottom: 14px;
         }
+
         .review-q-num {
-            width: 30px; height: 30px;
-            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
             flex-shrink: 0;
         }
-        .review-correct .review-q-num { background: var(--accent-glow); color: var(--accent); }
-        .review-wrong .review-q-num { background: var(--wrong-glow); color: var(--wrong); }
+
+        .review-correct .review-q-num { 
+            background: rgba(16, 185, 129, 0.2); 
+            color: #10b981; 
+        }
+        .review-wrong .review-q-num { 
+            background: var(--wrong-glow); 
+            color: var(--wrong); 
+        }
 
         .review-q-text {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            line-height: 1.8;
+            line-height: 1.9;
             flex: 1;
         }
+
         .review-answers {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            line-height: 1.8;
+            margin-top: 12px;
+            font-size: 0.95rem;
+            line-height: 2;
         }
+
         .review-your-ans { color: var(--wrong); }
         .review-your-ans span { font-weight: 700; }
-        .review-correct-ans { color: var(--accent); }
+        .review-correct-ans { color: #10b981; }
         .review-correct-ans span { font-weight: 700; }
 
-        /* === توست === */
+        /* === Toast === */
         .toast {
             position: fixed;
-            top: 24px;
+            top: 30px;
             left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            padding: 14px 28px;
-            border-radius: 14px;
+            transform: translateX(-50%) translateY(-120px);
+            padding: 16px 32px;
+            border-radius: 16px;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
-            font-size: 0.95rem;
-            z-index: 999;
-            transition: transform 0.4s ease;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            font-size: 1rem;
+            z-index: 9999;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.correct-toast {
-            background: var(--accent);
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
         }
         .toast.wrong-toast {
-            background: var(--wrong);
+            background: linear-gradient(135deg, var(--wrong), #cc0044);
             color: white;
         }
 
         /* === ريسبونسيف === */
         @media (max-width: 640px) {
-            .home-header h1 { font-size: 1.6rem; }
-            .stats-bar { gap: 20px; padding: 12px 16px; }
-            .stat-item .num { font-size: 1.3rem; }
-            .level-card { padding: 18px 16px; gap: 14px; }
+            .home-header h1 { font-size: 1.8rem; }
+            .planet-container { width: 100px; height: 100px; }
+            .planet { font-size: 35px; }
+            .stats-bar { gap: 16px; padding: 14px 20px; }
+            .stat-item .num { font-size: 1.6rem; }
+            .level-card { padding: 20px 16px; gap: 14px; }
+            .level-icon { width: 50px; height: 50px; font-size: 22px; }
             .level-info h3 { font-size: 1rem; }
             .question-card { padding: 24px 20px; }
             .question-text { font-size: 1.05rem; }
-            .option-btn { padding: 14px 16px; font-size: 0.9rem; }
-            .tf-btn { padding: 20px 16px; font-size: 1.05rem; }
-            .results-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            .r-stat { padding: 14px 8px; }
-            .r-stat .r-num { font-size: 1.3rem; }
+            .option-btn { padding: 14px 16px; font-size: 0.95rem; }
+            .tf-btn { padding: 22px 16px; font-size: 1.1rem; }
+            .tf-btn i { font-size: 1.5rem; }
+            .results-stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .r-stat { padding: 16px 12px; }
+            .r-stat .r-num { font-size: 1.5rem; }
+            .control-btns { flex-direction: column; }
+            .question-nav { max-height: 100px; }
+            .nav-dot { width: 32px; height: 32px; font-size: 0.75rem; }
         }
 
         /* === سكرولبار === */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, var(--accent), var(--purple)); 
+            border-radius: 4px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -741,14 +1076,13 @@
 </head>
 <body>
 
-<div class="bg-effects">
-    <div class="bg-blob"></div>
-    <div class="bg-blob"></div>
-    <div class="bg-blob"></div>
-</div>
-<div class="bg-grid"></div>
+<div class="space-bg"></div>
+<div class="stars" id="starsContainer"></div>
+<div class="shooting-star" style="top: 20%; left: 80%; animation-delay: 0s;"></div>
+<div class="shooting-star" style="top: 50%; left: 90%; animation-delay: 2s;"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
 
-<!-- توست -->
 <div class="toast" id="toast"></div>
 
 <div class="app-container">
@@ -756,11 +1090,14 @@
     <!-- ===== الشاشة الرئيسية ===== -->
     <div class="screen active" id="homeScreen">
         <div class="home-header">
-            <div class="icon-wrap">
-                <i class="fa-solid fa-scale-balanced"></i>
+            <div class="planet-container">
+                <div class="planet-ring"></div>
+                <div class="planet">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
             </div>
             <h1>حقوق الإنسان ومكافحة الفساد</h1>
-            <p>اختبر معلوماتك في حقوق الإنسان بأسئلة متنوعة وبدون ضغط وقت</p>
+            <p>انطلق في رحلة فضائية لاستكشاف عالم حقوق الإنسان</p>
         </div>
 
         <div class="stats-bar">
@@ -773,8 +1110,8 @@
                 <div class="label">مستويات</div>
             </div>
             <div class="stat-item">
-                <div class="num">3</div>
-                <div class="label">أنواع أسئلة</div>
+                <div class="num">2</div>
+                <div class="label">نوع أسئلة</div>
             </div>
         </div>
 
@@ -783,20 +1120,37 @@
 
     <!-- ===== شاشة الاختبار ===== -->
     <div class="screen" id="quizScreen">
-        <div class="quiz-top-bar">
-            <div class="quiz-level-name" id="quizLevelName"></div>
-            <div class="quiz-score-live" id="quizScoreLive"></div>
+        <div class="quiz-header">
+            <div class="quiz-level-name">
+                <i class="fa-solid fa-rocket"></i>
+                <span id="quizLevelName"></span>
+            </div>
+            <div class="quiz-score-live">
+                <i class="fa-solid fa-star"></i>
+                <span id="quizScoreLive">0</span>
+            </div>
         </div>
-        <div class="progress-wrap">
-            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>التقدم</span>
+                <span><span id="currentQ">1</span> / <span id="totalQs">20</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
         </div>
-        <div class="question-counter">
-            السؤال <span id="currentQ">1</span> من <span id="totalQs">20</span>
-        </div>
+
+        <div class="question-nav" id="questionNav"></div>
+
         <div id="questionArea"></div>
-        <div class="next-btn-wrap" id="nextBtnWrap">
-            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">
-                <span id="nextBtnText">السؤال التالي</span>
+
+        <div class="control-btns">
+            <button class="ctrl-btn secondary" id="prevBtn" onclick="prevQuestion()" disabled>
+                <i class="fa-solid fa-arrow-right"></i> السابق
+            </button>
+            <button class="ctrl-btn primary" id="nextBtn" onclick="nextQuestion()">
+                التالي <i class="fa-solid fa-arrow-left"></i>
             </button>
         </div>
     </div>
@@ -804,36 +1158,53 @@
     <!-- ===== شاشة النتائج ===== -->
     <div class="screen" id="resultsScreen">
         <div class="results-screen">
-            <div class="results-circle">
-                <svg viewBox="0 0 160 160">
-                    <circle class="bg-ring" cx="80" cy="80" r="70"/>
-                    <circle class="fg-ring" id="resultRing" cx="80" cy="80" r="70"/>
-                </svg>
-                <div class="center-text">
-                    <div class="pct" id="resultPct">0%</div>
-                    <div class="pct-label">النتيجة</div>
+            <div class="results-visual">
+                <div class="results-ring">
+                    <svg viewBox="0 0 200 200">
+                        <defs>
+                            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--accent)"/>
+                                <stop offset="100%" style="stop-color:var(--purple)"/>
+                            </linearGradient>
+                        </defs>
+                        <circle class="ring-bg" cx="100" cy="100" r="90"/>
+                        <circle class="ring-progress" id="resultRing" cx="100" cy="100" r="90"/>
+                    </svg>
+                </div>
+                <div class="results-center">
+                    <div class="results-pct" id="resultPct">0%</div>
+                    <div class="results-label">النتيجة</div>
                 </div>
             </div>
             <div class="results-grade" id="resultGrade"></div>
             <div class="results-message" id="resultMessage"></div>
             <div class="results-stats">
                 <div class="r-stat green">
+                    <div class="r-icon"><i class="fa-solid fa-check-circle"></i></div>
                     <div class="r-num" id="rCorrect">0</div>
                     <div class="r-label">صحيح</div>
                 </div>
                 <div class="r-stat red">
+                    <div class="r-icon"><i class="fa-solid fa-times-circle"></i></div>
                     <div class="r-num" id="rWrong">0</div>
                     <div class="r-label">خطأ</div>
                 </div>
                 <div class="r-stat blue">
+                    <div class="r-icon"><i class="fa-solid fa-list-ol"></i></div>
                     <div class="r-num" id="rTotal">0</div>
                     <div class="r-label">إجمالي</div>
                 </div>
             </div>
             <div class="results-actions">
-                <button class="r-btn primary" onclick="showReview()">مراجعة الإجابات</button>
-                <button class="r-btn secondary" onclick="retryQuiz()">إعادة الاختبار</button>
-                <button class="r-btn ghost" onclick="goHome()">العودة للقائمة</button>
+                <button class="r-btn primary" onclick="showReview()">
+                    <i class="fa-solid fa-list-check"></i> مراجعة الإجابات
+                </button>
+                <button class="r-btn secondary" onclick="retryQuiz()">
+                    <i class="fa-solid fa-redo"></i> إعادة الاختبار
+                </button>
+                <button class="r-btn ghost" onclick="goHome()">
+                    <i class="fa-solid fa-home"></i> العودة للقائمة
+                </button>
             </div>
         </div>
     </div>
@@ -841,7 +1212,7 @@
     <!-- ===== شاشة المراجعة ===== -->
     <div class="screen" id="reviewScreen">
         <div class="review-header">
-            <h2><i class="fa-solid fa-list-check" style="color:var(--accent);margin-left:8px;"></i> مراجعة الإجابات</h2>
+            <h2><i class="fa-solid fa-list-check" style="color:var(--accent)"></i> مراجعة الإجابات</h2>
             <button class="back-btn" onclick="showScreen('resultsScreen')">
                 <i class="fa-solid fa-arrow-right"></i> رجوع
             </button>
@@ -852,167 +1223,412 @@
 </div>
 
 <script>
-// ========== بنك الأسئلة ==========
+// ========== إنشاء النجوم ==========
+function createStars() {
+    const container = document.getElementById('starsContainer');
+    const starCount = 150;
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--opacity', Math.random() * 0.8 + 0.2);
+        star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        star.style.animationDelay = Math.random() * 3 + 's';
+        container.appendChild(star);
+    }
+}
+createStars();
 
+// ========== بنك الأسئلة الضخم ==========
 const questions = {
-    // === المستوى الأساسي ===
     easy: [
-        { t: "نشأت فكرة حقوق الإنسان أساسًا من:", type: "mcq", o: ["الثورة الصناعية", "حاجة الإنسان لتنظيم حياته مع الآخرين", "التطور التكنولوجي", "الحروب الحديثة"], a: 1 },
-        { t: "الهدف الأساسي من حقوق الإنسان هو:", type: "mcq", o: ["زيادة السلطة", "حماية كرامة الإنسان", "تنظيم التجارة", "تقليل السكان"], a: 1 },
-        { t: "تعتبر الأديان السماوية مصدرًا لـ:", type: "mcq", o: ["القوانين الاقتصادية", "حقوق الإنسان", "التكنولوجيا", "التجارة"], a: 1 },
-        { t: "المواطنة تعني:", type: "mcq", o: ["حقوق فقط", "واجبات فقط", "حقوق وواجبات", "سلطة الدولة فقط"], a: 2 },
-        { t: "من مظاهر انتهاك حقوق الإنسان:", type: "mcq", o: ["العدالة", "الفساد", "التعليم", "الحرية"], a: 1 },
-        { t: "حقوق الإنسان تُمنح للإنسان لأنه:", type: "mcq", o: ["غني", "قوي", "إنسان فقط", "متعلم"], a: 2 },
-        { t: "في الحضارات القديمة كانت حقوق الإنسان:", type: "mcq", o: ["كاملة", "متساوية", "محدودة", "غير موجودة"], a: 2 },
-        { t: "ركزت اليهودية على:", type: "mcq", o: ["المساواة الكاملة", "الشعب المختار", "الحرية المطلقة", "الديمقراطية"], a: 1 },
-        { t: "دعت المسيحية إلى:", type: "mcq", o: ["العنف", "التسامح والرحمة", "التمييز", "السيطرة"], a: 1 },
-        { t: "من أهم مبادئ الإسلام:", type: "mcq", o: ["التفرقة", "الظلم", "المساواة والعدل", "الاستبداد"], a: 2 },
-        { t: "وثيقة الماجنا كارتا صدرت عام:", type: "mcq", o: ["1789", "1215", "1776", "1948"], a: 1 },
-        { t: "إعلان الاستقلال الأمريكي كان عام:", type: "mcq", o: ["1689", "1776", "1787", "1948"], a: 1 },
-        { t: "إعلان حقوق الإنسان والمواطن صدر في:", type: "mcq", o: ["إنجلترا", "أمريكا", "فرنسا", "ألمانيا"], a: 2 },
-        { t: "الإعلان العالمي لحقوق الإنسان صدر سنة:", type: "mcq", o: ["1919", "1945", "1948", "1966"], a: 2 },
-        { t: "من خصائص حقوق الإنسان:", type: "mcq", o: ["مؤقتة", "نسبية", "عالمية", "خاصة بدولة معينة"], a: 2 },
-        { t: "الحقوق لا يمكن التنازل عنها لأنها:", type: "mcq", o: ["اقتصادية", "ثابتة", "سياسية", "مؤقتة"], a: 1 },
-        { t: "من مصادر حقوق الإنسان:", type: "mcq", o: ["الألعاب", "القوانين والدساتير", "التكنولوجيا", "الإعلانات"], a: 1 },
-        { t: "العهد الدولي يشمل:", type: "mcq", o: ["التجارة", "الحقوق المدنية والسياسية", "الصناعة", "الزراعة"], a: 1 },
-        { t: "من أمثلة الاتفاقيات الدولية:", type: "mcq", o: ["قوانين المرور", "اتفاقية منع التعذيب", "قوانين التعليم", "قوانين العمل فقط"], a: 1 },
-        { t: "الهدف من القانون الدولي لحقوق الإنسان:", type: "mcq", o: ["السيطرة على الدول", "حماية الإنسان من الانتهاكات", "زيادة الضرائب", "تنظيم التجارة"], a: 1 },
-        // صح وغلط
-        { t: "حقوق الإنسان ظهرت في العصر الحديث فقط", type: "tf", a: false },
-        { t: "الإسلام لا يهتم بحقوق الإنسان", type: "tf", a: false },
-        { t: "المواطنة تعني حقوق فقط", type: "tf", a: false },
-        { t: "الفساد من أسباب انتهاك حقوق الإنسان", type: "tf", a: true },
-        { t: "جميع الناس متساوون في حقوق الإنسان", type: "tf", a: true },
-        { t: "الحقوق كانت كاملة في الحضارات القديمة", type: "tf", a: false },
-        { t: "المسيحية دعت إلى التسامح", type: "tf", a: true },
-        { t: "الإسلام يدعو إلى العدل والمساواة", type: "tf", a: true },
-        { t: "الإعلان العالمي صدر عام 1948", type: "tf", a: true },
-        { t: "حقوق الإنسان تختلف من شخص لآخر", type: "tf", a: false },
+        // === الفصل الأول: تعريفات ومفاهيم ===
+        { t: "يقصد بحقوق الإنسان:", type: "mcq", o: ["حقوق الأغنياء فقط", "حقوق المواطنين فقط", "الحقوق الأساسية لكل إنسان", "حقوق الموظفين فقط"], a: 2 },
+        { t: "بدأت حقوق الإنسان في صورة:", type: "mcq", o: ["معاهدات دولية", "قواعد عرفية", "قوانين جنائية", "دساتير حديثة"], a: 1 },
+        { t: "أصبحت حقوق الإنسان جزءًا من:", type: "mcq", o: ["القانون التجاري", "القانون الجنائي", "القانون الدولي لحقوق الإنسان", "القانون الإداري"], a: 2 },
+        { t: "كلمة 'ماعت' في الحضارة الفرعونية تعني:", type: "mcq", o: ["الحرب", "العدالة والحق والصدق", "القوة", "الثروة"], a: 1 },
+        { t: "من أبرز الشخصيات المرتبطة بحقوق الإنسان في مصر القديمة:", type: "mcq", o: ["رمسيس الثاني", "خوفو", "أخناتون", "مينا"], a: 2 },
+        { t: "دعا أخناتون إلى:", type: "mcq", o: ["الحروب والتوسع", "السلام والمساواة", "التمييز بين الناس", "زيادة الضرائب"], a: 1 },
+        { t: "اشتهر الفلاح الفصيح بأنه:", type: "mcq", o: ["قائد عسكري", "مدافع عن العدالة والمساواة", "طبيب مشهور", "كاهن معبد"], a: 1 },
+        { t: "كان أفلاطون يرى أن:", type: "mcq", o: ["العبيد يتمتعون بكامل حقوق المواطنة", "العبيد يجب أن يطيعوا الأحرار", "جميع الناس متساوون سياسيًا", "يجب إلغاء الرق"], a: 1 },
+        { t: "انتشر نظام الرق بشكل واضح عند:", type: "mcq", o: ["المصريين القدماء", "الرومان", "العرب", "الفرس"], a: 1 },
+        { t: "صدر الميثاق الأعظم (Magna Carta) عام:", type: "mcq", o: ["1066م", "1215م", "1492م", "1789م"], a: 1 },
+        { t: "صدرت عريضة الحقوق عام:", type: "mcq", o: ["1215م", "1776م", "1628م", "1948م"], a: 2 },
+        { t: "أصبحت حقوق الإنسان قضية دولية في:", type: "mcq", o: ["العصور القديمة", "العصور الوسطى", "العصر الحديث", "العصر الحجري"], a: 2 },
+        { t: "ركزت الثورة الفرنسية على:", type: "mcq", o: ["الرق", "الحرية والمساواة", "الاستعمار", "الإقطاع"], a: 1 },
+        { t: "دعت المسيحية إلى:", type: "mcq", o: ["العنف", "التمييز", "المحبة والتسامح", "الحروب"], a: 2 },
+        { t: "دافعت المسيحية عن:", type: "mcq", o: ["الأغنياء فقط", "الفقراء والمستضعفين", "الحكام فقط", "التجار فقط"], a: 1 },
+        { t: "حقوق الإنسان في الإسلام:", type: "mcq", o: ["مؤقتة", "وضعية فقط", "حقوق ربانية المصدر", "سياسية فقط"], a: 2 },
+        { t: "حقوق الإنسان في الإسلام ملزمة:", type: "mcq", o: ["للحاكم فقط", "للمحكوم فقط", "للأجانب فقط", "للحاكم والمحكوم"], a: 3 },
+        { t: "تعني المواطنة:", type: "mcq", o: ["امتلاك الأرض", "العلاقة بين الفرد والدولة", "العمل الحكومي", "الانتماء الديني"], a: 1 },
+        { t: "من أهم حقوق الإنسان:", type: "mcq", o: ["الحق في الحياة", "الحق في التمييز", "الحق في الاستعباد", "الحق في الظلم"], a: 0 },
+        { t: "ترتبط ظاهرة الفساد غالبًا بـ:", type: "mcq", o: ["زيادة احترام حقوق الإنسان", "زيادة انتهاك حقوق الإنسان", "زيادة التعليم فقط", "زيادة التجارة فقط"], a: 1 },
+        // === تعريفات أساسية ===
+        { t: "ما المقصود بحقوق الإنسان اصطلاحًا؟", type: "mcq", o: ["العقوبات القانونية", "المصالح والحريات التي يتمتع بها الفرد", "الواجبات فقط", "القوانين الجنائية"], a: 1 },
+        { t: "تعد حقوق الإنسان أساسًا لـ:", type: "mcq", o: ["التجارة", "الحرية والعدالة والسلام", "الصناعة", "الضرائب"], a: 1 },
+        { t: "القانون الداخلي لحقوق الإنسان ينظم العلاقة بين:", type: "mcq", o: ["الدول والمنظمات الدولية", "الدولة ورعاياها", "الشركات والعملاء", "البرلمان والمحاكم"], a: 1 },
+        { t: "أي مما يلي يعد من حقوق الإنسان؟", type: "mcq", o: ["حق الحياة", "رخصة القيادة", "جواز السفر", "البطاقة الشخصية"], a: 0 },
+        { t: "أي الوثائق التالية تمثل أساسًا دوليًا لحقوق الإنسان؟", type: "mcq", o: ["قانون العقوبات", "الإعلان العالمي لحقوق الإنسان", "القانون التجاري", "اللائحة التنفيذية"], a: 1 },
+        { t: "صدر العهد الدولي للحقوق المدنية والسياسية عام:", type: "mcq", o: ["1945", "1950", "1966", "1975"], a: 2 },
+        { t: "حقوق الإنسان في القانون الدولي هي:", type: "mcq", o: ["حقوق محلية فقط", "حقوق عالمية وغير قابلة للتجزئة", "حقوق اقتصادية فقط", "حقوق سياسية فقط"], a: 1 },
+        { t: "من خصائص حقوق الإنسان أنها:", type: "mcq", o: ["تباع وتشترى", "تورث", "غير قابلة للتنازل عنها", "تمنح للأغنياء فقط"], a: 2 },
+        { t: "حقوق الإنسان عالمية بمعنى أنها:", type: "mcq", o: ["تخص دولة معينة", "تشمل جميع البشر دون تمييز", "تخص الرجال فقط", "تخص المواطنين فقط"], a: 1 },
+        { t: "أي من الآتي ليس من خصائص حقوق الإنسان؟", type: "mcq", o: ["عالمية", "مترابطة", "قابلة للبيع", "غير قابلة للتجزئة"], a: 2 },
+        { t: "من المصادر التاريخية لحقوق الإنسان:", type: "mcq", o: ["الدستور", "القانون التجاري", "الأديان السماوية والفلسفات القديمة", "اللوائح التنفيذية"], a: 2 },
+        { t: "من الفلاسفة الذين أسهموا في فكرة حقوق الإنسان:", type: "mcq", o: ["أرسطو", "نيوتن", "داروين", "إديسون"], a: 0 },
+        { t: "الماجنا كارتا صدرت في:", type: "mcq", o: ["فرنسا", "إنجلترا", "أمريكا", "إيطاليا"], a: 1 },
+        { t: "سنة صدور الماجنا كارتا هي:", type: "mcq", o: ["1215م", "1628م", "1776م", "1789م"], a: 0 },
+        { t: "إعلان الاستقلال الأمريكي صدر عام:", type: "mcq", o: ["1215م", "1628م", "1776م", "1789م"], a: 2 },
+        { t: "إعلان حقوق الإنسان والمواطن الفرنسي صدر عام:", type: "mcq", o: ["1776م", "1789م", "1815م", "1948م"], a: 1 },
+        { t: "من المصادر الوطنية لحقوق الإنسان:", type: "mcq", o: ["الدستور", "الماجنا كارتا", "الإعلان العالمي", "العهد الدولي"], a: 0 },
+        { t: "من المصادر الاحتياطية لحقوق الإنسان:", type: "mcq", o: ["القضاء والفقه", "الدستور فقط", "المعاهدات فقط", "اللوائح فقط"], a: 0 },
+        { t: "حقوق الإنسان تحمي:", type: "mcq", o: ["الحكومات فقط", "الأفراد والجماعات", "الشركات فقط", "الأحزاب فقط"], a: 1 },
+        { t: "حقوق الإنسان مرتبطة بـ:", type: "mcq", o: ["فئة معينة", "جنسية معينة", "الكرامة الإنسانية", "الثروة"], a: 2 },
+        // === صح وخطأ ===
+        { t: "حقوق الإنسان تقتصر على مواطني الدولة فقط.", type: "tf", a: false },
+        { t: "تقوم حقوق الإنسان على احترام كرامة الإنسان.", type: "tf", a: true },
+        { t: "دعا أخناتون إلى السلام والتسامح.", type: "tf", a: true },
+        { t: "ترمز كلمة ماعت إلى العدالة والحق.", type: "tf", a: true },
+        { t: "طالب الفلاح الفصيح بالعدل والمساواة.", type: "tf", a: true },
+        { t: "منح أفلاطون العبيد حقوق المواطنة الكاملة.", type: "tf", a: false },
+        { t: "انتشر الرق في الحضارة الرومانية.", type: "tf", a: true },
+        { t: "صدر الميثاق الأعظم سنة 1215م.", type: "tf", a: true },
+        { t: "بقيت حقوق الإنسان شأنًا داخليًا فقط في العصر الحديث.", type: "tf", a: false },
+        { t: "ساهم الإعلان العالمي لحقوق الإنسان في تطوير مفهوم حقوق الإنسان.", type: "tf", a: true },
+        { t: "دعت المسيحية إلى المحبة والتسامح.", type: "tf", a: true },
+        { t: "اهتمت المسيحية بالدفاع عن الفقراء والمستضعفين.", type: "tf", a: true },
+        { t: "تعتبر حقوق الإنسان في الإسلام منحة إلهية.", type: "tf", a: true },
+        { t: "تطبق حقوق الإنسان في الإسلام على الحاكم فقط.", type: "tf", a: false },
+        { t: "المساواة من المبادئ الأساسية لحقوق الإنسان.", type: "tf", a: true },
+        { t: "تعتمد حقوق الإنسان على جنسية الفرد.", type: "tf", a: false },
+        { t: "الحرية والعدالة من حقوق الإنسان الأساسية.", type: "tf", a: true },
+        { t: "يؤثر الفساد سلبًا على حقوق الإنسان.", type: "tf", a: true },
+        { t: "عرفت الحضارة المصرية القديمة مبادئ العدالة والمساواة.", type: "tf", a: true },
+        { t: "تهدف حقوق الإنسان إلى حماية كرامة الإنسان.", type: "tf", a: true },
+        { t: "حقوق الإنسان يمكن بيعها أو شراؤها.", type: "tf", a: false },
+        { t: "حقوق الإنسان عالمية وتشمل جميع البشر.", type: "tf", a: true },
+        { t: "يحق للدولة سلب الإنسان حقه في الحياة.", type: "tf", a: false },
+        { t: "حقوق الإنسان غير قابلة للتنازل عنها.", type: "tf", a: true },
+        { t: "الإعلان العالمي لحقوق الإنسان من المصادر الدولية.", type: "tf", a: true },
+        { t: "الحريات العامة وحقوق الإنسان شيء واحد تمامًا.", type: "tf", a: false },
+        { t: "القانون الداخلي يمثل التطبيق العملي لحقوق الإنسان داخل الدولة.", type: "tf", a: true },
+        { t: "جميع البشر متساوون في الكرامة والحقوق.", type: "tf", a: true },
+        { t: "الدستور من المصادر الوطنية لحقوق الإنسان.", type: "tf", a: true },
+        { t: "القضاء من المصادر الاحتياطية لحقوق الإنسان.", type: "tf", a: true },
+        { t: "الماجنا كارتا صدرت عام 1215م.", type: "tf", a: true },
+        { t: "إعلان الاستقلال الأمريكي صدر عام 1776م.", type: "tf", a: true },
+        { t: "حقوق الإنسان قابلة للتجزئة.", type: "tf", a: false },
+        { t: "حقوق الإنسان تحمي الفرد والجماعة معًا.", type: "tf", a: true },
+        { t: "الفلاسفة القدماء أسهموا في تطوير مفهوم حقوق الإنسان.", type: "tf", a: true },
+        { t: "حقوق الإنسان تقتصر على المواطنين فقط.", type: "tf", a: false },
+        { t: "العهد الدولي للحقوق المدنية والسياسية صدر عام 1966م.", type: "tf", a: true },
+        { t: "حقوق الإنسان مرتبطة بالكرامة الإنسانية.", type: "tf", a: true },
+        { t: "يمكن إنكار حقوق الإنسان إذا لم تعترف بها الدولة.", type: "tf", a: false },
+        { t: "حقوق الإنسان من الضمانات القانونية العالمية.", type: "tf", a: true },
     ],
 
-    // === المستوى المتوسط ===
     medium: [
-        { t: "ساهمت الحضارة ____ في تجسيد فكرة حقوق الإنسان", type: "mcq", o: ["الإغريقية", "الرومانية", "اليونانية", "الفرعونية"], a: 2 },
-        { t: "أصدر ____ أولى وثائق حقوق الإنسان في تاريخ الإنسانية", type: "mcq", o: ["الفلاح المصري", "الفلاح الفرنسي", "الفلاح الإنجليزي", "الفلاح اليوناني"], a: 0 },
-        { t: "لم تعرف ____ فكرة حقوق الإنسان", type: "mcq", o: ["الإسلام", "الفراعنة", "المسيحية", "اليهودية"], a: 1 },
-        { t: "تعتبر ____ من أهم مصادر حقوق الإنسان على كافة المستويات", type: "mcq", o: ["الشريعة الإسلامية", "اليهودية", "القوانين الإقليمية", "الفلسفة اليونانية"], a: 0 },
-        { t: "من خصائص حقوق الإنسان أنها:", type: "mcq", o: ["لا تُشترى ولا تُكتسب", "يتم جمعها", "يمكن التنازل عنها", "تُشترى وتُورث"], a: 0 },
-        { t: "من المصادر الوطنية المكتوبة لحقوق الإنسان:", type: "mcq", o: ["إعلان الحقوق السياسية", "إعلان الحقوق الاقتصادية", "الدستور", "الميثاق الأعظم"], a: 2 },
-        { t: "الحق في الاسم من الحقوق:", type: "mcq", o: ["السياسية", "الاقتصادية", "الشخصية", "الصحية"], a: 2 },
-        { t: "تعرف ____ بأنها عالم أسرار الإنسان التي يحب ألا يطلع عليه غيره", type: "mcq", o: ["الخصوصية", "الموطن", "الاسم", "الجنسية"], a: 0 },
-        { t: "الحق في الزواج وتكوين الأسرة من الحقوق:", type: "mcq", o: ["الفردية", "الصحية", "الاقتصادية", "السياسية"], a: 0 },
-        { t: "____ هي أساس وقوام المجتمع وتحرص الدولة على تمسكها", type: "mcq", o: ["الرجل", "المرأة", "الثقافة", "الأسرة"], a: 3 },
-        { t: "الحق في مستوى معيشي مناسب من الحقوق:", type: "mcq", o: ["غير إنسانية", "الجماعية", "السياسية", "الفردية"], a: 3 },
-        { t: "الحق في التنقل من الحقوق:", type: "mcq", o: ["الفردية", "غير إنسانية", "السياسية", "الجماعية"], a: 0 },
-        { t: "الحق في الرعاية الصحية من الحقوق:", type: "mcq", o: ["الجماعية", "غير إنسانية", "السياسية", "الفردية"], a: 3 },
-        { t: "____ هو حق أو سلطة مباشرة على شيء ذي طبيعة مالية", type: "mcq", o: ["حق الصحة", "حق الاسم", "حق التملك", "حق التنقل"], a: 2 },
-        { t: "الحق في التملك من الحقوق:", type: "mcq", o: ["السياسية", "الفردية", "النظامية", "الجماعية"], a: 1 },
-        { t: "الحق في ____ هو المجهود البدني أو الذهني الذي يبذله الفرد لإنتاج سلعة أو خدمة", type: "mcq", o: ["الجنسية", "الصحة", "العمل", "الاسم"], a: 2 },
-        { t: "الحق في العمل من الحقوق:", type: "mcq", o: ["الجماعية", "الفردية والجماعية", "الفردية", "السياسية"], a: 1 },
-        { t: "____ هو أولى مراحل الارتقاء بالذهن وبناء الفكرة", type: "mcq", o: ["الحق في التعلم", "الحق في العمل", "الحق في الاسم", "الحق في الجنسية"], a: 0 },
-        { t: "يشمل _____ حرية اعتناق الآراء دون أي تدخل", type: "mcq", o: ["التنقل", "التعليم", "الحق في حرية الرأي", "الصحة"], a: 2 },
-        { t: "الحق في حرية التعبير من الحقوق:", type: "mcq", o: ["الجماعية", "الاقتصادية", "الإدارية", "الفردية"], a: 3 },
-        // صح وغلط
-        { t: "حقوق الإنسان ثابتة ولا يمكن سحبها", type: "tf", a: true },
-        { t: "القانون الدولي لا يهتم بحقوق الإنسان", type: "tf", a: false },
-        { t: "الدستور من مصادر حقوق الإنسان", type: "tf", a: true },
-        { t: "الحقوق غير مرتبطة ببعضها", type: "tf", a: false },
-        { t: "العهد الدولي يشمل حقوق الإنسان الأساسية", type: "tf", a: true },
-        { t: "الخصوصية تشمل الهاتف والمراسلات", type: "tf", a: true },
-        { t: "يمكن إجبار شخص على الزواج", type: "tf", a: false },
-        { t: "الدولة غير مسؤولة عن الصحة", type: "tf", a: false },
-        { t: "يمكن نزع الملكية بدون تعويض", type: "tf", a: false },
-        { t: "البيئة النظيفة من حقوق الإنسان", type: "tf", a: true },
+        // === تصنيفات الحقوق ===
+        { t: "تنقسم حقوق الإنسان إلى:", type: "mcq", o: ["سياسية فقط", "اقتصادية فقط", "فردية وجماعية", "مدنية فقط"], a: 2 },
+        { t: "الحقوق السياسية تُعرف بحقوق:", type: "mcq", o: ["الجيل الأول", "الجيل الثاني", "الجيل الثالث", "الجيل الرابع"], a: 0 },
+        { t: "من الحقوق السياسية:", type: "mcq", o: ["الحق في العمل", "الحق في الحياة", "الحق في الضمان الاجتماعي", "الحق في التنمية"], a: 1 },
+        { t: "الحقوق الاقتصادية والاجتماعية والثقافية تسمى:", type: "mcq", o: ["حقوق الجيل الأول", "حقوق الجيل الثاني", "حقوق الجيل الثالث", "حقوق الجيل الرابع"], a: 1 },
+        { t: "من الحقوق الاقتصادية والاجتماعية:", type: "mcq", o: ["حرية التعبير", "الحق في التصويت", "الحق في العمل", "الحق في اللجوء"], a: 2 },
+        { t: "لكل طفل الحق في:", type: "mcq", o: ["اسم يميزه عن غيره", "وظيفة حكومية", "التصويت", "الترشح"], a: 0 },
+        { t: "تنص اتفاقية حقوق الطفل على تسجيل الطفل:", type: "mcq", o: ["عند المدرسة", "عند البلوغ", "فور ولادته", "عند الزواج"], a: 2 },
+        { t: "المادة الخاصة بحق الطفل في الاسم في الدستور المصري هي:", type: "mcq", o: ["80", "18", "35", "65"], a: 0 },
+        { t: "من الحقوق اللصيقة بالإنسان:", type: "mcq", o: ["الجنسية", "الوظيفة", "المنصب", "الثروة"], a: 0 },
+        { t: "تنص المادة 15 من الإعلان العالمي على:", type: "mcq", o: ["الحق في التعليم", "الحق في الجنسية", "الحق في العمل", "الحق في الثقافة"], a: 1 },
+        { t: "المواطنة تعني:", type: "mcq", o: ["علاقة بين الفرد والدولة", "علاقة بين الفرد والأسرة", "علاقة بين الفرد والعمل", "علاقة بين الفرد والمال"], a: 0 },
+        { t: "يقصد بالخصوصية:", type: "mcq", o: ["الحياة الخاصة للفرد", "العمل الحكومي", "الانتخابات", "النشاط التجاري"], a: 0 },
+        { t: "تحمي الخصوصية:", type: "mcq", o: ["المراسلات", "الضرائب", "التجارة", "الانتخابات"], a: 0 },
+        { t: "لا يجوز مراقبة المراسلات إلا:", type: "mcq", o: ["بأمر إداري", "بأمر قضائي مسبب", "بأمر شرطي", "بموافقة الجيران"], a: 1 },
+        { t: "من شروط الزواج:", type: "mcq", o: ["الإكراه", "الرضا الكامل للطرفين", "السن الصغير", "عدم التوثيق"], a: 1 },
+        { t: "الأسرة هي:", type: "mcq", o: ["وحدة اقتصادية", "الوحدة الطبيعية الأساسية للمجتمع", "مؤسسة سياسية", "منظمة دولية"], a: 1 },
+        { t: "الحق في مستوى معيشي مناسب يشمل:", type: "mcq", o: ["الغذاء والمسكن والعلاج", "الانتخابات فقط", "الرياضة فقط", "السفر فقط"], a: 0 },
+        { t: "المادة الخاصة بالحق في الغذاء الكافي:", type: "mcq", o: ["79", "35", "65", "87"], a: 0 },
+        { t: "الحق في الصحة ورد في المادة:", type: "mcq", o: ["80", "18", "57", "75"], a: 1 },
+        { t: "نسبة الإنفاق الحكومي على الصحة لا تقل عن:", type: "mcq", o: ["1%", "2%", "3%", "5%"], a: 2 },
+        // === حقوق إضافية ===
+        { t: "حرية التنقل تعني:", type: "mcq", o: ["اختيار مكان الإقامة والتنقل", "حق التملك", "حق التعليم", "حق العمل"], a: 0 },
+        { t: "من حقوق الإنسان:", type: "mcq", o: ["التملك", "الاحتكار", "الاستغلال", "التمييز"], a: 0 },
+        { t: "الملكية الخاصة:", type: "mcq", o: ["قابلة للمصادرة دائمًا", "مصونة بالدستور", "غير معترف بها", "مؤقتة"], a: 1 },
+        { t: "لا تنزع الملكية إلا:", type: "mcq", o: ["بقرار إداري", "للمنفعة العامة وتعويض عادل", "بقرار فردي", "دون تعويض"], a: 1 },
+        { t: "العمل هو:", type: "mcq", o: ["حق وواجب وشرف", "واجب فقط", "حق فقط", "اختيار فقط"], a: 0 },
+        { t: "المادة الدستورية الخاصة بالعمل:", type: "mcq", o: ["12", "18", "35", "65"], a: 0 },
+        { t: "من حقوق العمال:", type: "mcq", o: ["الفصل التعسفي", "الحماية من مخاطر العمل", "منع التفاوض", "إلغاء الإجازات"], a: 1 },
+        { t: "التعليم الابتدائي يجب أن يكون:", type: "mcq", o: ["اختياريًا", "إلزاميًا", "مدفوعًا", "خاصًا"], a: 1 },
+        { t: "الهدف من التعليم:", type: "mcq", o: ["زيادة الجهل", "تنمية شخصية الإنسان", "منع الإبداع", "تقليل المعرفة"], a: 1 },
+        { t: "حرية الرأي والتعبير وردت في المادة:", type: "mcq", o: ["65", "35", "18", "87"], a: 0 },
+        { t: "حرية الصحافة وردت في المادة:", type: "mcq", o: ["70", "80", "18", "10"], a: 0 },
+        { t: "حرية التفكير والضمير والدين وردت في المادة:", type: "mcq", o: ["18 من الإعلان العالمي", "3", "21", "27"], a: 0 },
+        { t: "الانتخابات الحرة تعبر عن:", type: "mcq", o: ["إرادة الشعب", "إرادة الحكومة", "إرادة الحزب", "إرادة البرلمان"], a: 0 },
+        { t: "المشاركة في الحياة العامة:", type: "mcq", o: ["حق فقط", "واجب وطني", "ممنوعة", "غير مهمة"], a: 1 },
+        { t: "سن القيد الانتخابي:", type: "mcq", o: ["16 سنة", "17 سنة", "18 سنة", "21 سنة"], a: 2 },
+        { t: "المتهم يعتبر:", type: "mcq", o: ["مذنبًا", "بريئًا حتى تثبت إدانته", "مشتبهاً فقط", "مسؤولاً مدنيًا"], a: 1 },
+        { t: "حق تقرير المصير يعني:", type: "mcq", o: ["اختيار النظام السياسي", "اختيار الوظيفة", "اختيار المدرسة", "اختيار المهنة"], a: 0 },
+        { t: "من الحقوق الجماعية:", type: "mcq", o: ["التنمية", "الزواج", "التملك", "التعليم"], a: 0 },
+        { t: "الحق في السالم يعني:", type: "mcq", o: ["الأمن والاستقرار", "الانتخابات", "الملكية", "التجارة"], a: 0 },
+        { t: "الحق في بيئة صحية يهدف إلى:", type: "mcq", o: ["زيادة التلوث", "حماية البيئة", "منع التنمية", "تقليل الموارد"], a: 1 },
+        // === الفساد - تعريفات ===
+        { t: "يقصد بالفساد لغويًا:", type: "mcq", o: ["الإصلاح", "التقدم", "التلف والانحراف", "التعاون"], a: 2 },
+        { t: "الفساد هو عكس:", type: "mcq", o: ["العدالة", "الصلاح", "التنمية", "الحرية"], a: 1 },
+        { t: "من أشهر تعريفات الفساد:", type: "mcq", o: ["زيادة الإنتاج", "إساءة استعمال السلطة لتحقيق مكاسب خاصة", "تحسين الخدمات", "تطبيق القانون"], a: 1 },
+        { t: "يرى نشطاء حقوق الإنسان أن الفساد يمثل انتهاكًا لمبدأ:", type: "mcq", o: ["الحرية فقط", "المساواة وتكافؤ الفرص", "الملكية", "الأمن"], a: 1 },
+        { t: "عرف البنك الدولي الفساد بأنه:", type: "mcq", o: ["إساءة استعمال الوظيفة العامة للكسب الخاص", "سوء الإدارة", "مخالفة الأعراف", "إهدار الوقت"], a: 0 },
+        { t: "من خصائص الفساد أنه:", type: "mcq", o: ["عمل عفوي", "يعتمد على التخطيط والحساب", "لا يسبب ضررًا", "قانوني"], a: 1 },
+        // === صح وخطأ ===
+        { t: "حقوق الإنسان تنقسم إلى حقوق فردية وجماعية.", type: "tf", a: true },
+        { t: "الحقوق الاقتصادية تسمى حقوق الجيل الأول.", type: "tf", a: false },
+        { t: "الحق في الحياة من الحقوق السياسية.", type: "tf", a: true },
+        { t: "التعليم من الحقوق الاقتصادية والاجتماعية.", type: "tf", a: true },
+        { t: "لكل طفل الحق في اسم منذ ولادته.", type: "tf", a: true },
+        { t: "يجوز حرمان الشخص من جنسيته تعسفًا.", type: "tf", a: false },
+        { t: "الخصوصية تشمل المراسلات الشخصية.", type: "tf", a: true },
+        { t: "يجوز مراقبة المراسلات دون إذن قضائي.", type: "tf", a: false },
+        { t: "الزواج يجب أن يقوم على الرضا الكامل للطرفين.", type: "tf", a: true },
+        { t: "الأسرة هي الوحدة الأساسية للمجتمع.", type: "tf", a: true },
+        { t: "الغذاء والمسكن من عناصر المعيشة المناسبة.", type: "tf", a: true },
+        { t: "الحق في الصحة غير معترف به دستوريًا.", type: "tf", a: false },
+        { t: "حرية التنقل تشمل اختيار محل الإقامة.", type: "tf", a: true },
+        { t: "الملكية الخاصة مصونة بالدستور.", type: "tf", a: true },
+        { t: "يجوز نزع الملكية دون تعويض.", type: "tf", a: false },
+        { t: "العمل حق وواجب وشرف.", type: "tf", a: true },
+        { t: "يحظر فصل العامل تعسفيًا.", type: "tf", a: true },
+        { t: "التعليم الابتدائي إلزامي.", type: "tf", a: true },
+        { t: "التعليم العالي يجب أن يكون متاحًا على أساس الكفاءة.", type: "tf", a: true },
+        { t: "حرية الرأي والتعبير مكفولة.", type: "tf", a: true },
+        { t: "حرية الصحافة محظورة في الدستور.", type: "tf", a: false },
+        { t: "حرية الدين والضمير من حقوق الإنسان.", type: "tf", a: true },
+        { t: "الانتخابات الحرة تعبر عن إرادة الشعب.", type: "tf", a: true },
+        { t: "المشاركة السياسية حق للمواطن.", type: "tf", a: true },
+        { t: "المتهم مذنب حتى تثبت براءته.", type: "tf", a: false },
+        { t: "افتراض البراءة من مبادئ حقوق الإنسان.", type: "tf", a: true },
+        { t: "تقرير المصير من الحقوق الجماعية.", type: "tf", a: true },
+        { t: "التنمية ليست من حقوق الشعوب.", type: "tf", a: false },
+        { t: "السالم حق جماعي.", type: "tf", a: true },
+        { t: "البيئة الصحية حق جماعي.", type: "tf", a: true },
+        { t: "الشخصية القانونية تبدأ بالوفاة.", type: "tf", a: false },
+        { t: "جميع الناس متساوون في الشخصية القانونية.", type: "tf", a: true },
+        { t: "الكرامة الإنسانية حق لكل إنسان.", type: "tf", a: true },
+        { t: "يحظر الاتجار بالبشر.", type: "tf", a: true },
+        { t: "الأحزاب السياسية وسيلة للمشاركة السياسية.", type: "tf", a: true },
+        { t: "لا يجوز إجبار شخص على الانضمام لجمعية.", type: "tf", a: true },
+        { t: "الحرية الشخصية حق طبيعي.", type: "tf", a: true },
+        { t: "يجوز تعذيب المحتجزين.", type: "tf", a: false },
+        { t: "المحاكمة العادلة حق أساسي.", type: "tf", a: true },
+        { t: "يجب تمكين المتهم من الدفاع عن نفسه.", type: "tf", a: true },
+        { t: "إنشاء النقابات حق يكفله القانون.", type: "tf", a: true },
+        { t: "الحق في الثقافة من حقوق الإنسان.", type: "tf", a: true },
+        { t: "الحصول على المعلومات حق للمواطن.", type: "tf", a: true },
+        { t: "حقوق الإنسان مطلقة بلا قيود.", type: "tf", a: false },
+        { t: "من واجبات الفرد الالتزام بقيم التسامح.", type: "tf", a: true },
+        { t: "الحوار البناء يساعد على حل المشكلات.", type: "tf", a: true },
+        { t: "حماية الوطن من واجبات المواطن.", type: "tf", a: true },
+        { t: "الوحدة الوطنية من ركائز المجتمع.", type: "tf", a: true },
+        { t: "الإرهاب الإلكتروني لا يشكل خطرًا على المجتمع.", type: "tf", a: false },
+        { t: "مواجهة الإرهاب الإلكتروني من واجبات الأفراد والدولة.", type: "tf", a: true },
     ],
 
-    // === المستوى الصعب ===
     hard: [
-        { t: "أي مما يلي يُعد الأساس الحقيقي لظهور قواعد حقوق الإنسان؟", type: "mcq", o: ["التطور الاقتصادي", "الحاجة إلى تنظيم العلاقات داخل المجتمع", "الحروب العالمية", "التقدم العلمي"], a: 1 },
-        { t: "أي العبارات التالية أدق؟", type: "mcq", o: ["حقوق الإنسان منحة من الدولة", "حقوق الإنسان تُكتسب بالتعليم", "حقوق الإنسان لصيقة بالإنسان لذاته", "حقوق الإنسان مرتبطة بالوظيفة"], a: 2 },
-        { t: "الفرق بين حقوق الإنسان في القديم والحديث:", type: "mcq", o: ["لم تكن موجودة قديمًا", "كانت شاملة قديمًا", "كانت مقصورة على فئات معينة قديمًا وأصبحت عامة حديثًا", "لم تتغير"], a: 2 },
-        { t: "أي مما يلي لا يُعد من خصائص حقوق الإنسان؟", type: "mcq", o: ["العالمية", "القابلية للتصرف", "المساواة", "الثبات"], a: 1 },
-        { t: "أي مما يلي يمثل مصدرًا دوليًا مباشرًا لحقوق الإنسان؟", type: "mcq", o: ["العادات الاجتماعية", "الدستور", "الاتفاقيات الدولية", "الفلسفة"], a: 2 },
-        { t: "أهمية وثيقة الماجنا كارتا تتمثل في:", type: "mcq", o: ["إعلان الاستقلال", "تقييد سلطة الحاكم", "إلغاء الضرائب", "نشر الديمقراطية عالميًا"], a: 1 },
-        { t: "أي من التالي يعبر عن مبدأ عالمية حقوق الإنسان؟", type: "mcq", o: ["تطبيق الحقوق داخل الدولة فقط", "اختلاف الحقوق حسب الثقافة", "تمتع جميع البشر بنفس الحقوق دون تمييز", "خضوع الحقوق للقانون الداخلي فقط"], a: 2 },
-        { t: "أي مما يلي يمثل انتهاكًا غير مباشر لحقوق الإنسان؟", type: "mcq", o: ["التعذيب", "منع التعليم", "الفساد الإداري", "الاعتقال التعسفي"], a: 2 },
-        { t: "العلاقة بين الحقوق والواجبات هي:", type: "mcq", o: ["منفصلة تمامًا", "متعارضة", "متكاملة", "غير موجودة"], a: 2 },
-        { t: "أي من التالي يُعد تطورًا حديثًا في حقوق الإنسان؟", type: "mcq", o: ["ظهور الفلسفة", "القوانين الرومانية", "إنشاء المنظمات الدولية", "الأديان"], a: 2 },
-        { t: "لماذا يُعد الإعلان العالمي وثيقة غير ملزمة قانونيًا؟", type: "mcq", o: ["لأنه غير مهم", "لأنه مجرد إعلان أخلاقي وليس معاهدة", "لأنه خاص بدولة واحدة", "لأنه قديم"], a: 1 },
-        { t: "أي مما يلي يعبر عن الحقوق المدنية؟", type: "mcq", o: ["الحق في التعليم", "الحق في العمل", "الحق في الحياة والحرية", "الحق في التأمين"], a: 2 },
-        { t: "أي مما يلي يمثل مبدأ عدم التمييز؟", type: "mcq", o: ["التفرقة حسب الدين", "المساواة بين جميع الأفراد", "إعطاء امتيازات لفئة", "اختلاف الحقوق حسب الدولة"], a: 1 },
-        { t: "أي مما يلي يعد نتيجة لغياب حقوق الإنسان؟", type: "mcq", o: ["الاستقرار", "التنمية", "الفوضى وعدم الاستقرار", "التقدم العلمي"], a: 2 },
-        { t: "أي مما يلي يعبر عن مفهوم ثبات الحقوق؟", type: "mcq", o: ["تتغير حسب الزمن", "تُسحب من الأفراد", "لا يمكن التنازل عنها أو إلغاؤها", "مرتبطة بالقانون فقط"], a: 2 },
-        { t: "أي من التالي يُعد مصدرًا تاريخيًا لحقوق الإنسان؟", type: "mcq", o: ["الأمم المتحدة", "الفلاسفة والأديان", "البرلمان", "القضاء"], a: 1 },
-        { t: "العهد الدولي للحقوق المدنية والسياسية يهدف إلى:", type: "mcq", o: ["تنظيم التجارة", "حماية الحريات الأساسية للأفراد", "تنظيم الصناعة", "دعم الاقتصاد"], a: 1 },
-        { t: "أي مما يلي يعبر عن مبدأ ترابط الحقوق؟", type: "mcq", o: ["كل حق مستقل تمامًا", "الحقوق تتعارض", "لا يمكن التمتع بحق دون الآخر", "الحقوق غير مهمة"], a: 2 },
-        { t: "متى بدأت حقوق الإنسان تأخذ طابعًا دوليًا؟", type: "mcq", o: ["العصور القديمة", "العصور الوسطى", "بعد الحرب العالمية الثانية", "قبل الميلاد"], a: 2 },
-        { t: "أي مما يلي يُعد مثالًا على الحقوق الاقتصادية؟", type: "mcq", o: ["حرية التعبير", "الحق في العمل", "الحق في الحياة", "حرية الدين"], a: 1 },
-        // صح وغلط tricky
-        { t: "حقوق الإنسان تعتمد على اعتراف الدولة بها", type: "tf", a: false },
-        { t: "جميع مصادر حقوق الإنسان قانونية فقط", type: "tf", a: false },
-        { t: "الحقوق المدنية والسياسية أقل أهمية من الاقتصادية", type: "tf", a: false },
-        { t: "يمكن التنازل عن حقوق الإنسان بمحض الإرادة", type: "tf", a: false },
-        { t: "المساواة تعني التطابق التام بين الأفراد", type: "tf", a: false },
-        { t: "الفساد قد يؤدي إلى انتهاك حقوق الإنسان بشكل غير مباشر", type: "tf", a: true },
-        { t: "الإعلان العالمي يُعد معاهدة ملزمة", type: "tf", a: false },
-        { t: "الحقوق مترابطة ولا يمكن فصلها", type: "tf", a: true },
-        { t: "الأديان لم يكن لها دور في حقوق الإنسان", type: "tf", a: false },
-        { t: "القانون الدولي يحمي الإنسان من تعسف الدولة", type: "tf", a: true },
+        // === أنواع الفساد ===
+        { t: "المستوى الأخطر للفساد هو:", type: "mcq", o: ["الإداري", "السياسي", "الاجتماعي", "الفردي"], a: 1 },
+        { t: "يشمل الفساد السياسي:", type: "mcq", o: ["الوزراء وأعضاء البرلمان", "الطلاب", "العمال فقط", "التجار فقط"], a: 0 },
+        { t: "الفساد المالي هو:", type: "mcq", o: ["مخالفة القواعد المالية لتحقيق منفعة خاصة", "مخالفة أخلاقية", "خطأ إداري بسيط", "نشاط اقتصادي"], a: 0 },
+        { t: "أي مما يلي يعد من صور الفساد المالي؟", type: "mcq", o: ["الرشوة", "القراءة", "التدريب", "التعليم"], a: 0 },
+        { t: "عبارة 'من أين لك هذا؟' ترتبط بجريمة:", type: "mcq", o: ["الرشوة", "غسل الأموال", "الإثراء غير المشروع", "المحسوبية"], a: 2 },
+        { t: "الرشوة تحتاج في حدها الأدنى إلى:", type: "mcq", o: ["شخص واحد", "طرفين على الأقل", "أربعة أطراف", "حكومة"], a: 1 },
+        { t: "الراشي هو:", type: "mcq", o: ["من يأخذ الرشوة", "من يدفع الرشوة", "القاضي", "الوسيط"], a: 1 },
+        { t: "المرتشي هو:", type: "mcq", o: ["من يدفع المال", "من يأخذ الرشوة", "الشاهد", "المحامي"], a: 1 },
+        { t: "الرشوة الدولية تتم غالبًا بين:", type: "mcq", o: ["أفراد الأسرة", "شركة أجنبية ومسؤول حكومي", "الطلاب", "العمال"], a: 1 },
+        { t: "اختلاس المال العام يعني:", type: "mcq", o: ["التبرع", "الاستيلاء على المال العام دون حق", "الاستثمار", "الادخار"], a: 1 },
+        { t: "إهدار المال العام يشمل:", type: "mcq", o: ["استخدام سيارات الدولة لأغراض شخصية", "الالتزام بالقانون", "حماية الممتلكات", "زيادة الإنتاج"], a: 0 },
+        { t: "غسل الأموال يهدف إلى:", type: "mcq", o: ["زيادة الضرائب", "إخفاء المصدر غير المشروع للأموال", "الادخار", "مكافحة الجريمة"], a: 1 },
+        { t: "من أشهر الجرائم المرتبطة بغسل الأموال:", type: "mcq", o: ["المخدرات", "التعليم", "الرياضة", "الزراعة"], a: 0 },
+        { t: "الفساد الإداري يتمثل في:", type: "mcq", o: ["مخالفة القوانين الإدارية", "الاستثمار", "الابتكار", "الادخار"], a: 0 },
+        { t: "تعيين شخص بسبب القرابة يسمى:", type: "mcq", o: ["شفافية", "واسطة", "عدالة", "رقابة"], a: 1 },
+        { t: "تنفيذ أعمال لصالح جماعة ينتمي إليها الشخص يسمى:", type: "mcq", o: ["محاباة", "محسوبية", "نزاهة", "شفافية"], a: 1 },
+        { t: "تفضيل جهة على أخرى بغير حق يسمى:", type: "mcq", o: ["المحاباة", "النزاهة", "الرقابة", "العدالة"], a: 0 },
+        { t: "استغلال السلطة لتحقيق منفعة شخصية يسمى:", type: "mcq", o: ["استغلال النفوذ الوظيفي", "رقابة", "مساءلة", "نزاهة"], a: 0 },
+        { t: "التهاون في أداء الواجبات يؤدي إلى:", type: "mcq", o: ["زيادة الكفاءة", "الترهل الإداري", "التنمية", "الاستثمار"], a: 1 },
+        { t: "شراء أصوات الناخبين يعد:", type: "mcq", o: ["فسادًا سياسيًا", "فسادًا ماليًا", "فسادًا أخلاقيًا", "فسادًا علميًا"], a: 0 },
+        // === أسباب وآثار الفساد ===
+        { t: "أول أسباب الفساد المذكورة في الفصل:", type: "mcq", o: ["الفقر", "ضعف سيادة القانون", "البطالة", "التعليم"], a: 1 },
+        { t: "ضعف القضاء يؤدي إلى:", type: "mcq", o: ["زيادة الردع", "الإفلات من العقاب", "القضاء على الفساد", "التنمية"], a: 1 },
+        { t: "ضعف أجهزة الرقابة يؤدي إلى:", type: "mcq", o: ["زيادة الشفافية", "انتشار الفساد", "زيادة الاستثمار", "العدالة"], a: 1 },
+        { t: "تضارب المصالح يضعف:", type: "mcq", o: ["الشفافية", "التعليم", "الرياضة", "الصناعة"], a: 0 },
+        { t: "ضعف المجتمع المدني يؤدي إلى:", type: "mcq", o: ["تقوية الرقابة", "زيادة الفساد", "زيادة التنمية", "تحسين الخدمات"], a: 1 },
+        { t: "من أسباب الفساد:", type: "mcq", o: ["ارتفاع الوعي", "انتشار الجهل", "النزاهة", "العدالة"], a: 1 },
+        { t: "انخفاض أجور الموظفين يؤدي إلى:", type: "mcq", o: ["انخفاض الرشوة", "زيادة احتمالات الفساد", "زيادة النزاهة", "زيادة الإنتاج"], a: 1 },
+        { t: "ضعف الرقابة الداخلية يؤدي إلى:", type: "mcq", o: ["زيادة الانضباط", "انتشار الممارسات الفاسدة", "زيادة الكفاءة", "زيادة الاستثمار"], a: 1 },
+        { t: "جرائم الفساد تسمى أحيانًا:", type: "mcq", o: ["جرائم الكتمان", "جرائم المرور", "جرائم البيئة", "الجرائم الرياضية"], a: 0 },
+        { t: "الرقم الأسود للفساد يعني:", type: "mcq", o: ["عدد القضايا المحكوم فيها", "الجرائم غير المكتشفة", "الأموال المصادرة", "الرشاوى الدولية"], a: 1 },
+        { t: "الفساد يؤثر سلبًا على:", type: "mcq", o: ["الاستثمار", "الفساد فقط", "الرياضة", "الطقس"], a: 0 },
+        { t: "يؤدي الفساد إلى:", type: "mcq", o: ["زيادة النمو", "زيادة البطالة والفقر", "تحسين الدخل", "زيادة العدالة"], a: 1 },
+        { t: "الفساد يرفع:", type: "mcq", o: ["الثقة", "تكلفة المشروعات", "الإنتاجية", "الشفافية"], a: 1 },
+        { t: "الفساد يؤدي إلى:", type: "mcq", o: ["تحسين الخدمات", "ضعف الخدمات العامة", "زيادة الكفاءة", "الاستقرار"], a: 1 },
+        { t: "يؤدي الفساد إلى:", type: "mcq", o: ["تقليل التضخم", "زيادة الأسعار", "زيادة الادخار", "زيادة الشفافية"], a: 1 },
+        { t: "من الآثار الاجتماعية للفساد:", type: "mcq", o: ["زيادة الانتماء", "ضعف الانتماء للدولة", "زيادة الثقة", "زيادة العدالة"], a: 1 },
+        { t: "الفساد يؤدي إلى:", type: "mcq", o: ["هجرة الكفاءات", "عودة المهاجرين", "زيادة الخبرات", "تحسين الإدارة"], a: 0 },
+        { t: "من الآثار السياسية للفساد:", type: "mcq", o: ["تقوية الشرعية", "إضعاف شرعية الدولة", "تعزيز الديمقراطية", "زيادة الثقة"], a: 1 },
+        { t: "يؤدي الفساد إلى:", type: "mcq", o: ["الاستقرار السياسي", "الاضطرابات وعدم الاستقرار", "زيادة الأمن", "تقوية المؤسسات"], a: 1 },
+        { t: "يؤدي الفساد إلى:", type: "mcq", o: ["وصول الأكفاء للمناصب", "وصول غير الأكفاء للمناصب العليا", "تحسين الأداء", "زيادة الكفاءة"], a: 1 },
+        // === صح وخطأ ===
+        { t: "الفساد يعني الصلاح.", type: "tf", a: false },
+        { t: "الفساد يرتبط بالانحراف والتلف.", type: "tf", a: true },
+        { t: "لا يوجد تعريف واحد متفق عليه للفساد.", type: "tf", a: true },
+        { t: "الفساد يخالف القيم الأخلاقية.", type: "tf", a: true },
+        { t: "الرشوة من صور الفساد المالي.", type: "tf", a: true },
+        { t: "الاختلاس لا يعد فسادًا ماليًا.", type: "tf", a: false },
+        { t: "غسل الأموال يهدف لإخفاء المصدر غير المشروع للأموال.", type: "tf", a: true },
+        { t: "الإثراء غير المشروع من صور الفساد المالي.", type: "tf", a: true },
+        { t: "الرشوة تحتاج إلى طرف واحد فقط.", type: "tf", a: false },
+        { t: "الرشوة الدولية تتم في صفقات دولية.", type: "tf", a: true },
+        { t: "استخدام سيارات الدولة لأغراض شخصية يعد إهدارًا للمال العام.", type: "tf", a: true },
+        { t: "الفساد الإداري يقتصر على الرشوة فقط.", type: "tf", a: false },
+        { t: "الواسطة من صور الفساد الإداري.", type: "tf", a: true },
+        { t: "المحسوبية تقوم على الاستحقاق والكفاءة.", type: "tf", a: false },
+        { t: "المحاباة تعني تفضيل شخص أو جهة دون حق.", type: "tf", a: true },
+        { t: "استغلال النفوذ الوظيفي صورة من صور الفساد.", type: "tf", a: true },
+        { t: "التهاون في أداء الواجبات يعد فسادًا إداريًا.", type: "tf", a: true },
+        { t: "الفساد السياسي يرتبط بالعملية الانتخابية أحيانًا.", type: "tf", a: true },
+        { t: "شراء الأصوات الانتخابية فساد سياسي.", type: "tf", a: true },
+        { t: "الاستبداد والفساد لا علاقة بينهما.", type: "tf", a: false },
+        { t: "التحرش الوظيفي صورة من صور الفساد الأخلاقي.", type: "tf", a: true },
+        { t: "الرشوة الجنسية من صور الفساد الأخلاقي.", type: "tf", a: true },
+        { t: "ضعف سيادة القانون يساعد على انتشار الفساد.", type: "tf", a: true },
+        { t: "القضاء المستقل يقلل الفساد.", type: "tf", a: true },
+        { t: "ضعف الرقابة يزيد الفساد.", type: "tf", a: true },
+        { t: "الشفافية تساعد على مكافحة الفساد.", type: "tf", a: true },
+        { t: "تضارب المصالح يدعم النزاهة.", type: "tf", a: false },
+        { t: "ضعف المجتمع المدني يزيد الفساد.", type: "tf", a: true },
+        { t: "الجهل يساعد على انتشار الفساد.", type: "tf", a: true },
+        { t: "انخفاض الأجور قد يشجع الرشوة.", type: "tf", a: true },
+        { t: "ضعف الرقابة الداخلية يسهم في الفساد.", type: "tf", a: true },
+        { t: "جرائم الفساد سهلة الاكتشاف دائمًا.", type: "tf", a: false },
+        { t: "الرقم الأسود يشير إلى الجرائم غير المكتشفة.", type: "tf", a: true },
+        { t: "الفساد يؤثر سلبًا على الاستثمار.", type: "tf", a: true },
+        { t: "الفساد يزيد تكلفة المشروعات.", type: "tf", a: true },
+        { t: "الفساد يقلل البطالة.", type: "tf", a: false },
+        { t: "الفساد يؤدي إلى زيادة الفقر.", type: "tf", a: true },
+        { t: "الفساد يضعف الخدمات العامة.", type: "tf", a: true },
+        { t: "الفساد يرفع الأسعار.", type: "tf", a: true },
+        { t: "الفساد يعزز العدالة الاجتماعية.", type: "tf", a: false },
+        { t: "الفساد يؤدي إلى تركز الثروة لدى قلة من الناس.", type: "tf", a: true },
+        { t: "الفساد يضعف الانتماء الوطني.", type: "tf", a: true },
+        { t: "الفساد يساهم في تدهور التعليم والصحة.", type: "tf", a: true },
+        { t: "الفساد يشجع هجرة الكفاءات.", type: "tf", a: true },
+        { t: "الفساد يزيد ثقة المواطنين بالحكومة.", type: "tf", a: false },
+        { t: "الفساد يضعف شرعية الدولة.", type: "tf", a: true },
+        { t: "الفساد قد يؤدي إلى اضطرابات سياسية.", type: "tf", a: true },
+        { t: "الفساد يسيء إلى سمعة الدولة.", type: "tf", a: true },
+        { t: "الفساد يساعد على توسيع المشاركة السياسية.", type: "tf", a: false },
+        { t: "وصول غير الأكفاء للمناصب من آثار الفساد.", type: "tf", a: true },
     ],
 
-    // === المستوى الخبير ===
     expert: [
-        { t: "أي من التالي يمثل انتهاكًا غير مباشر لحقوق الإنسان؟", type: "mcq", o: ["الاعتقال التعسفي", "التعذيب", "الفساد الإداري", "السجن"], a: 2 },
-        { t: "إذا وفرت الدولة تعليمًا لكن بجودة ضعيفة جدًا، فهذا:", type: "mcq", o: ["احترام كامل للحق", "انتهاك جزئي للحق في التعليم", "لا علاقة له بالحق", "حق مكتمل"], a: 1 },
-        { t: "منع شخص من السفر لأسباب قانونية يعد:", type: "mcq", o: ["انتهاكًا مطلقًا", "مسموحًا به إذا كان وفق القانون", "غير قانوني دائمًا", "جريمة"], a: 1 },
-        { t: "أي مما يلي يعبر بدقة عن ترابط الحقوق؟", type: "mcq", o: ["كل حق مستقل", "لا تأثير بين الحقوق", "انتهاك حق يؤثر على باقي الحقوق", "الحقوق غير مهمة"], a: 2 },
-        { t: "إعطاء وظيفة لشخص دون كفاءة بسبب الواسطة:", type: "mcq", o: ["عدل", "انتهاك لمبدأ المساواة", "حق طبيعي", "حرية شخصية"], a: 1 },
-        { t: "إذا تم احترام حرية التعبير لكن مع نشر كراهية:", type: "mcq", o: ["حق كامل", "استخدام خاطئ للحق", "لا مشكلة", "واجب"], a: 1 },
-        { t: "أي مما يلي يعبر عن انتهاك مركب؟", type: "mcq", o: ["حرمان من التعليم فقط", "منع العلاج فقط", "منع العمل والتعليم معًا", "حرية التعبير"], a: 2 },
-        { t: "الحق في الجنسية مهم لأنه:", type: "mcq", o: ["يعطي مال", "يحدد انتماء الفرد للدولة وحقوقه", "يحدد العمل", "يحدد التعليم"], a: 1 },
-        { t: "إذا أُجبر شخص على الزواج:", type: "mcq", o: ["ممارسة حق", "انتهاك لحرية الاختيار", "أمر طبيعي", "قانوني"], a: 1 },
-        { t: "حرمان فئة من العلاج بسبب الفقر يعد:", type: "mcq", o: ["عدل", "تمييز وانتهاك للحق في الصحة", "قانون", "تنظيم"], a: 1 },
-        { t: "أي مما يلي يمثل قيدًا مشروعًا على الحقوق؟", type: "mcq", o: ["منع الرأي", "منع السفر دون سبب", "تقييد الحرية لحماية الأمن العام وفق القانون", "التمييز"], a: 2 },
-        { t: "إذا تم توفير سكن بدون خدمات أساسية:", type: "mcq", o: ["تحقيق كامل للحق", "انتهاك للحق في مستوى معيشة مناسب", "لا علاقة", "حق مكتمل"], a: 1 },
-        { t: "الفرق بين الحقوق الفردية والجماعية:", type: "mcq", o: ["لا يوجد فرق", "الفردية للفرد والجماعية للشعب", "الجماعية أهم", "الفردية غير مهمة"], a: 1 },
-        { t: "أي مما يلي يعبر عن العدالة؟", type: "mcq", o: ["إعطاء كل الناس نفس الشيء", "إعطاء كل شخص ما يستحقه", "التمييز", "الظلم"], a: 1 },
-        { t: "منع التعليم عن الإناث:", type: "mcq", o: ["حرية", "انتهاك لمبدأ المساواة والحق في التعليم", "قانون", "تنظيم"], a: 1 },
-        { t: "تقييد حرية التعبير يكون مشروعًا عندما:", type: "mcq", o: ["يمنع الرأي", "يحمي المجتمع من الضرر", "يمنع الإعلام", "يمنع الكلام"], a: 1 },
-        { t: "إذا توفرت وظائف لكن برواتب غير عادلة:", type: "mcq", o: ["حق كامل", "انتهاك للحق في العمل اللائق", "لا مشكلة", "عدل"], a: 1 },
-        { t: "إذا تم التمييز بسبب الدين:", type: "mcq", o: ["حرية", "انتهاك لحقوق الإنسان", "قانون", "تنظيم"], a: 1 },
-        { t: "إذا وفرت الدولة خدمات لكنها غير متاحة للجميع:", type: "mcq", o: ["عدل", "انتهاك لمبدأ المساواة", "حق كامل", "قانون"], a: 1 },
-        { t: "حرمان شخص من محاكمة عادلة يؤدي إلى:", type: "mcq", o: ["تحقيق العدالة", "انتهاك خطير لحقوق الإنسان", "تنظيم", "قانون"], a: 1 },
-        // صح وغلط خبير
-        { t: "كل قيد على الحقوق يُعد انتهاكًا", type: "tf", a: false },
-        { t: "الحقوق يمكن تقييدها لحماية المجتمع", type: "tf", a: true },
-        { t: "المساواة تعني إعطاء الجميع نفس النتائج", type: "tf", a: false },
-        { t: "الفقر قد يؤدي لانتهاك حقوق الإنسان", type: "tf", a: true },
-        { t: "حرية التعبير مطلقة بدون قيود", type: "tf", a: false },
-        { t: "الدولة مسؤولة عن حماية الحقوق", type: "tf", a: true },
-        { t: "الكرامة الإنسانية أساس كل الحقوق", type: "tf", a: true },
-        { t: "المعاملة الإنسانية في السجون لم ترد ضمن حقوق الإنسان", type: "tf", a: false },
-        { t: "من الحقوق الفردية تجريم التعذيب والحق في الدفاع الشرعي وضمان الأمن الفردي في محاكمة عادلة", type: "tf", a: true },
-        { t: "آفة الفساد هي الأكثر فتكًا بالسلم والأمن الاجتماعي", type: "tf", a: true },
-        { t: "انتشر الرق وانتهاك حقوق الإنسان لدى الرومان والإغريق", type: "tf", a: true },
-        { t: "لا يشترط توافر الأمن والاستقرار للسماح للإنسان في الحياة وممارسة حقوقه", type: "tf", a: false },
-        { t: "عدم احترام الموظف العام مواعيد العمل لا يعد من الفساد الإداري", type: "tf", a: false },
-        { t: "غسيل الأموال تمثل جريمة لاحقة لنشاط جمع مال بطرق غير شرعية", type: "tf", a: true },
-        { t: "لا تعتبر حقوق الإنسان أساس الحرية والعدالة والسلام", type: "tf", a: false },
-        { t: "انتشار الجهل مع ثقافة متساهلة لا يعد من أسباب الفساد", type: "tf", a: false },
-        { t: "الأساس الأول لحقوق الإنسان هو الديانات السماوية ثم المواثيق والقوانين الدولية ثم الدساتير الوطنية", type: "tf", a: true },
-        { t: "أكد الإعلان العالمي لحقوق الإنسان على الحق في إنشاء النقابات والانضمام إليها", type: "tf", a: true },
-        { t: "لا يعتبر الفساد سوء سلوك ينعكس بالسلب على الآخرين", type: "tf", a: false },
-        { t: "الحق في الثقافة والحصول على المعلومات من حقوق الإنسان", type: "tf", a: true },
+        // === هيئة الرقابة الإدارية ===
+        { t: "تنص المادة الدستورية الخاصة بمكافحة الفساد على:", type: "mcq", o: ["210", "215", "218", "220"], a: 2 },
+        { t: "من الأجهزة الرقابية المختصة بمكافحة الفساد:", type: "mcq", o: ["وزارة التعليم", "هيئة الرقابة الإدارية", "وزارة الخارجية", "مجلس الدولة"], a: 1 },
+        { t: "مدة تعيين رئيس هيئة الرقابة الإدارية:", type: "mcq", o: ["سنتان", "ثلاث سنوات", "أربع سنوات", "خمس سنوات"], a: 2 },
+        { t: "يجوز تجديد مدة رئيس الهيئة:", type: "mcq", o: ["بلا حدود", "مرة واحدة فقط", "مرتين", "ثلاث مرات"], a: 1 },
+        { t: "يتم تعيين رئيس الهيئة بواسطة:", type: "mcq", o: ["مجلس الوزراء", "مجلس النواب", "رئيس الجمهورية", "وزير العدل"], a: 2 },
+        { t: "من أهداف الهيئة:", type: "mcq", o: ["زيادة الضرائب", "مكافحة الفساد الإداري", "إدارة الانتخابات", "إدارة الجامعات"], a: 1 },
+        { t: "من اختصاصات الهيئة:", type: "mcq", o: ["إصدار القوانين", "كشف المخالفات الإدارية والمالية", "تعيين الوزراء", "إدارة المحاكم"], a: 1 },
+        { t: "تهتم الهيئة بدراسة:", type: "mcq", o: ["أسعار السلع", "الشكاوى الصحفية المتعلقة بالفساد", "نتائج المباريات", "الأحوال الجوية"], a: 1 },
+        { t: "تختص الهيئة بفحص:", type: "mcq", o: ["شكاوى المواطنين", "شكاوى الشركات الأجنبية فقط", "الشكاوى الدولية فقط", "لا شيء مما سبق"], a: 0 },
+        { t: "قانون إنشاء هيئة الرقابة الإدارية رقم:", type: "mcq", o: ["54 لسنة 1964", "12 لسنة 1975", "81 لسنة 2016", "47 لسنة 1978"], a: 0 },
+        { t: "من الجرائم التي تضبطها الهيئة:", type: "mcq", o: ["الرشوة", "السرقة الأدبية", "المخالفات المرورية", "المشاجرات"], a: 0 },
+        { t: "من جرائم العدوان على المال العام:", type: "mcq", o: ["الاختلاس", "السب والقذف", "النصب الإلكتروني", "الهجرة غير الشرعية"], a: 0 },
+        { t: "من جرائم الاتجار بالوظيفة العامة:", type: "mcq", o: ["الرشوة", "القتل", "السرقة", "التهرب من الدراسة"], a: 0 },
+        { t: "من الجرائم المرتبطة بالمال العام:", type: "mcq", o: ["التربح", "التشرد", "التسول", "المخالفات المرورية"], a: 0 },
+        { t: "للهيئة حق:", type: "mcq", o: ["الاطلاع على البيانات والمعلومات", "إصدار الأحكام القضائية", "تعديل الدستور", "إصدار القوانين"], a: 0 },
+        { t: "للهيئة سلطة:", type: "mcq", o: ["الضبطية القضائية", "التشريع", "الرقابة البرلمانية", "إصدار الأحكام"], a: 0 },
+        { t: "من صلاحيات الهيئة:", type: "mcq", o: ["استدعاء الأشخاص لسماع أقوالهم", "حل البرلمان", "تعديل القوانين", "فرض الضرائب"], a: 0 },
+        { t: "يحق للهيئة التحفظ على:", type: "mcq", o: ["الملفات والمستندات", "العقارات الخاصة", "الصحف", "المدارس"], a: 0 },
+        { t: "يعاقب الموظف تأديبياً إذا:", type: "mcq", o: ["أخفى البيانات المطلوبة", "حضر للعمل مبكراً", "التزم بالقانون", "أدى عمله بإتقان"], a: 0 },
+        { t: "أضاف قانون 207 لسنة 2017 اختصاصات جديدة للهيئة تتعلق بـ:", type: "mcq", o: ["الاتجار بالبشر", "المرور", "التعليم", "الزراعة"], a: 0 },
+        // === النيابة الإدارية ===
+        { t: "النيابة الإدارية تعتبر:", type: "mcq", o: ["هيئة تنفيذية", "هيئة تشريعية", "هيئة قضائية مستقلة", "هيئة رقابية فقط"], a: 2 },
+        { t: "صدر قانون إعادة تنظيم النيابة الإدارية رقم:", type: "mcq", o: ["117 لسنة 1958", "47 لسنة 1978", "12 لسنة 1989", "115 لسنة 1983"], a: 0 },
+        { t: "الهدف الأساسي من إنشاء النيابة الإدارية هو:", type: "mcq", o: ["إدارة المحاكم", "حماية المال العام ومكافحة الفساد", "جمع الضرائب", "إصدار القوانين"], a: 1 },
+        { t: "نص دستور 2014 على استقلال النيابة الإدارية في المادة:", type: "mcq", o: ["101", "150", "197", "210"], a: 2 },
+        { t: "تتكون النيابة الإدارية من:", type: "mcq", o: ["رئيس فقط", "رئيس وعدد كاف من الأعضاء", "وزراء", "قضاة المحاكم فقط"], a: 1 },
+        { t: "تختص النيابة الإدارية بالتحقيق في:", type: "mcq", o: ["المخالفات المالية والإدارية", "الجرائم الحربية", "القضايا الدستورية", "الانتخابات"], a: 0 },
+        { t: "توسعت اختصاصات النيابة الإدارية بموجب القانون رقم:", type: "mcq", o: ["19 لسنة 1959", "117 لسنة 1958", "48 لسنة 1978", "1022 لسنة 2014"], a: 0 },
+        { t: "من سلطات النيابة الإدارية:", type: "mcq", o: ["استدعاء الشهود", "الاطلاع على المستندات", "وقف المتهم عن العمل", "جميع ما سبق"], a: 3 },
+        { t: "إذا علمت النيابة الإدارية بالمخالفة قبل جهة الإدارة فإن:", type: "mcq", o: ["تختص جهة الإدارة فقط", "تختص النيابة الإدارية بالتحقيق", "يحفظ التحقيق", "تحال للمحكمة مباشرة"], a: 1 },
+        { t: "من نتائج التحقيق التي تجريه النيابة الإدارية:", type: "mcq", o: ["حفظ التحقيق", "توقيع الجزاء", "الإحالة للمحاكمة التأديبية", "جميع ما سبق"], a: 3 },
+        { t: "الدعوى التأديبية تقام أمام:", type: "mcq", o: ["المحكمة الدستورية", "المحكمة الجنائية", "المحاكم التأديبية", "المحكمة الاقتصادية"], a: 2 },
+        { t: "النيابة الإدارية تشبه النيابة العامة بالنسبة إلى:", type: "mcq", o: ["الموظفين العموميين", "الوزراء فقط", "القضاة فقط", "القطاع الخاص فقط"], a: 0 },
+        { t: "من أهداف النيابة الإدارية:", type: "mcq", o: ["كشف أوجه القصور الإداري", "حماية المال العام", "مكافحة الفساد", "جميع ما سبق"], a: 3 },
+        { t: "تعتبر النيابة الإدارية من أهم جهات مكافحة:", type: "mcq", o: ["الإرهاب", "الفساد الإداري والمالي", "الهجرة", "البطالة"], a: 1 },
+        { t: "أنشئت اللجنة الوطنية التنسيقية لمكافحة الفساد عام:", type: "mcq", o: ["2005", "2008", "2010", "2014"], a: 2 },
+        { t: "يرأس اللجنة الوطنية التنسيقية لمكافحة الفساد:", type: "mcq", o: ["وزير العدل", "رئيس مجلس الوزراء", "رئيس النيابة الإدارية", "رئيس الجمهورية"], a: 1 },
+        { t: "من اختصاصات اللجنة الوطنية:", type: "mcq", o: ["متابعة تنفيذ الاتفاقيات الدولية", "مراجعة التشريعات", "مكافحة الفساد", "جميع ما سبق"], a: 3 },
+        { t: "اللجنة الفرعية التنسيقية أنشئت عام:", type: "mcq", o: ["2010", "2011", "2014", "2018"], a: 2 },
+        { t: "يرأس اللجنة الفرعية التنسيقية:", type: "mcq", o: ["رئيس هيئة الرقابة الإدارية", "وزير العدل", "رئيس مجلس الوزراء", "رئيس النيابة العامة"], a: 0 },
+        { t: "من مهام اللجنة الفرعية:", type: "mcq", o: ["إعداد الاستراتيجية الوطنية لمكافحة الفساد", "تبادل المعلومات بين الأجهزة الرقابية", "تلقي البلاغات", "جميع ما سبق"], a: 3 },
+        // === صح وخطأ ===
+        { t: "تلتزم الدولة بمكافحة الفساد وفقاً للدستور.", type: "tf", a: true },
+        { t: "هيئة الرقابة الإدارية من الأجهزة الرقابية المختصة بمكافحة الفساد.", type: "tf", a: true },
+        { t: "مدة رئيس الهيئة ست سنوات.", type: "tf", a: false },
+        { t: "يجوز تجديد مدة رئيس الهيئة مرة واحدة فقط.", type: "tf", a: true },
+        { t: "يعيّن رئيس الهيئة بواسطة مجلس الوزراء مباشرة.", type: "tf", a: false },
+        { t: "من اختصاصات الهيئة كشف المخالفات الإدارية والمالية.", type: "tf", a: true },
+        { t: "لا تهتم الهيئة بشكاوى المواطنين.", type: "tf", a: false },
+        { t: "تدرس الهيئة ما تنشره الصحافة عن الفساد وسوء الإدارة.", type: "tf", a: true },
+        { t: "للهيئة حق الاطلاع على المعلومات والبيانات.", type: "tf", a: true },
+        { t: "لا يجوز للهيئة الحصول على صور من المستندات.", type: "tf", a: false },
+        { t: "للهيئة سلطة استدعاء الأشخاص لسماع أقوالهم.", type: "tf", a: true },
+        { t: "لا تملك الهيئة الضبطية القضائية.", type: "tf", a: false },
+        { t: "الاختلاس من جرائم العدوان على المال العام.", type: "tf", a: true },
+        { t: "الرشوة من جرائم الاتجار بالوظيفة العامة.", type: "tf", a: true },
+        { t: "استغلال النفوذ من جرائم الاتجار بالوظيفة العامة.", type: "tf", a: true },
+        { t: "التزوير في المحررات الرسمية من الجرائم التي تضبطها الهيئة.", type: "tf", a: true },
+        { t: "الكسب غير المشروع خارج اختصاص الهيئة.", type: "tf", a: false },
+        { t: "غسل الأموال من الجرائم التي يتم ضبطها بالتنسيق مع جهات أخرى.", type: "tf", a: true },
+        { t: "التهرب الضريبي من الجرائم التي يتم ضبطها بالتنسيق مع جهات أخرى.", type: "tf", a: true },
+        { t: "الغش التجاري من الجرائم التي يتم ضبطها بالتنسيق مع جهات أخرى.", type: "tf", a: true },
+        { t: "يعاقب الموظف إذا امتنع عن تقديم البيانات المطلوبة للهيئة.", type: "tf", a: true },
+        { t: "تشارك الهيئة في تنفيذ الاستراتيجية الوطنية لمكافحة الفساد.", type: "tf", a: true },
+        { t: "من مهام الهيئة نشر قيم النزاهة والشفافية.", type: "tf", a: true },
+        { t: "أضاف قانون 207 لسنة 2017 جرائم الاتجار بالبشر لاختصاص الهيئة.", type: "tf", a: true },
+        { t: "يجوز للهيئة إجراء التحريات والمراقبة السرية عند الضرورة.", type: "tf", a: true },
+        { t: "النيابة الإدارية هيئة قضائية مستقلة.", type: "tf", a: true },
+        { t: "أنشئت النيابة الإدارية بموجب القانون رقم 117 لسنة 1958.", type: "tf", a: true },
+        { t: "تتبع النيابة الإدارية السلطة التنفيذية في أداء أعمالها.", type: "tf", a: false },
+        { t: "نص دستور 2014 على استقلال النيابة الإدارية.", type: "tf", a: true },
+        { t: "تختص النيابة الإدارية بالمخالفات المالية والإدارية.", type: "tf", a: true },
+        { t: "لا يجوز للنيابة الإدارية استدعاء الشهود.", type: "tf", a: false },
+        { t: "للنيابة الإدارية حق الاطلاع على المستندات.", type: "tf", a: true },
+        { t: "يمكن للنيابة الإدارية وقف المتهم عن العمل أثناء التحقيق.", type: "tf", a: true },
+        { t: "حفظ التحقيق أحد صور التصرف فيه.", type: "tf", a: true },
+        { t: "لا يجوز إحالة المتهم إلى المحاكمة التأديبية.", type: "tf", a: false },
+        { t: "تختص النيابة الإدارية بإقامة الدعوى التأديبية.", type: "tf", a: true },
+        { t: "تقتصر مهمة النيابة الإدارية على التحقيق فقط.", type: "tf", a: false },
+        { t: "تسهم النيابة الإدارية في كشف أوجه القصور الإداري.", type: "tf", a: true },
+        { t: "تهدف النيابة الإدارية إلى حماية المال العام.", type: "tf", a: true },
+        { t: "اللجنة الوطنية التنسيقية لمكافحة الفساد يرأسها رئيس مجلس الوزراء.", type: "tf", a: true },
+        { t: "أنشئت اللجنة الوطنية عام 2010.", type: "tf", a: true },
+        { t: "اللجنة الفرعية التنسيقية أنشئت عام 2014.", type: "tf", a: true },
+        { t: "يرأس اللجنة الفرعية وزير العدل.", type: "tf", a: false },
+        { t: "من مهام اللجنة الفرعية تلقي البلاغات المتعلقة بالفساد.", type: "tf", a: true },
+        { t: "تعمل اللجان المختصة على نشر ثقافة النزاهة والشفافية.", type: "tf", a: true },
     ]
 };
 
 // ========== بيانات المستويات ==========
 const levels = [
-    { key: "easy", name: "المستوى الأساسي", desc: "مبادئ عامة ونظريات أساسية", icon: "fa-book-open", color: "#10b981" },
-    { key: "medium", name: "المستوى المتوسط", desc: "الحقوق الفردية والمصادر التفصيلية", icon: "fa-graduation-cap", color: "#0ea5e9" },
-    { key: "hard", name: "المستوى الصعب", desc: "أسئلة تحليلية ومصطلحات دقيقة", icon: "fa-fire", color: "#f59e0b" },
-    { key: "expert", name: "المستوى الخبير", desc: "حالات معقدة وأسئلة محيرة", icon: "fa-skull-crossbones", color: "#ef4444" },
-    { key: "all", name: "اختبار شامل", desc: "أسئلة عشوائية من جميع المستويات", icon: "fa-trophy", color: "#a855f7" },
+    { key: "easy", name: "المستوى الأساسي", desc: "مبادئ وتعريفات وتاريخ حقوق الإنسان", icon: "fa-rocket", color: "#10b981" },
+    { key: "medium", name: "المستوى المتوسط", desc: "تصنيفات الحقوق والفساد", icon: "fa-satellite", color: "#00d2ff" },
+    { key: "hard", name: "المستوى الصعب", desc: "أنواع الفساد وأسبابه وآثاره", icon: "fa-meteor", color: "#ffd700" },
+    { key: "expert", name: "المستوى الخبير", desc: "أجهزة مكافحة الفساد والقوانين", icon: "fa-user-astronaut", color: "#ff3366" },
+    { key: "all", name: "اختبار شامل", desc: "مزيج من جميع المستويات", icon: "fa-star", color: "#9d00ff" },
 ];
 
 // ========== حالة التطبيق ==========
@@ -1021,16 +1637,13 @@ let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
 let userAnswers = [];
-let answered = false;
 
 // ========== تهيئة ==========
 function init() {
-    // حساب إجمالي الأسئلة
     let total = 0;
     for (let key in questions) total += questions[key].length;
     document.getElementById("totalQ").textContent = total;
 
-    // بناء بطاقات المستويات
     const grid = document.getElementById("levelsGrid");
     grid.innerHTML = "";
     levels.forEach(lv => {
@@ -1060,10 +1673,8 @@ function startQuiz(levelKey) {
     currentIndex = 0;
     score = 0;
     userAnswers = [];
-    answered = false;
 
     if (levelKey === "all") {
-        // أخذ 40 سؤال عشوائي من كل المستويات
         let allQ = [];
         for (let key in questions) allQ = allQ.concat(questions[key]);
         shuffleArray(allQ);
@@ -1077,75 +1688,138 @@ function startQuiz(levelKey) {
     document.getElementById("quizLevelName").textContent = lv.name;
     document.getElementById("totalQs").textContent = currentQuestions.length;
     updateScoreDisplay();
+    buildNavDots();
     showScreen("quizScreen");
     renderQuestion();
 }
 
+// ========== بناء نقاط التنقل ==========
+function buildNavDots() {
+    const nav = document.getElementById("questionNav");
+    nav.innerHTML = "";
+    for (let i = 0; i < currentQuestions.length; i++) {
+        const dot = document.createElement("div");
+        dot.className = "nav-dot";
+        dot.textContent = i + 1;
+        dot.addEventListener("click", () => goToQuestion(i));
+        nav.appendChild(dot);
+    }
+    updateNavDots();
+}
+
+// ========== تحديث نقاط التنقل ==========
+function updateNavDots() {
+    const dots = document.querySelectorAll(".nav-dot");
+    dots.forEach((dot, i) => {
+        dot.classList.remove("current", "answered", "correct", "wrong");
+        if (i === currentIndex) dot.classList.add("current");
+        if (userAnswers[i] !== undefined) {
+            if (userAnswers[i].correct) dot.classList.add("correct");
+            else dot.classList.add("wrong");
+        }
+    });
+}
+
+// ========== الانتقال لسؤال معين ==========
+function goToQuestion(index) {
+    if (index >= 0 && index < currentQuestions.length) {
+        currentIndex = index;
+        renderQuestion();
+        updateNavDots();
+        updateControlButtons();
+    }
+}
+
 // ========== عرض السؤال ==========
 function renderQuestion() {
-    answered = false;
     const q = currentQuestions[currentIndex];
     const area = document.getElementById("questionArea");
 
     document.getElementById("currentQ").textContent = currentIndex + 1;
-    document.getElementById("progressFill").style.width = ((currentIndex) / currentQuestions.length * 100) + "%";
-    document.getElementById("nextBtnWrap").classList.remove("show");
+    document.getElementById("progressFill").style.width = ((currentIndex + 1) / currentQuestions.length * 100) + "%";
 
     let html = `<div class="question-card">`;
-    html += `<span class="question-type-badge ${q.type === 'mcq' ? 'badge-mcq' : 'badge-tf'}">${q.type === 'mcq' ? 'اختيار من متعدد' : 'صح أو غلط'}</span>`;
+    html += `<span class="question-type-badge ${q.type === 'mcq' ? 'badge-mcq' : 'badge-tf'}">`;
+    html += `<i class="fa-solid ${q.type === 'mcq' ? 'fa-list' : 'fa-toggle-on'}"></i>`;
+    html += q.type === 'mcq' ? 'اختيار من متعدد' : 'صح أو خطأ';
+    html += `</span>`;
     html += `<div class="question-text">${q.t}</div>`;
+
+    const isAnswered = userAnswers[currentIndex] !== undefined;
+    const userAnswer = isAnswered ? userAnswers[currentIndex] : null;
 
     if (q.type === "mcq") {
         const letters = ["أ", "ب", "ج", "د"];
         html += `<div class="options-list">`;
         q.o.forEach((opt, i) => {
-            html += `<button class="option-btn" data-index="${i}" onclick="selectAnswer(${i})" aria-label="الخيار ${letters[i]}">
+            let classes = "option-btn";
+            if (isAnswered) {
+                classes += " disabled";
+                if (i === q.a) classes += " correct";
+                else if (i === userAnswer.userAnswer && !userAnswer.correct) classes += " wrong";
+            }
+            html += `<button class="${classes}" data-index="${i}" ${isAnswered ? '' : `onclick="selectAnswer(${i})"`} aria-label="الخيار ${letters[i]}">
                 <span class="opt-letter">${letters[i]}</span>
                 <span>${opt}</span>
             </button>`;
         });
         html += `</div>`;
     } else {
-        html += `<div class="tf-options">
-            <button class="tf-btn tf-true" onclick="selectAnswer(true)" aria-label="صح">
-                <i class="fa-solid fa-check"></i> صح
-            </button>
-            <button class="tf-btn tf-false" onclick="selectAnswer(false)" aria-label="خطأ">
-                <i class="fa-solid fa-xmark"></i> خطأ
-            </button>
-        </div>`;
+        html += `<div class="tf-options">`;
+        const opts = [
+            { val: true, label: "صح", icon: "fa-check", class: "tf-true" },
+            { val: false, label: "خطأ", icon: "fa-xmark", class: "tf-false" }
+        ];
+        opts.forEach(opt => {
+            let classes = `tf-btn ${opt.class}`;
+            if (isAnswered) {
+                classes += " disabled";
+                if (opt.val === q.a) classes += " correct";
+                else if (opt.val === userAnswer.userAnswer && !userAnswer.correct) classes += " wrong";
+            }
+            html += `<button class="${classes}" ${isAnswered ? '' : `onclick="selectAnswer(${opt.val})"`}>
+                <i class="fa-solid ${opt.icon}"></i>
+                ${opt.label}
+            </button>`;
+        });
+        html += `</div>`;
     }
 
     html += `</div>`;
     area.innerHTML = html;
+    updateControlButtons();
+    updateNavDots();
+}
+
+// ========== تحديث أزرار التحكم ==========
+function updateControlButtons() {
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const nextBtnText = document.getElementById("nextBtn").innerHTML;
+
+    prevBtn.disabled = currentIndex === 0;
+
+    if (currentIndex === currentQuestions.length - 1) {
+        nextBtn.innerHTML = `<i class="fa-solid fa-flag-checkered"></i> إنهاء الاختبار`;
+    } else {
+        nextBtn.innerHTML = `التالي <i class="fa-solid fa-arrow-left"></i>`;
+    }
 }
 
 // ========== اختيار إجابة ==========
 function selectAnswer(val) {
-    if (answered) return;
-    answered = true;
+    if (userAnswers[currentIndex] !== undefined) return;
 
     const q = currentQuestions[currentIndex];
     let isCorrect = false;
 
     if (q.type === "mcq") {
         isCorrect = val === q.a;
-        const btns = document.querySelectorAll(".option-btn");
-        btns.forEach((btn, i) => {
-            btn.classList.add("disabled");
-            if (i === q.a) btn.classList.add("correct");
-            if (i === val && !isCorrect) btn.classList.add("wrong");
-        });
     } else {
         isCorrect = val === q.a;
-        const btns = document.querySelectorAll(".tf-btn");
-        btns.forEach(btn => {
-            btn.classList.add("disabled");
-            const isTrueBtn = btn.classList.contains("tf-true");
-            if (isTrueBtn === q.a) btn.classList.add("correct");
-            if ((isTrueBtn === val) && !isCorrect) btn.classList.add("wrong");
-        });
     }
+
+    userAnswers[currentIndex] = { question: q, userAnswer: val, correct: isCorrect };
 
     if (isCorrect) {
         score++;
@@ -1154,32 +1828,29 @@ function selectAnswer(val) {
         showToast("إجابة خاطئة", false);
     }
 
-    userAnswers.push({ question: q, userAnswer: val, correct: isCorrect });
     updateScoreDisplay();
-
-    // عرض زر التالي
-    setTimeout(() => {
-        const wrap = document.getElementById("nextBtnWrap");
-        const btnText = document.getElementById("nextBtnText");
-        btnText.textContent = currentIndex === currentQuestions.length - 1 ? "عرض النتائج" : "السؤال التالي";
-        wrap.classList.add("show");
-    }, 600);
+    renderQuestion();
 }
 
-// ========== السؤال التالي ==========
-function nextQuestion() {
-    currentIndex++;
-    if (currentIndex >= currentQuestions.length) {
-        showResults();
-    } else {
+// ========== التنقل بين الأسئلة ==========
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
         renderQuestion();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+    } else {
+        showResults();
     }
 }
 
 // ========== عرض النتائج ==========
 function showResults() {
-    document.getElementById("progressFill").style.width = "100%";
     showScreen("resultsScreen");
 
     const total = currentQuestions.length;
@@ -1190,25 +1861,20 @@ function showResults() {
     document.getElementById("rTotal").textContent = total;
     document.getElementById("resultPct").textContent = pct + "%";
 
-    // حلقة النتيجة
     const ring = document.getElementById("resultRing");
-    const circumference = 2 * Math.PI * 70; // ~440
+    const circumference = 2 * Math.PI * 90;
     const offset = circumference - (pct / 100) * circumference;
-    ring.classList.remove("low", "mid");
-    if (pct < 50) ring.classList.add("low");
-    else if (pct < 75) ring.classList.add("mid");
 
     setTimeout(() => {
         ring.style.strokeDashoffset = offset;
     }, 100);
 
-    // التقييم
     let grade = "", message = "";
-    if (pct >= 90) { grade = "ممتاز"; message = "أداء رائع! أنت متمكن من المادة بجدارة"; }
-    else if (pct >= 75) { grade = "جيد جدًا"; message = "مستوى جيد جدًا، مع مزيد من المراجعة ستصل للأفضل"; }
-    else if (pct >= 60) { grade = "جيد"; message = "أداء مقبول، تحتاج لمراجعة بعض النقاط"; }
-    else if (pct >= 40) { grade = "مقبول"; message = "تحتاج لمراجعة جادة للمادة"; }
-    else { grade = "ضعيف"; message = "لا تقلق، عد للمادة وراجع جيدًا ثم حاول مرة أخرى"; }
+    if (pct >= 90) { grade = "متميز"; message = "أداء استثنائي! أنت خبير في حقوق الإنسان"; }
+    else if (pct >= 75) { grade = "ممتاز"; message = "أداء رائع! معرفة قوية بالمادة"; }
+    else if (pct >= 60) { grade = "جيد جدًا"; message = "أداء جيد، استمر في المراجعة"; }
+    else if (pct >= 40) { grade = "جيد"; message = "تحتاج لمزيد من الدراسة"; }
+    else { grade = "يحتاج تحسين"; message = "راجع المادة جيدًا وحاول مرة أخرى"; }
 
     document.getElementById("resultGrade").textContent = grade;
     document.getElementById("resultMessage").textContent = message;
@@ -1221,6 +1887,7 @@ function showReview() {
     list.innerHTML = "";
 
     userAnswers.forEach((ua, i) => {
+        if (!ua) return;
         const q = ua.question;
         const item = document.createElement("div");
         item.className = `review-item ${ua.correct ? "review-correct" : "review-wrong"}`;
@@ -1243,7 +1910,7 @@ function showReview() {
                 <div class="review-q-text">${q.t}</div>
             </div>
             <div class="review-answers">
-                ${ua.correct ? '' : `<div class="review-your-ans"><i class="fa-solid fa-xmark"></i> إجابتك: <span>${yourAnsText}</span></div>`}
+                ${ua.correct ? '' : `<div class="review-your-ans"><i class="fa-solid fa-times"></i> إجابتك: <span>${yourAnsText}</span></div>`}
                 <div class="review-correct-ans"><i class="fa-solid fa-check"></i> الإجابة الصحيحة: <span>${correctAnsText}</span></div>
             </div>
         `;
@@ -1253,14 +1920,13 @@ function showReview() {
 
 // ========== إعادة الاختبار ==========
 function retryQuiz() {
-    // إعادة تعيين حلقة النتيجة
-    document.getElementById("resultRing").style.strokeDashoffset = 440;
+    document.getElementById("resultRing").style.strokeDashoffset = 628;
     startQuiz(currentLevel);
 }
 
 // ========== العودة للقائمة ==========
 function goHome() {
-    document.getElementById("resultRing").style.strokeDashoffset = 440;
+    document.getElementById("resultRing").style.strokeDashoffset = 628;
     showScreen("homeScreen");
 }
 
@@ -1272,14 +1938,14 @@ function showScreen(id) {
 }
 
 function updateScoreDisplay() {
-    document.getElementById("quizScoreLive").innerHTML = `<i class="fa-solid fa-star"></i> ${score}`;
+    document.getElementById("quizScoreLive").textContent = score;
 }
 
 function showToast(msg, isCorrect) {
     const toast = document.getElementById("toast");
-    toast.textContent = msg;
+    toast.innerHTML = `<i class="fa-solid ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${msg}`;
     toast.className = `toast ${isCorrect ? 'correct-toast' : 'wrong-toast'} show`;
-    setTimeout(() => toast.classList.remove("show"), 1500);
+    setTimeout(() => toast.classList.remove("show"), 2000);
 }
 
 function shuffleArray(arr) {
@@ -1295,11 +1961,10 @@ document.addEventListener("keydown", (e) => {
     if (!document.getElementById("quizScreen").classList.contains("active")) return;
 
     const q = currentQuestions[currentIndex];
-    if (answered) {
-        if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            nextQuestion();
-        }
+    if (userAnswers[currentIndex] !== undefined) {
+        if (e.key === "ArrowRight" && currentIndex > 0) prevQuestion();
+        else if (e.key === "ArrowLeft" && currentIndex < currentQuestions.length - 1) nextQuestion();
+        else if (e.key === "Enter") nextQuestion();
         return;
     }
 
