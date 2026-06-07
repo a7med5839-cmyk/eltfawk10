@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>AI Faculty - JARVIS Edition</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -29,7 +29,8 @@ display:flex;
 justify-content:center;
 align-items:center;
 background:radial-gradient(circle at top,#07233b,#020b16 70%);
-overflow:hidden;
+overflow-x:hidden;
+padding:20px;
 }
 
 #particles-js{
@@ -41,7 +42,7 @@ z-index:0;
 .card{
 position:relative;
 z-index:1;
-width:580px;
+width:min(90%,580px);
 padding:70px 50px;
 border-radius:35px;
 background:rgba(5,15,25,.85);
@@ -127,12 +128,6 @@ letter-spacing:3px;
 margin:10px 0 20px;
 }
 
-.description{
-opacity:.85;
-line-height:1.8;
-margin-bottom:20px;
-}
-
 .metrics{
 display:flex;
 gap:10px;
@@ -208,6 +203,104 @@ transition:.3s;
 transform:translateY(-4px);
 box-shadow:0 0 30px var(--cyan);
 }
+
+/* Tablet */
+@media (max-width:768px){
+.card{
+padding:50px 30px;
+}
+
+h1{
+font-size:2.5rem;
+}
+
+.robot{
+width:120px;
+height:120px;
+}
+
+.robot:before{
+width:150px;
+height:150px;
+}
+
+.robot:after{
+width:180px;
+height:180px;
+}
+
+.clock{
+font-size:1.6rem;
+}
+
+.metrics{
+flex-wrap:wrap;
+}
+
+.metric{
+min-width:120px;
+}
+}
+
+/* Mobile */
+@media (max-width:480px){
+body{
+padding:15px;
+}
+
+.card{
+width:100%;
+padding:35px 20px;
+border-radius:25px;
+}
+
+h1{
+font-size:2rem;
+}
+
+.subtitle{
+font-size:.8rem;
+letter-spacing:1px;
+}
+
+.metrics{
+flex-direction:column;
+}
+
+.metric{
+width:100%;
+}
+
+.robot{
+width:90px;
+height:90px;
+}
+
+.robot:before{
+width:120px;
+height:120px;
+}
+
+.robot:after{
+width:145px;
+height:145px;
+}
+
+.clock{
+font-size:1.2rem;
+letter-spacing:2px;
+}
+
+.date{
+font-size:.85rem;
+}
+
+.btn{
+width:100%;
+padding:14px;
+font-size:1rem;
+}
+}
 </style>
 </head>
 <body>
@@ -225,7 +318,6 @@ box-shadow:0 0 30px var(--cyan);
 <h1>ذكاء اصطناعي</h1>
 
 <div class="subtitle">FACULTY OF ARTIFICIAL INTELLIGENCE</div>
-
 
 <div class="metrics">
 <div class="metric"><b>AI</b>CORE</div>
