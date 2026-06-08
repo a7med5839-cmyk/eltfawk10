@@ -3,310 +3,786 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار التفوق المطور 2026</title> 
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>AI Systems Diagnostic Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-cyan: #00f2fe;
-            --dark-cyan: #083344;
-            --bg-deep: #020617;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(34, 211, 238, 0.2);
-            --success: #10b981;
-            --error: #ef4444;
+            --bg-deep: #01050e;
+            --bg-panel: rgba(8, 18, 35, 0.75);
+            --primary-neon: #00f3ff;
+            --secondary-neon: #4d79ff;
+            --accent-glow: rgba(0, 243, 255, 0.6);
+            --text-bright: #e0f7fa;
+            --text-dim: #81d4fa;
+            --success: #00ff9d;
+            --error: #ff3366;
+            --border-tech: rgba(0, 243, 255, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background: radial-gradient(circle at top, #0f172a, var(--bg-deep));
-            color: white;
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-bright);
             min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
             align-items: center;
         }
 
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-deep); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 20px; color: var(--primary-cyan);
+        /* --- Dynamic Background (Canvas Layer) --- */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #0a192f 0%, #000000 100%);
         }
 
-        header {
-            width: 100%; padding: 15px 5%;
-            background: rgba(8, 51, 68, 0.4);
-            backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border);
-            box-sizing: border-box;
-        }
-
-        .container { width: 90%; max-width: 750px; margin-top: 30px; margin-bottom: 50px; flex-grow: 1; }
-        
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            padding: 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-        #progress-fill { width: 0%; height: 100%; background: var(--primary-cyan); transition: 0.4s; box-shadow: 0 0 10px var(--primary-cyan); }
-
-        .q-text { font-size: 22px; margin-bottom: 25px; line-height: 1.6; text-align: center; min-height: 70px; }
-        
-        .options-grid { display: grid; gap: 12px; }
-        
-        .option-btn {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            padding: 15px 20px;
+        /* --- Main UI Container --- */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-tech);
             border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: right;
-            font-family: 'Tajawal';
-            font-size: 16px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 0 40px rgba(0, 243, 255, 0.08),
+                0 0 80px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
+            margin: 20px;
         }
 
-        .option-btn:hover:not(:disabled) { background: rgba(0, 242, 254, 0.1); border-color: var(--primary-cyan); }
-        .option-btn.selected { border-color: var(--primary-cyan); background: rgba(0, 242, 254, 0.2); }
+        /* Decorative Holographic Corners */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 40%, rgba(0, 243, 255, 0.03) 50%, transparent 60%);
+            pointer-events: none;
+            background-size: 200% 200%;
+            animation: hologramShine 8s linear infinite;
+        }
+
+        @keyframes hologramShine {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        /* --- Header --- */
+        .header {
+            padding: 25px 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            letter-spacing: 2px;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, var(--primary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .sub-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--secondary-neon);
+            letter-spacing: 4px;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .progress-bar {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-neon), var(--primary-neon));
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px var(--primary-neon);
+        }
+
+        /* --- Quiz Area --- */
+        .quiz-area {
+            padding: 40px;
+            min-height: 400px;
+        }
+
+        .question-counter {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85em;
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.9;
+        }
         
-        /* ألوان التصحيح */
-        .option-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
-        .option-btn.wrong { background: var(--error) !important; color: white; border-color: var(--error); animation: shake 0.4s; }
+        .question-counter span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-neon);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 35px;
+            line-height: 1.7;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* --- Option Buttons --- */
+        .option-btn {
+            padding: 18px 25px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: right;
+            font-size: 1.1em;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Hover Glow Effect */
+        .option-btn:hover:not(.disabled) {
+            background: rgba(0, 243, 255, 0.05);
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            transform: translateX(-5px);
+        }
+
+        /* Selection State */
+        .option-btn.selected {
+            border-color: var(--primary-neon);
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        /* Correct State */
+        .option-btn.correct {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.15);
+        }
+
+        /* Wrong State */
+        .option-btn.wrong {
+            background: rgba(255, 51, 102, 0.1);
+            border-color: var(--error);
+            color: var(--error);
+            box-shadow: 0 0 25px rgba(255, 51, 102, 0.15);
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+            40%, 60% { transform: translate3d(3px, 0, 0); }
         }
 
-        .nav-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.5;
+        }
+
+        /* --- Navigation --- */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn {
+            padding: 12px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-next {
+            background: var(--primary-neon);
+            border-color: var(--primary-neon);
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
         
-        .btn-confirm, .btn-nav {
-            padding: 15px; border-radius: 12px; border: none;
-            font-weight: bold; cursor: pointer; font-size: 16px;
-            transition: 0.3s; font-family: 'Tajawal';
+        .btn-next:hover {
+            background: #fff;
+            box-shadow: 0 0 30px var(--primary-neon);
         }
 
-        .btn-confirm {
-            flex: 2;
-            background: linear-gradient(90deg, var(--primary-cyan), #4facfe);
-            color: var(--dark-cyan);
+        .nav-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            border-color: #333;
         }
 
-        .btn-nav {
-            flex: 1;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid var(--border);
+        /* --- Result Screen --- */
+        .result-screen {
+            padding: 60px 40px;
+            text-align: center;
         }
 
-        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 3px solid rgba(0, 243, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            color: var(--primary-neon);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.1);
+            position: relative;
+        }
+        
+        /* Scanner Effect */
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-neon);
+            box-shadow: 0 0 15px var(--primary-neon);
+            animation: scan 2s linear infinite;
+            opacity: 0.5;
+        }
 
-        .score-box { font-size: 60px; color: var(--primary-cyan); margin: 20px 0; font-weight: bold; text-align: center; }
-        .locked-badge { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 5px 15px; border-radius: 50px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
-        footer { padding: 20px; color: #64748b; font-size: 13px; text-align: center; }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .review-list {
+            text-align: right;
+            margin-top: 40px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-left: 10px;
+        }
+
+        .review-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .review-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .review-list::-webkit-scrollbar-thumb {
+            background: var(--primary-neon);
+            border-radius: 2px;
+        }
+
+        .review-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border-right: 3px solid #555;
+            font-size: 0.95em;
+            backdrop-filter: blur(5px);
+        }
+
+        .review-item.correct { border-color: var(--success); }
+        .review-item.wrong { border-color: var(--error); }
+
+        .hidden { display: none; }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .quiz-area { padding: 20px; }
+            .navigation { padding: 15px 20px; }
+            h2 { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
 
-<div id="loader">جارٍ التأكد من هويتك الرقمية... 🔐</div>
-
-<header>
-    <div style="font-weight: bold; color: var(--primary-cyan); font-size: 1.2rem;">🚀اختبار التصميم المنطقي</div>
-    <div id="user-display" style="font-size: 13px; opacity: 0.8;"></div>
-</header>
+    <!-- Background Canvas for Neural Network/Particles -->
+    <canvas id="bgCanvas"></canvas>
 
 <div class="container">
-    <div id="quiz-screen" class="glass-card" style="display:none;">
-        <div class="progress-container"><div id="progress-fill"></div></div>
-        <div id="q-number" style="color: var(--primary-cyan); font-size: 14px; margin-bottom: 10px;">سؤال 1 من 15</div>
-        <div class="q-text" id="question-text">تحميل السؤال...</div>
-        <div class="options-grid" id="options-container"></div>
-        
-        <div class="nav-buttons">
-            <button class="btn-nav" id="prev-btn" disabled>السابق</button>
-            <button class="btn-confirm" id="next-btn">تأكيد الإجابة</button>
-        </div>
+    <div class="header">
+        <h2>Digital Logic Systems</h2>
+        <div class="sub-header">INTELLIGENCE ASSESSMENT PROTOCOL</div>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
     </div>
 
-    <div id="result-screen" class="glass-card" style="display:none; text-align: center;">
-        <span class="locked-badge">🛡️ اتمني لكم النجاح</span>
-        <h2>النتيجة النهائية</h2>
-        <div class="score-box" id="final-score">0%</div>
-        <p id="result-text" style="color: #94a3b8; margin-bottom: 25px;"></p>
-        <button class="btn-confirm" onclick="location.href='dashboard.html'">العودة للوحة التحكم</button>
+    <!-- Quiz Screen -->
+    <div class="quiz-area" id="quizScreen">
+        <div class="question-counter" id="qCounter"><span></span></div>
+        <div class="question-text" id="qText"></div>
+        <div class="options-container" id="optionsContainer"></div>
+    </div>
+
+    <div class="navigation" id="navArea">
+        <button class="nav-btn" id="prevBtn" onclick="changeQuestion(-1)">Back</button>
+        <button class="nav-btn btn-next" id="nextBtn" onclick="changeQuestion(1)">Next</button>
+    </div>
+
+    <!-- Result Screen -->
+    <div class="result-screen hidden" id="resultScreen">
+        <h2 style="font-family: 'Orbitron'; color: #fff; font-size: 1.2rem; letter-spacing: 2px;">ANALYSIS COMPLETE</h2>
+        <div class="score-circle" id="scoreCircle">0%</div>
+        <p id="scoreText" style="color: var(--text-dim); font-size: 1.1em; margin-bottom: 30px;"></p>
+        <button class="nav-btn btn-next" onclick="restartQuiz()">Reinitialize</button>
+        
+        <div class="review-list" id="reviewList"></div>
     </div>
 </div>
 
-<footer>
-    تم التطوير وبرمجة النظام بواسطة <b> Ahmed El_Samahy</b> | 2026 ©
-</footer>
+<script>
+    // --- Background Animation Logic (Particles & Neural Net) ---
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = Math.random() * 0.5 - 0.25;
+            this.speedY = Math.random() * 0.5 - 0.25;
+            this.color = `rgba(0, 243, 255, ${Math.random() * 0.5 + 0.2})`;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDTWkD6ff9rYYc4T7yXaSP1hHLiGSNwSzk",
-        authDomain: "blog-62e33.firebaseapp.com",
-        projectId: "blog-62e33",
-        storageBucket: "blog-62e33.firebasestorage.app",
-        messagingSenderId: "804628373288",
-        appId: "1:804628373288:web:b29db5c1600b5792393a1d"
-    };
+    function initParticles() {
+        particles = [];
+        const numParticles = Math.floor((canvas.width * canvas.height) / 9000);
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new Particle());
+        }
+    }
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    function connectParticles() {
+        const maxDistance = 120;
+        for (let a = 0; a < particles.length; a++) {
+            for (let b = a; b < particles.length; b++) {
+                const dx = particles[a].x - particles[b].x;
+                const dy = particles[a].y - particles[b].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < maxDistance) {
+                    const opacity = 1 - (distance / maxDistance);
+                    ctx.strokeStyle = `rgba(0, 243, 255, ${opacity * 0.15})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[a].x, particles[a].y);
+                    ctx.lineTo(particles[b].x, particles[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
 
+    function animateBg() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw connecting lines first (background)
+        connectParticles();
+        
+        // Draw particles
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        requestAnimationFrame(animateBg);
+    }
+    initParticles();
+    animateBg();
+
+    // --- Quiz Logic ---
     const questions = [
-        { q: "ما هي لغة البرمجة التي تُستخدم لتصميم هيكل صفحات الويب؟", opts: ["HTML", "Python", "CSS", "SQL"], ans: 0 },
-        { q: "أي من اللغات التالية تُستخدم لإضافة تنسيقات جمالية للموقع؟", opts: ["PHP", "CSS", "C#", "HTML"], ans: 1 },
-        { q: "ما هي الدالة المستخدمة لعرض رسالة تنبيه في JavaScript؟", opts: ["msg()", "prompt()", "alert()", "confirm()"], ans: 2 },
-        { q: "ما هو ناتج عملية 10 * 10؟", opts: ["10", "100", "1000", "20"], ans: 1 },
-        { q: "أي كوكب هو الأقرب إلى الشمس؟", opts: ["المريخ", "عطارد", "الزهرة", "المشتري"], ans: 1 },
-        { q: "ما هو أكبر حيوان في العالم؟", opts: ["الفيل", "الحوت الأزرق", "الزرافة", "القرش"], ans: 1 },
-        { q: "كم عدد أضلاع المثلث؟", opts: ["2", "3", "4", "5"], ans: 1 },
-        { q: "ما هي عاصمة المملكة العربية السعودية؟", opts: ["جدة", "مكة", "الرياض", "الدمام"], ans: 2 },
-        { q: "أي لغة برمجية تُستخدم بكثرة في الذكاء الاصطناعي؟", opts: ["Java", "Python", "C++", "JavaScript"], ans: 1 },
-        { q: "ما هي سرعة الضوء التقريبية؟", opts: ["300 ألف كم/ث", "150 ألف كم/ث", "500 ألف كم/ث", "100 ألف كم/ث"], ans: 0 },
-        { q: "من هو مؤسس شركة مايكروسوفت؟", opts: ["ستيف جوبز", "بيل غيتس", "مارك زوكربيرغ", "إيلون ماسك"], ans: 1 },
-        { q: "ما هو العنصر الكيميائي الذي رمزه O؟", opts: ["الذهب", "الحديد", "الأكسجين", "الهيدروجين"], ans: 2 },
-        { q: "كم دقيقة في الساعة الواحدة؟", opts: ["50", "60", "70", "100"], ans: 1 },
-        { q: "ما هو المحيط الذي يحد الوطن العربي من الغرب؟", opts: ["الهندي", "الهادي", "الأطلسي", "المتجمد"], ans: 2 },
-        { q: "هل هذه المنصة رائعة؟", opts: ["نعم جداً", "بالتأكيد", "الأفضل على الإطلاق", "كل ما سبق"], ans: 3 }
+        // --- MCQ Questions ---
+        { q: "When was the transistor invented?", options: ["1930s", "1940s", "1950s", "1960s"], answer: 1 },
+        { q: "According to Moore's Law, how often does computer power double?", options: ["Every 6–12 months", "Every 12–18 months", "Every 18–24 months", "Every 2–3 years"], answer: 2 },
+        { q: "What are the two main technology types used to categorize Integrated Circuits (ICs)?", options: ["SSI and MSI", "DIP and SMT", "TTL and CMOS", "NPN and PNP"], answer: 2 },
+        { q: "Which IC package style utilizes Through-Hole Technology (THT)?", options: ["SMT", "QFP", "DIP", "LSI"], answer: 2 },
+        { q: "Which logic gate outputs a '1' only when both of its inputs are '1'?", options: ["OR", "NOT", "NAND", "AND"], answer: 3 },
+        { q: "What is the standard 74-Series TTL IC number for a Quad 2-input AND Gate?", options: ["7404", "7408", "7432", "7400"], answer: 1 },
+        { q: "What is the standard 74-Series TTL IC number for Hex Inverters (NOT gates)?", options: ["7404", "7408", "7432", "7400"], answer: 0 },
+        { q: "Which TTL logic sub-family is known for having a 'good speed-power ratio'?", options: ["Standard TTL", "Low Power TTL", "Advanced Schottky (74AS)", "Low-Power Schottky (74LS)"], answer: 3 },
+        { q: "In basic digital logic systems, what does a '0' bit represent?", options: ["TRUE / ON", "TRUE / OFF", "FALSE / ON", "FALSE / OFF"], answer: 3 },
+        { q: "A transistor operates like a valve controlling water flow; it can act as an amplifier or a:", options: ["Resistor", "Battery", "Switch", "Capacitor"], answer: 2 },
+        { q: "What is the output of a NAND gate if both of its inputs are '1'?", options: ["1", "0", "High", "None of the above"], answer: 1 },
+        { q: "What is the standard 74-Series IC number for a Quad 2-input NAND Gate?", options: ["7400", "7402", "7404", "7408"], answer: 0 },
+        { q: "Which of the following is considered a 'Universal Gate' because it can be used to build AND, OR, and NOT operations?", options: ["AND", "OR", "NAND", "XOR"], answer: 2 },
+        { q: "A NOR gate is equivalent to which combination of basic logic gates?", options: ["AND followed by NOT", "OR followed by NOT", "NOT followed by OR", "XOR followed by NOT"], answer: 1 },
+        { q: "Which standard IC contains Quad 2-input NOR gates?", options: ["7432", "7486", "7402", "7400"], answer: 2 },
+        { q: "According to the truth table for an XOR gate, when will the output be '1'?", options: ["When both inputs are the same", "When the inputs are different", "When both inputs are 1", "When both inputs are 0"], answer: 1 },
+        { q: "What is the correct Boolean expression for an XOR gate (A ⊕ B)?", options: ["AB + A'B'", "(A+B)'", "A'B + AB'", "A' + B'"], answer: 2 },
+        { q: "What is the standard IC number for Quad 2-input XOR Gates?", options: ["7402", "7486", "7432", "7400"], answer: 1 },
+        { q: "What is the correct order of operations when evaluating Boolean Algebra expressions?", options: ["AND > OR > NOT", "NOT > AND > OR", "OR > AND > NOT", "NOT > OR > AND"], answer: 1 },
+        { q: "According to DeMorgan's Theorem, what is the equivalent expression for (x • y)'?", options: ["x' • y'", "x + y", "(x + y)'", "x' + y'"], answer: 3 },
+        { q: "What does 'SOP' stand for in digital logic design?", options: ["Sum of Products", "System of Products", "Sequence of Programs", "Sum of Parts"], answer: 0 },
+        { q: "How many cells are in a Karnaugh map used for a 3-variable function?", options: ["4", "8", "12", "16"], answer: 1 },
+        { q: "When grouping 1s in a Karnaugh map to simplify an expression, which group size is NOT valid?", options: ["2", "4", "6", "8"], answer: 2 },
+        { q: "A logic circuit that performs arithmetic addition on two single binary bits is called a:", options: ["Full Adder", "Multiplexer", "Decoder", "Half Adder"], answer: 3 },
+        { q: "What are the two outputs produced by a Half Adder circuit?", options: ["Sum and Difference", "Carry In and Carry Out", "Sum and Carry", "High and Low"], answer: 2 },
+        { q: "Which logic gate is used to determine the 'Sum' output in a Half Adder?", options: ["AND", "OR", "NAND", "XOR"], answer: 3 },
+        { q: "A Full Adder is designed to perform the addition of how many single bits?", options: ["Two", "Three", "Four", "Eight"], answer: 1 },
+        { q: "A logic circuit that has n inputs and 2ⁿ outputs and detects a specific binary combination is a:", options: ["Encoder", "Decoder", "Multiplexer", "Adder"], answer: 1 },
+        { q: "Which standard IC is commonly used as a BCD to Seven-Segment decoder?", options: ["74LS04", "74LS08", "74LS47", "74LS32"], answer: 2 },
+        { q: "Which combinational circuit allows you to select a single data line from many data lines to pass to the output?", options: ["Decoder", "Encoder", "Full Adder", "Multiplexer"], answer: 3 },
+        { q: "Which type of logic circuit takes past output values along with present inputs into account?", options: ["Combinational", "Sequential", "Arithmetic", "Multiplexed"], answer: 1 },
+        { q: "Sequential logic circuits require a ____ to store the previous state of a circuit.", options: ["Multiplexer", "Memory Element", "Decoder", "Full Adder"], answer: 1 },
+        { q: "In an SR latch, what is the state when both Set and Reset inputs are 1?", options: ["Output is 0", "Output is 1", "Previous state held", "Invalid / Undefined"], answer: 3 },
+        { q: "What is the primary difference between a latch and a flip-flop?", options: ["Latches are edge-triggered", "Latches are level-sensitive, flip-flops are edge-triggered", "Flip-flops do not use a clock", "Latches are synchronous"], answer: 1 },
+        { q: "If the period of a clock signal is T, what is its frequency?", options: ["F = T", "F = T²", "F = 1/T", "F = 1 + T"], answer: 2 },
+        { q: "How is positive-edge triggering indicated on a flip-flop symbol?", options: ["Bubble", "Triangle", "Square", "Wavy line"], answer: 1 },
+        { q: "How is negative-edge triggering indicated?", options: ["Triangle preceded by a bubble", "Only a circle", "Only a triangle", "Straight line"], answer: 0 },
+        { q: "Which component uses one data input (D) and one enable input (E) to solve the invalid state problem of the SR latch?", options: ["JK Latch", "T Latch", "D Latch", "Master-Slave Latch"], answer: 2 },
+        { q: "In which counter is the clock signal only applied to the first flip-flop?", options: ["Synchronous Counter", "Ripple Counter", "Ring Counter", "Decade Counter"], answer: 1 },
+        { q: "What defines a synchronous counter?", options: ["Different clocks", "No clock", "All flip-flops share the same clock", "Only first flip-flop has a clock"], answer: 2 },
+        { q: "Which terminal of a BJT acts as the control valve?", options: ["Emitter", "Collector", "Base", "Source"], answer: 2 },
+        { q: "In SN74LS08N, what does LS denote?", options: ["Logical System", "Low-Power Schottky", "Large Scale", "Low Speed"], answer: 1 },
+        { q: "A NAND gate is logically equivalent to:", options: ["Negative AND", "Negative OR", "Positive OR", "Positive AND"], answer: 1 },
+        { q: "A NOR gate is logically equivalent to a:", options: ["Negative AND", "Negative OR", "Inverted XOR", "Positive AND"], answer: 0 },
+        { q: "What is the involution theorem?", options: ["x + 0 = x", "x • 1 = x", "(x')' = x", "x • x = x"], answer: 2 },
+        { q: "SOP is formed by taking the sum of all ____ that make the output true.", options: ["Maxterms", "Variables", "Minterms", "Equivalents"], answer: 2 },
+        { q: "When grouping 1s in a Karnaugh map, which rule applies?", options: ["Groups can be diagonal", "Groups must be odd", "Groups can intersect and share 1s", "Every 1 isolated"], answer: 2 },
+        { q: "The simplified Carry Out (Cout) of a Full Adder is:", options: ["A ⊕ B ⊕ Cin", "BCin + AB + ACin", "AB + Cin", "A'B' + AB"], answer: 1 },
+        { q: "How many AND gates are required to build a 4-to-16 decoder?", options: ["4", "8", "16", "32"], answer: 2 },
+        { q: "If input line 7 is High on an 8×3 priority encoder, what is the binary output?", options: ["100", "11", "111", "0"], answer: 2 },
+        
+        // --- More MCQs (51-100) ---
+        { q: "Which combinational circuit is essentially the reverse operation of a decoder?", options: ["Multiplexer", "Full Adder", "Encoder", "Flip-Flop"], answer: 2 },
+        { q: "Why are edge-triggered flip-flops preferred over level-sensitive latches in complex synchronous systems?", options: ["Latches require more gates", "Level-sensitivity can lead to unpredictable behavior and incorrect states", "Flip-flops consume less power", "Latches cannot store data"], answer: 1 },
+        { q: "Which component forms the basic building blocks of all other types of flip-flops?", options: ["Multiplexer", "SR Latch", "Decoder", "D Latch"], answer: 1 },
+        { q: "In a D Latch, what happens when the Enable (E) signal is inactive (low)?", options: ["Output Q goes to 0", "Output Q goes to 1", "The latch holds its previous value", "The latch becomes transparent"], answer: 2 },
+        { q: "What characterizes a Ripple Counter?", options: ["All flip-flops share a clock", "Uses only combinational logic", "Output of one flip-flop serves as the clock for the next", "Cannot count above 4"], answer: 2 },
+        { q: "Which is the most common type of Bipolar Junction Transistor (BJT) mentioned in the labs?", options: ["NPN", "PNP", "CMOS", "FET"], answer: 0 },
+        { q: "In the IC part number 'SN74LS08N', what does the 'N' indicate?", options: ["Negative logic", "Manufacturer (National)", "Package Style (DIP)", "Nano-scale"], answer: 2 },
+        { q: "What is the Boolean expression for an XNOR gate?", options: ["A ⊕ B", "A'B + AB'", "A'B'", "(A ⊕ B)'"], answer: 3 },
+        { q: "According to the ANSI/IEC symbol table, the output of a NAND gate is at logic 0 when:", options: ["Any input is 0", "All inputs are 0", "All inputs are 1", "Any input is 1"], answer: 2 },
+        { q: "To design a 4-input NAND gate using DeMorgan's law, you need two 2-input NAND gates and one:", options: ["2-input OR gate", "2-input AND gate", "2-input XOR gate", "Inverter"], answer: 0 },
+        { q: "According to Boolean Algebra Theorem 1, what does x + 0 evaluate to?", options: ["0", "1", "x", "x'"], answer: 2 },
+        { q: "In a 3-variable truth table with inputs A, B, and C, what is the Boolean expression for minterm m6?", options: ["A'B'C'", "ABC", "A'BC", "ABC'"], answer: 3 },
+        { q: "In the Voting Application where 3 inputs determine a majority vote, what is the unsimplified SOP expression?", options: ["A'B'C' + ABC", "BC + AC + AB", "BC + AC + AB + ABC", "ABC"], answer: 2 },
+        { q: "Which logical operation is used to calculate the Carry (C) out of a Half Adder circuit?", options: ["OR", "AND", "XOR", "NOR"], answer: 1 },
+        { q: "The simplified Boolean expression for the Sum (S) in a Full Adder is:", options: ["A ⊕ B ⊕ Cin", "AB + BCin", "A'B'Cin'", "A + B + Cin"], answer: 0 },
+        { q: "The 74LS47 IC is specifically designed to function as a:", options: ["Full Adder", "8×3 Priority Encoder", "Quad 2-input NAND", "BCD to Seven-Segment Decoder"], answer: 3 },
+        { q: "In a Multiplexer, what determines which input data line is passed to the output?", options: ["Clock signal", "Enable line", "Selection lines", "Priority encoder"], answer: 2 },
+        { q: "If you need to choose a single data line from multiple data lines to pass to an output, which circuit should you use?", options: ["Decoder", "Encoder", "Adder", "Multiplexer"], answer: 3 },
+        { q: "What is the frequency (F) of a clock signal?", options: ["The reciprocal of the period (1/T)", "Duration of one cycle", "Propagation delay", "Voltage rise time"], answer: 0 },
+        { q: "How many D Flip-Flops and Full Adders are needed to design a 4-bit synchronous counter?", options: ["2 Flip-Flops, 1 Adder", "4 Flip-Flops, 4 Adders", "8 Flip-Flops, 4 Adders", "4 Flip-Flops, 1 Adder"], answer: 1 },
+        { q: "What does a '1' bit represent in digital logic systems?", options: ["FALSE / OFF", "FALSE / ON", "TRUE / OFF", "TRUE / ON"], answer: 3 },
+        { q: "In IC scale of integration, what does VLSI stand for?", options: ["Very Low Speed Integration", "Very Large Scale Integration", "Variable Logic System Integration", "Voltage Level Signal Inverter"], answer: 1 },
+        { q: "The XNOR gate is logically equivalent to an XOR gate followed by which gate?", options: ["AND", "OR", "NOT", "NAND"], answer: 2 },
+        { q: "According to Boolean Algebra Theorem 1, what does x • 1 evaluate to?", options: ["1", "0", "x'", "x"], answer: 3 },
+        { q: "When designing the unsimplified Z = BC' + AC logic circuit with basic gates, how many total standard ICs (74LS04, 74LS08, 74LS32) are required?", options: ["1", "2", "3", "4"], answer: 2 },
+        { q: "What is the correct term for the product of literals that makes a single line in a truth table true?", options: ["Maxterm", "Sum of Products", "Minterm", "Multiplexer"], answer: 2 },
+        { q: "For 3 binary variables (x, y, z), what is the correct Boolean designation for minterm m3?", options: ["x'yz'", "x'yz", "xy'z", "xyz"], answer: 1 },
+        { q: "What are the necessary inputs for a Full Adder circuit?", options: ["A and B", "A, B, and Sum", "Sum and Carry Out", "A, B, and Carry In (Cin)"], answer: 3 },
+        { q: "What is the correct Boolean equation for the Carry (C) out of a Half Adder?", options: ["A ⊕ B", "A + B", "AB", "A'B'"], answer: 2 },
+        { q: "How many output lines does a 3-to-8 decoder have?", options: ["3", "4", "8", "16"], answer: 2 },
+        { q: "Which combinational logic circuit detects a specific combination of bits at its input and outputs on the corresponding line?", options: ["Multiplexer", "Encoder", "Decoder", "Full Adder"], answer: 2 },
+        { q: "In a 2-to-1 Multiplexer circuit, what chooses which data line (D0 or D1) is passed to the output?", options: ["Clock edge", "Single Select line", "Ripple counter", "SR Latch"], answer: 1 },
+        { q: "What is the defining characteristic of a level-sensitive latch?", options: ["Changes only on a clock edge", "Remains transparent while Enable is active", "Ignores all inputs", "Has no memory element"], answer: 1 },
+        { q: "In a D Flip-Flop, when is the data from D captured and stored?", options: ["When Enable is active", "On the clock transition (edge)", "When D and Q are both 1", "When the circuit is disabled"], answer: 1 },
+        { q: "What makes a synchronous counter different from a ripple counter?", options: ["It does not use flip-flops", "Clock only applied to first flip-flop", "All flip-flops share the same clock signal", "Uses latches instead of flip-flops"], answer: 2 },
+        { q: "In the transistor inverter circuit example, what is the value of the resistor connected to the base of the PN2222 transistor?", options: ["1K Ω", "33K Ω", "5V", "10K Ω"], answer: 1 },
+        { q: "How many input lines does the 74LS11 (Triple 3-input AND Gate) IC have per gate?", options: ["1", "2", "3", "4"], answer: 2 },
+        { q: "According to the IEC symbol table, what symbol represents an AND gate?", options: ["&", "≥1", "1", "+"], answer: 0 },
+        { q: "According to the IEC symbol table, which gate is represented by the '=1' symbol?", options: ["AND", "OR", "XOR", "NOT"], answer: 2 },
+        { q: "If you want to design a circuit for the function f(A,B,C)=AB+BC using only NAND gates optimized with DeMorgan's law, how many 2-input NAND gates are required?", options: ["2", "3", "4", "5"], answer: 1 },
+        { q: "What is the correct Boolean expression for minterm m5 in a 3-variable system (A, B, C)?", options: ["A'B'C", "AB'C", "ABC'", "AB'C'"], answer: 1 },
+        { q: "In the Car Start/Alarm example application, which input is considered active High?", options: ["Seat belt", "Door closed", "Transmission Park", "Key"], answer: 3 },
+        { q: "What are the two output variables of a Half Adder circuit usually labeled?", options: ["A and B", "Sum and Carry", "Q and Q'", "High and Low"], answer: 1 },
+        { q: "How many input and output lines does a 4-to-16 decoder have?", options: ["2 inputs, 4 outputs", "4 inputs, 8 outputs", "4 inputs, 16 outputs", "16 inputs, 4 outputs"], answer: 2 },
+        { q: "In a seven-segment display, how many LEDs are used to form numbers and letters?", options: ["5", "7", "8", "10"], answer: 1 },
+        { q: "Which logic circuit takes a 2ⁿ active input and converts it into its corresponding n-bit binary number?", options: ["Decoder", "Multiplexer", "Encoder", "Half Adder"], answer: 2 },
+        { q: "In an 8×3 Priority Encoder, what happens if input line D7 is high?", options: ["Output is 000", "Output represents binary 7 (111) regardless of other inputs", "Invalid state", "Outputs all low"], answer: 1 },
+        { q: "What characterizes a level-sensitive device like a latch?", options: ["Changes only on clock edge", "Remains transparent and responsive while Enable is active", "Ignores all inputs", "Requires a full adder"], answer: 1 },
+        { q: "What does the Q output of a D-latch represent when Enable (E) = 0?", options: ["0", "1", "Invalid state", "Previous State"], answer: 3 },
+        { q: "What is the frequency (F) of a clock signal with period (T)?", options: ["F = T", "F = 1/T", "F = T × 2", "F = 1 + T"], answer: 1 },
+
+        // --- True/False Questions ---
+        { q: "Transistors made early computers larger and more expensive.", options: ["True", "False"], answer: 1 },
+        { q: "The base terminal of a transistor controls the current flow between the Collector and the Emitter.", options: ["True", "False"], answer: 0 },
+        { q: "An OR gate will output a '0' if any of its inputs are '1'.", options: ["True", "False"], answer: 1 },
+        { q: "The 7432 IC contains Quad 2-input OR gates.", options: ["True", "False"], answer: 0 },
+        { q: "Combinational Logic Circuits are made up from logic gates connected together to produce more complicated switching circuits.", options: ["True", "False"], answer: 0 },
+        { q: "The AND, OR, and NOT operations can be performed using only NAND gates.", options: ["True", "False"], answer: 0 },
+        { q: "The output of a NOR gate is '1' only when both of its inputs are '0'.", options: ["True", "False"], answer: 0 },
+        { q: "An XNOR gate is an XOR gate followed by an OR gate.", options: ["True", "False"], answer: 1 },
+        { q: "A NAND gate is logically equivalent to a Negative OR gate.", options: ["True", "False"], answer: 0 },
+        { q: "The primary reason to simplify logic circuits is to make them look better on a breadboard.", options: ["True", "False"], answer: 1 },
+        { q: "A minterm is an expression that makes a single line of a truth table false.", options: ["True", "False"], answer: 1 },
+        { q: "Combinational logic circuits are 'stateless', meaning their outputs can be predicted entirely by their current inputs using truth tables.", options: ["True", "False"], answer: 0 },
+        { q: "A Full Adder circuit can be constructed by combining two Half Adders and one OR gate.", options: ["True", "False"], answer: 0 },
+        { q: "An encoder performs the exact same function as a decoder.", options: ["True", "False"], answer: 1 },
+        { q: "Multiplexers are particularly useful in computer systems that use a bus architecture where multiple devices share a communication path.", options: ["True", "False"], answer: 0 },
+        { q: "The SR latch forms the basic building blocks of all other types of flip-flops.", options: ["True", "False"], answer: 0 },
+        { q: "Because a latch is level-sensitive, it guarantees completely predictable and stable behavior in complex synchronous systems.", options: ["True", "False"], answer: 1 },
+        { q: "The D flip-flop is the most widely used memory element in modern digital electronics.", options: ["True", "False"], answer: 0 },
+        { q: "A clock is used to synchronize a circuit that contains components with different propagation delays.", options: ["True", "False"], answer: 0 },
+        { q: "A D latch is transparent and copies the input D to the output Q when it is disabled.", options: ["True", "False"], answer: 1 },
+        { q: "A bipolar junction transistor (BJT) can be used as an amplifier or a switch.", options: ["True", "False"], answer: 0 },
+        { q: "The Advanced Schottky (74AS) TTL logic sub-family provides the best speed-power ratio among all TTL sub-families.", options: ["True", "False"], answer: 1 },
+        { q: "The XNOR gate output is at logic 0 when one and ONLY ONE of its inputs is at logic 1.", options: ["True", "False"], answer: 0 },
+        { q: "By applying DeMorgan's theorem, a 4-input NAND gate can be designed using two 2-input NAND gates and one 2-input OR gate.", options: ["True", "False"], answer: 0 },
+        { q: "A Karnaugh map for a 4-variable function contains exactly 8 cells.", options: ["True", "False"], answer: 1 },
+        { q: "A Full Adder can be constructed using two Half Adders and one AND gate.", options: ["True", "False"], answer: 1 },
+        { q: "A multiplexer acts as a data selector by passing a single data line to the output based on the selection inputs.", options: ["True", "False"], answer: 0 },
+        { q: "A negative-edge triggered flip-flop captures data when the clock voltage rises from 0 to 1.", options: ["True", "False"], answer: 1 },
+        { q: "In a synchronous counter, the clock signal is applied sequentially from one flip-flop to the next.", options: ["True", "False"], answer: 1 },
+        { q: "The SR Latch can be designed using two NOR gates configured with a feedback loop.", options: ["True", "False"], answer: 0 },
+        { q: "A transistor can only be used as a switch in a circuit, never as an amplifier.", options: ["True", "False"], answer: 1 },
+        { q: "Small Scale Integration (SSI) and Very Large Scale Integration (VLSI) are categories based on the technology type of an IC.", options: ["True", "False"], answer: 1 },
+        { q: "Based on DeMorgan's equivalents, a NAND gate can be represented by a Negative OR gate.", options: ["True", "False"], answer: 0 },
+        { q: "The Boolean Algebra theorem for Involution states that x • x = x.", options: ["True", "False"], answer: 1 },
+        { q: "Karnaugh maps are best used with logical functions that have more than 4 input variables.", options: ["True", "False"], answer: 1 },
+        { q: "A full adder adds two binary values and ignores any carry bit from previous additions.", options: ["True", "False"], answer: 1 },
+        { q: "A 2-bit decoder will have 2 input lines and exactly 4 output lines.", options: ["True", "False"], answer: 0 },
+        { q: "The output of a basic SR latch is in an undefined/invalid state when both S and R inputs are 0.", options: ["True", "False"], answer: 1 },
+        { q: "A D latch successfully holds its previous value when the enable signal is inactive (disabled).", options: ["True", "False"], answer: 0 },
+        { q: "In a synchronous counter, the clock signal is applied to the first flip-flop only, and its output serves as the clock for the next.", options: ["True", "False"], answer: 1 },
+        { q: "Early computers before the 1940s used mechanical relays and vacuum tubes instead of transistors.", options: ["True", "False"], answer: 0 },
+        { q: "DIP stands for Dual Inline Package, which is a common IC package style.", options: ["True", "False"], answer: 0 },
+        { q: "The output of a NAND gate is at logic 1 only when all of its inputs are at logic 1.", options: ["True", "False"], answer: 1 },
+        { q: "According to DeMorgan's Theorem, the complement of a product (x • y)' is equal to the sum of the complements x' + y'.", options: ["True", "False"], answer: 0 },
+        { q: "When grouping 1s to simplify an expression in a Karnaugh map, you are allowed to make groups diagonally.", options: ["True", "False"], answer: 1 },
+        { q: "A half adder circuit lacks a Carry In (Cin) input, making it unable to link together to add multi-bit numbers.", options: ["True", "False"], answer: 0 },
+        { q: "An encoder performs the exact reverse operation of a decoder.", options: ["True", "False"], answer: 0 },
+        { q: "Multiplexers are rarely used in computer systems with bus architectures.", options: ["True", "False"], answer: 1 },
+        { q: "In an SR latch, setting both the S and R inputs to 0 causes the latch to enter an invalid state.", options: ["True", "False"], answer: 1 },
+        { q: "A positive-edge triggered flip-flop captures data at the exact instant the clock voltage rises from 0 to 1.", options: ["True", "False"], answer: 0 }
     ];
 
-    let currentUser = null;
-    let currentQ = 0;
-    let userAnswers = new Array(questions.length).fill(null); // تخزين إجابات المستخدم
-    let confirmedAnswers = new Array(questions.length).fill(false); // هل تم تأكيد السؤال؟
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let answered = new Array(questions.length).fill(false);
+    let userAnswers = new Array(questions.length).fill(null);
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('quiz-screen').style.display = 'block';
-            document.getElementById('user-display').innerText = `المستخدم: ${user.displayName || user.email}`;
-            loadQuestion();
-        } else {
-            setTimeout(() => { if (!auth.currentUser) window.location.href = 'index.html'; }, 3000);
-        }
-    });
+    const quizScreen = document.getElementById('quizScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const navArea = document.getElementById('navArea');
+    const qCounter = document.getElementById('qCounter');
+    const qText = document.getElementById('qText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
 
     function loadQuestion() {
-        const q = questions[currentQ];
-        const container = document.getElementById('options-container');
-        const nextBtn = document.getElementById('next-btn');
-        const prevBtn = document.getElementById('prev-btn');
+        const q = questions[currentQuestionIndex];
         
-        // تحديث النصوص والتقدم
-        document.getElementById('question-text').innerText = q.q;
-        document.getElementById('q-number').innerText = `سؤال ${currentQ + 1} من ${questions.length}`;
-        document.getElementById('progress-fill').style.width = ((currentQ + 1) / questions.length) * 100 + "%";
-        
-        container.innerHTML = '';
-        prevBtn.disabled = currentQ === 0;
-        
-        // تغيير نص الزر في السؤال الأخير
-        nextBtn.innerText = confirmedAnswers[currentQ] ? (currentQ === questions.length - 1 ? "إنهاء الاختبار" : "السؤال التالي") : "تأكيد الإجابة";
+        // Update Counter & Progress
+        qCounter.innerHTML = `<span></span> QUERY ${currentQuestionIndex + 1} OF ${questions.length}`;
+        const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+        progressBar.style.width = progress + "%";
 
-        q.opts.forEach((opt, i) => {
+        // Set Question Text
+        qText.innerText = q.q;
+
+        // Clear Options
+        optionsContainer.innerHTML = '';
+
+        // Create Options
+        q.options.forEach((option, index) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerText = opt;
+            btn.innerText = option;
+            btn.onclick = () => selectOption(index);
             
-            // استعادة الاختيار السابق إن وجد
-            if (userAnswers[currentQ] === i) btn.classList.add('selected');
-            
-            // تطبيق ألوان التصحيح إذا تم التأكيد مسبقاً
-            if (confirmedAnswers[currentQ]) {
-                btn.disabled = true;
-                if (i === q.ans) btn.classList.add('correct');
-                else if (i === userAnswers[currentQ]) btn.classList.add('wrong');
+            // Restore state if already answered
+            if (answered[currentQuestionIndex]) {
+                btn.classList.add('disabled');
+                if (index === q.answer) {
+                    btn.classList.add('correct');
+                }
+                if (userAnswers[currentQuestionIndex] === index) {
+                    if (index !== q.answer) {
+                        btn.classList.add('wrong');
+                    }
+                }
             }
-
-            btn.onclick = () => {
-                if (confirmedAnswers[currentQ]) return;
-                userAnswers[currentQ] = i;
-                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-            };
-            container.appendChild(btn);
-        });
-    }
-
-    document.getElementById('next-btn').onclick = () => {
-        if (userAnswers[currentQ] === null) {
-            alert("يرجى اختيار إجابة أولاً!");
-            return;
-        }
-
-        // إذا لم يتم التأكيد بعد، قم بالتصحيح الفوري
-        if (!confirmedAnswers[currentQ]) {
-            confirmedAnswers[currentQ] = true;
-            loadQuestion(); // إعادة التحميل لإظهار الألوان
-            return;
-        }
-
-        // الانتقال للسؤال التالي أو الإنهاء
-        if (currentQ < questions.length - 1) {
-            currentQ++;
-            loadQuestion();
-        } else {
-            finalizeQuiz();
-        }
-    };
-
-    document.getElementById('prev-btn').onclick = () => {
-        if (currentQ > 0) {
-            currentQ--;
-            loadQuestion();
-        }
-    };
-
-    async function finalizeQuiz() {
-        let finalScore = 0;
-        userAnswers.forEach((ans, index) => {
-            if (ans === questions[index].ans) finalScore++;
+            
+            optionsContainer.appendChild(btn);
         });
 
-        const finalPct = Math.round((finalScore / questions.length) * 100);
+        // Navigation Buttons Logic
+        prevBtn.disabled = currentQuestionIndex === 0;
         
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = finalPct + "%";
-        document.getElementById('result-text').innerText = `لقد أجبت على ${finalScore} من أصل ${questions.length} أسئلة بشكل صحيح.`;
-
-        try {
-            await setDoc(doc(db, "exam_results", currentUser.uid), {
-                student: currentUser.displayName || currentUser.email,
-                final_score: finalPct,
-                correct_count: finalScore,
-                is_locked: true,
-                submitted_at: serverTimestamp()
-            });
-        } catch (error) {
-            console.error("خطأ في الحفظ:", error);
+        if (currentQuestionIndex === questions.length - 1) {
+            nextBtn.innerText = "Finalize";
+            nextBtn.className = "nav-btn btn-next";
+        } else {
+            nextBtn.innerText = "Next";
+            nextBtn.className = "nav-btn btn-next";
         }
     }
+
+    function selectOption(index) {
+        if (answered[currentQuestionIndex]) return; 
+
+        answered[currentQuestionIndex] = true;
+        userAnswers[currentQuestionIndex] = index;
+
+        const q = questions[currentQuestionIndex];
+        const buttons = optionsContainer.children;
+
+        if (index === q.answer) {
+            buttons[index].classList.add('correct');
+            score++;
+        } else {
+            buttons[index].classList.add('wrong');
+            buttons[q.answer].classList.add('correct'); 
+        }
+
+        for (let btn of buttons) {
+            btn.classList.add('disabled');
+        }
+    }
+
+    function changeQuestion(direction) {
+        if (direction === 1) {
+            if (currentQuestionIndex === questions.length - 1) {
+                showResults();
+            } else {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        } else {
+            currentQuestionIndex--;
+            loadQuestion();
+        }
+        window.scrollTo(0, 0);
+    }
+
+    function showResults() {
+        quizScreen.classList.add('hidden');
+        navArea.classList.add('hidden');
+        resultScreen.classList.remove('hidden');
+        progressBar.style.width = "100%";
+
+        const percentage = Math.round((score / questions.length) * 100);
+        document.getElementById('scoreCircle').innerText = percentage + "%";
+        document.getElementById('scoreText').innerText = `System Efficiency: ${score}/${questions.length} Processes Executed Successfully`;
+
+        const reviewList = document.getElementById('reviewList');
+        reviewList.innerHTML = '';
+
+        questions.forEach((q, i) => {
+            const div = document.createElement('div');
+            const status = userAnswers[i] === q.answer ? 'correct' : 'wrong';
+            div.className = `review-item ${status}`;
+            
+            const userAnsText = userAnswers[i] !== null ? q.options[userAnswers[i]] : "NULL DATA";
+            const correctAnsText = q.options[q.answer];
+
+            div.innerHTML = `
+                <p style="font-weight:bold; color:#fff; margin-bottom:8px;">QUERY #${i+1}: ${q.q}</p>
+                <p style="margin:0; color:var(--error);">User Input: ${userAnsText}</p>
+                <p style="margin:0; color:var(--success);">Required Output: ${correctAnsText}</p>
+            `;
+            reviewList.appendChild(div);
+        });
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        answered = new Array(questions.length).fill(false);
+        userAnswers = new Array(questions.length).fill(null);
+        
+        resultScreen.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        navArea.classList.remove('hidden');
+        
+        loadQuestion();
+    }
+
+    loadQuestion();
+
 </script>
 </body>
 </html>
