@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة التفوق - AI Faculty Style</title>
+<title>WEVA | منصة تعليمية للذكاء الاصطناعي</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
@@ -48,16 +48,51 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 6%;
+    padding:10px 6%;
     background:rgba(5,10,25,0.6);
     backdrop-filter:blur(12px);
     border-bottom:1px solid rgba(0,255,255,0.1);
 }
 
-.logo{
-    font-size:1.3rem;
-    font-weight:800;
-    color:var(--cyan);
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+}
+
+.brand-logo{
+    height:48px;
+    width:auto;
+    filter:drop-shadow(0 0 8px rgba(0,170,255,0.5));
+    transition:.3s;
+}
+
+.brand-logo:hover{
+    filter:drop-shadow(0 0 14px rgba(0,255,255,0.9));
+}
+
+.brand-text{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+}
+
+.brand-name{
+    font-family:"Orbitron",sans-serif;
+    font-size:1.4rem;
+    font-weight:900;
+    letter-spacing:3px;
+    background:linear-gradient(90deg,#fff,var(--cyan));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.brand-tag{
+    font-size:0.6rem;
+    letter-spacing:2px;
+    color:#9fb3c8;
+    text-transform:uppercase;
 }
 
 .navbar ul{
@@ -66,16 +101,17 @@ body{
     list-style:none;
 }
 
-.navbar a{
+.navbar a.nav-link{
     text-decoration:none;
     color:white;
     padding:8px 14px;
     border-radius:10px;
     background:rgba(255,255,255,0.05);
     transition:.3s;
+    font-size:0.95rem;
 }
 
-.navbar a:hover{
+.navbar a.nav-link:hover{
     background:var(--cyan);
     color:#001018;
 }
@@ -83,7 +119,23 @@ body{
 /* HERO */
 .hero{
     text-align:center;
-    padding:60px 20px 30px;
+    padding:50px 20px 30px;
+    position:relative;
+    z-index:2;
+}
+
+.hero-logo{
+    width:220px;
+    max-width:80%;
+    margin:0 auto 20px;
+    display:block;
+    filter:drop-shadow(0 0 25px rgba(0,170,255,0.6));
+    animation:floatLogo 4s ease-in-out infinite;
+}
+
+@keyframes floatLogo{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
 }
 
 .hero h1{
@@ -91,6 +143,13 @@ body{
     background:linear-gradient(90deg,#fff,var(--cyan),#fff);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
+    margin-bottom:10px;
+}
+
+.hero p.subtitle{
+    color:#9fb3c8;
+    font-size:1rem;
+    letter-spacing:1px;
 }
 
 /* STATS */
@@ -123,6 +182,8 @@ body{
 /* SECTIONS */
 .section{
     padding:40px 6%;
+    position:relative;
+    z-index:2;
 }
 
 .section h2{
@@ -156,6 +217,11 @@ body{
     transform:translateY(-6px);
     border-color:var(--cyan);
     box-shadow:0 0 30px rgba(0,255,255,0.15);
+}
+
+.card h3{
+    color:#fff;
+    margin-bottom:10px;
 }
 
 /* BUTTONS */
@@ -199,6 +265,8 @@ body{
     padding:50px 6%;
     display:flex;
     justify-content:center;
+    position:relative;
+    z-index:2;
 }
 
 .dev-glass-card{
@@ -218,12 +286,22 @@ body{
     padding:25px;
     background:rgba(0,0,0,0.4);
     color:#9fb3c8;
+    position:relative;
+    z-index:2;
+}
+
+.footer .footer-logo{
+    height:36px;
+    margin-bottom:10px;
+    opacity:0.85;
 }
 
 /* RESPONSIVE */
 @media(max-width:600px){
     .hero h1{font-size:1.6rem;}
     .navbar{flex-direction:column;gap:10px;}
+    .brand-logo{height:40px;}
+    .hero-logo{width:160px;}
 }
 </style>
 </head>
@@ -235,18 +313,26 @@ body{
 
 <!-- NAV -->
 <nav class="navbar">
-    <div class="logo">🚀 التفوق</div>
+    <a href="#" class="brand">
+        <img src="weva-logo.png" alt="WEVA Logo" class="brand-logo">
+        <span class="brand-text">
+            <span class="brand-name">WEVA</span>
+            <span class="brand-tag">Robotics &amp; ML</span>
+        </span>
+    </a>
     <ul>
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#sec2">الدورات</a></li>
-        <li><a href="nerm.html">GPA</a></li>
-        <li><a href="#sec">تواصل</a></li>
+        <li><a href="#" class="nav-link">الرئيسية</a></li>
+        <li><a href="#sec2" class="nav-link">الدورات</a></li>
+        <li><a href="nerm.html" class="nav-link">GPA</a></li>
+        <li><a href="#sec" class="nav-link">تواصل</a></li>
     </ul>
 </nav>
 
 <!-- HERO -->
 <header class="hero">
-    <h1>مرحباً بك في رحلتك التعليمية</h1>
+    <img src="weva-logo.png" alt="WEVA Robotics & ML" class="hero-logo">
+    <h1>مرحباً بك في منصة WEVA التعليمية</h1>
+    <p class="subtitle">Robotics &amp; Machine Learning · كلية الذكاء الاصطناعي</p>
 
     <div class="stats">
         <div class="stat-card"><h3>+300</h3><p>طالب</p></div>
@@ -333,7 +419,7 @@ body{
 <!-- DEV -->
 <section id="sec" class="dev-card-wrapper">
     <div class="dev-glass-card">
-        <h3 style="color:var(--cyan)">Ahmed El_Samahy & Mohamed Abdallah</h3>
+        <h3 style="color:var(--cyan)">Ahmed El_Samahy </h3>
         <p>مطور واجهات المواقع</p>
         <p style="margin-top:10px; color:#9fb3c8;">
             تم تطوير هذه المنصة لدعم طلاب كلية الذكاء الاصطناعي
@@ -343,7 +429,8 @@ body{
 
 <!-- FOOTER -->
 <footer class="footer">
-    جميع الحقوق محفوظة © 2026 - منصة التفوق التعليمية
+    <img src="weva-logo.png" alt="WEVA" class="footer-logo">
+    <div>جميع الحقوق محفوظة © 2026 — منصة WEVA التعليمية · Robotics &amp; ML</div>
 </footer>
 
 <script>
